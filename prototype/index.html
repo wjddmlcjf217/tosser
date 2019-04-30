@@ -61,11 +61,12 @@
             bin.displayHeight = 150;
             bin.displayWidth = 150;
             
-            this.physics.add.collider(paper, bin);
+            // this.physics.add.collider(paper, bin);
             this.physics.add.overlap(paper, bin, hitTarget, null, this);
 
             function hitTarget(paper, bin){
                 paper.disableBody(true, true);
+                console.log("asdfas")
             }
 
             // this.anims.create({ key: 'fly', frames: this.anims.generateFrameNumbers('paper', [0]), frameRate: 5, repeat: -1 });
