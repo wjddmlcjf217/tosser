@@ -39,7 +39,7 @@ function create() {
     banana.displayHeight = 50;
     banana.displayWidth = 50;
     banana.visible = false;
-    console.log(banana);
+    banana.onWorldBounds = false;
 
     banana.setCollideWorldBounds(true);
 
@@ -61,8 +61,6 @@ function create() {
 
 
     // function hitTarget() {
-
-
 
 
 }
@@ -109,6 +107,10 @@ function update() {
         }
 
     }, this);
+
+    if (banana.onWorldBounds === true) {
+        console.log("worked");
+    }
 
     banana.on('pointerdown', function (pointerdown) {
         if (banana.getBounds().contains(pointerdown.downX, pointerdown.downY)) {
