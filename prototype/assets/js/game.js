@@ -26,8 +26,9 @@ function preload() {
     this.load.image('background', 'assets/img/background.jpg');
     this.load.image('bin', 'assets/img/bin.jpg');
     this.load.image('paper', 'assets/img/paper.png');
+    this.load.image('banana', 'assets/img/banana.png');
 
-
+    console.log("pre-load");
 }
 
 function create() {
@@ -50,7 +51,7 @@ function create() {
     // function hitTarget() {
 
 
-
+    console.log("create");
 
 
 }
@@ -67,20 +68,21 @@ function update() {
     paper.on('pointerdown', function (pointerdown) {
         if (paper.getBounds().contains(pointerdown.downX, pointerdown.downY)) {
             this.input.on('pointerup', function (pointerup) {
-                let angle = BetweenPoints(paper, pointerup)
-                let velocityX = pointerup.upX - pointerdown.downX
-                let velocityY = pointerup.upY - pointerdown.downY
+                let angle = BetweenPoints(paper, pointerup);
+                let velocityX = pointerup.upX - pointerdown.downX;
+                let velocityY = pointerup.upY - pointerdown.downY;
 
-                let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize()
-                velocity.scale(500)
+                let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
+                velocity.scale(500);
 
-                console.log(velocityX)
-                console.log(velocityY)
-                console.log(velocity)
+                // console.log(velocityX);
+                // console.log(velocityY);
+                // console.log(velocity);
 
                 paper.enableBody(true, paper.x, paper.y, true, true).body.setVelocity(velocity.x, velocity.y);
                 gfx.clear().strokeLineShape(line);
-                this.input.removeListener('pointerup')
+                // todo: find the non-deprecated way to remove event listener
+                this.input.removeListener('pointerup');
 
                 v2 = pointerdown.position
             }, this);
@@ -92,5 +94,5 @@ function update() {
             paper.enableBody(true, 400, 550, true, true);
         }
     }, this);
-
+    console.log("update");
 }
