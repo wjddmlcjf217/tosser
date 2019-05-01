@@ -1,5 +1,6 @@
 // version 0.1.5
 
+
 let config = {
     type: Phaser.AUTO,
     width: 800,
@@ -26,13 +27,21 @@ function preload() {
     this.load.image('background', 'assets/img/background.jpg');
     this.load.image('bin', 'assets/img/bin.jpg');
     this.load.image('paper', 'assets/img/paper.png');
-    this.load.image('banana', 'assets/img/banana.png');
+    this.load.image('banana', 'assets/img/banana-sprite.png');
 
-    console.log("pre-load");
 }
 
 function create() {
     this.add.image(400, 300, 'background');
+
+    banana = this.physics.add.sprite(100, 550, 'banana');
+    banana.setInteractive();
+    banana.displayHeight = 50;
+    banana.displayWidth = 50;
+    banana.disableBody(true, true);
+    console.log(banana);
+
+
     paper = this.physics.add.sprite(400, 550, 'paper');
     paper.setInteractive();
     paper.displayHeight = 50;
@@ -51,7 +60,6 @@ function create() {
     // function hitTarget() {
 
 
-    console.log("create");
 
 
 }
@@ -64,7 +72,7 @@ function update() {
     let line = new Phaser.Geom.Line();
     let gfx = this.add.graphics().setDefaultStyles({ lineStyle: { width: 10, color: 0xffdd00, alpha: 0.5 } });
 
-
+    // spawn paper and object physiscs
     paper.on('pointerdown', function (pointerdown) {
         if (paper.getBounds().contains(pointerdown.downX, pointerdown.downY)) {
             this.input.on('pointerup', function (pointerup) {
@@ -94,5 +102,36 @@ function update() {
             paper.enableBody(true, 400, 550, true, true);
         }
     }, this);
-    console.log("update");
+
+    banana.on('pointerdown', function (pointerdown) {
+        if (banana.getBounds().contains(pointerdown.downX, pointerdown.downY)) {
+            this.input.on('pointerup', function (pointerup) {
+                let angle = BetweenPoints(banana, pointerup);
+                let velocityX = pointerup.upX - pointerdown.downX;
+                let velocityY = pointerup.upY - pointerdown.downY;
+
+                let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
+                velocity.scale(500);
+
+                // console.log(velocityX);
+                // console.log(velocityY);
+                // console.log(velocity);
+
+                banana.enableBody(true, banana.x, banana.y, true, true).body.setVelocity(velocity.x, velocity.y);
+                gfx.clear().strokeLineShape(line);
+                // todo: find the non-deprecated way to remove event listener
+                this.input.removeListener('pointerup');
+
+                v2 = pointerdown.position
+            }, this);
+        }
+
+        this.physics.add.overlap(banana, bin, hitTarget, null, this);
+        function hitTarget(banana, bin) {
+            banana.disableBody(true, true);
+            banana.enableBody(true, 400, 550, true, true);
+        }
+    }, this);
+
+
 }
