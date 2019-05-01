@@ -38,14 +38,17 @@ function create() {
     banana.setInteractive();
     banana.displayHeight = 50;
     banana.displayWidth = 50;
-    banana.disableBody(true, true);
+    banana.visible = false;
     console.log(banana);
 
+    banana.setCollideWorldBounds(true);
 
     paper = this.physics.add.sprite(400, 550, 'paper');
     paper.setInteractive();
     paper.displayHeight = 50;
     paper.displayWidth = 50;
+
+    paper.setCollideWorldBounds(true);
 
     bin = this.physics.add.sprite(400, 100, 'bin');
     bin.displayHeight = 150;
@@ -100,7 +103,11 @@ function update() {
         function hitTarget(paper, bin) {
             paper.disableBody(true, true);
             paper.enableBody(true, 400, 550, true, true);
+            paper.visible = false;
+            banana.visible = true;
+
         }
+
     }, this);
 
     banana.on('pointerdown', function (pointerdown) {
@@ -129,7 +136,9 @@ function update() {
         this.physics.add.overlap(banana, bin, hitTarget, null, this);
         function hitTarget(banana, bin) {
             banana.disableBody(true, true);
-            banana.enableBody(true, 400, 550, true, true);
+            banana.enableBody(true, 100, 550, true, true);
+            banana.visible = false;
+            paper.visible = true;
         }
     }, this);
 
