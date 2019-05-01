@@ -46,33 +46,25 @@
 
         }
 
-
         function create() {
-            // this.add.image(400, 300, 'paper');
-
             this.add.image(400, 300, 'background');
-
             paper = this.physics.add.sprite(400, 550, 'paper');
-            paper.setInteractive()
+            paper.setInteractive();
             paper.displayHeight = 50;
             paper.displayWidth = 50;
 
             bin = this.physics.add.sprite(400, 100, 'bin');
             bin.displayHeight = 150;
             bin.displayWidth = 150;
-            
+
             // this.physics.add.collider(paper, bin);
-            this.physics.add.overlap(paper, bin, hitTarget, null, this);
+            // this.physics.add.overlap(paper, bin, hitTarget, null, this);
 
-        
-            function hitTarget(){
-                paper.destroy()
-            }
 
-            // this.anims.create({ key: 'fly', frames: this.anims.generateFrameNumbers('paper', [0]), frameRate: 5, repeat: -1 });
 
-            // paper.anims.msPerFrame = 30;
-            // this.time.desiredFps = 120;
+
+            // function hitTarget() {
+
 
 
 
@@ -102,12 +94,7 @@
                         console.log(velocityY)
                         console.log(velocity)
 
-
                         paper.enableBody(true, paper.x, paper.y, true, true).body.setVelocity(velocity.x, velocity.y);
-
-
-                        // SetToAngle(line, paper.x, paper.y, angle, 500);
-                        // velocityFromRotation(angle, 600, velocity);
                         gfx.clear().strokeLineShape(line);
                         this.input.removeListener('pointerup')
 
@@ -115,14 +102,13 @@
                     }, this);
                 }
 
-                // if (pointer.x < 175 && pointer.x > 225){
-                //     if (pointer.y < 475 && )
-                // }
-                // Enable physics body and reset (at position), activate game object, show game object
-                // paper.enableBody(true, paper.x, paper.y, true, true).setVelocity(velocity.x, velocity.y);
-                // paper.play('fly');
+                this.physics.add.overlap(paper, bin, hitTarget, null, this);
+                function hitTarget(paper, bin) {
+                    paper.disableBody(true, true);
+                    paper.enableBody(true, 400, 550, true, true);
+                }
             }, this);
-            
+
         }
     </script>
 
