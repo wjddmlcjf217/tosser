@@ -20,11 +20,6 @@ let config = {
     }
 };
 
-// git test
-
-// Bryden git testing
-
-
 let game = new Phaser.Game(config);
 
 function preload() {
