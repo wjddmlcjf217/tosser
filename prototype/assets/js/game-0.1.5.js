@@ -38,7 +38,6 @@ function create() {
     banana.displayWidth = 50;
     banana.visible = false;
     banana.body.onWorldBounds = true;
-
     banana.body.setCollideWorldBounds(true);
 
     paper = this.physics.add.sprite(400, 550, 'paper');
@@ -46,7 +45,6 @@ function create() {
     paper.displayHeight = 50;
     paper.displayWidth = 50;
     paper.body.onWorldBounds = true;
-
     paper.body.setCollideWorldBounds(true);
 
     bin = this.physics.add.sprite(400, 100, 'bin');
@@ -61,15 +59,7 @@ function create() {
         console.log('You hit the bounds!');
     });
 
-
-
-
     // function hitTarget() {
-
-
-}
-
-function update() {
     let BetweenPoints = Phaser.Math.Angle.BetweenPoints;
     let SetToAngle = Phaser.Geom.Line.SetToAngle;
     let velocityFromRotation = this.physics.velocityFromRotation;
@@ -143,6 +133,8 @@ function update() {
             paper.visible = true;
         }
     }, this);
+}
 
+function update() {
 
 }
