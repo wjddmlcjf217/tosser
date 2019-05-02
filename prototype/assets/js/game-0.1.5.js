@@ -27,7 +27,6 @@ function preload() {
     this.load.image('bin', 'assets/img/bin.jpg');
     this.load.image('paper', 'assets/img/paper.png');
     this.load.image('banana', 'assets/img/banana-sprite.png');
-
 }
 
 function create() {
