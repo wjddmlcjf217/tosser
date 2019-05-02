@@ -37,17 +37,17 @@ function create() {
     banana.displayHeight = 50;
     banana.displayWidth = 50;
     banana.visible = false;
-    banana.onWorldBounds = true;
+    banana.body.onWorldBounds = true;
 
-    banana.setCollideWorldBounds(true);
+    banana.body.setCollideWorldBounds(true);
 
     paper = this.physics.add.sprite(400, 550, 'paper');
     paper.setInteractive();
     paper.displayHeight = 50;
     paper.displayWidth = 50;
-    paper.onWorldBounds = true;
+    paper.body.onWorldBounds = true;
 
-    paper.setCollideWorldBounds(true);
+    paper.body.setCollideWorldBounds(true);
 
     bin = this.physics.add.sprite(400, 100, 'bin');
     bin.displayHeight = 150;
@@ -111,10 +111,6 @@ function update() {
         }
 
     }, this);
-
-    if (banana.onWorldBounds === true) {
-        console.log("worked");
-    }
 
     banana.on('pointerdown', function (pointerdown) {
         if (banana.getBounds().contains(pointerdown.downX, pointerdown.downY)) {
