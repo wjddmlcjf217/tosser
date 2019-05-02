@@ -37,7 +37,7 @@ function create() {
     banana.displayHeight = 50;
     banana.displayWidth = 50;
     banana.visible = false;
-    banana.onWorldBounds = false;
+    banana.onWorldBounds = true;
 
     banana.setCollideWorldBounds(true);
 
@@ -45,6 +45,7 @@ function create() {
     paper.setInteractive();
     paper.displayHeight = 50;
     paper.displayWidth = 50;
+    paper.onWorldBounds = true;
 
     paper.setCollideWorldBounds(true);
 
@@ -54,6 +55,11 @@ function create() {
 
     // this.physics.add.collider(paper, bin);
     // this.physics.add.overlap(paper, bin, hitTarget, null, this);
+
+    // function that does something when an object collides with the bounds
+    this.physics.world.on('worldbounds', function () {
+        console.log('You hit the bounds!');
+    });
 
 
 
