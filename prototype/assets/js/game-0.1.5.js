@@ -112,10 +112,6 @@ function update() {
 
     }, this);
 
-    if (banana.onWorldBounds === true) {
-        console.log("worked");
-    }
-
     banana.on('pointerdown', function (pointerdown) {
         if (banana.getBounds().contains(pointerdown.downX, pointerdown.downY)) {
             this.input.on('pointerup', function (pointerup) {
