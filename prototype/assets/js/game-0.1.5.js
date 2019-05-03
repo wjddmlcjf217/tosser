@@ -143,6 +143,4 @@ function update() {
             paper.visible = true;
         }
     }, this);
-
-
 }
