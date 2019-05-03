@@ -8,7 +8,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 0 },
+            gravity: {y: 0},
             debug: true,
         },
     },
@@ -26,15 +26,24 @@ var item_status = false;
 
 function preload() {
     this.load.image('background', 'assets/img/school_scene.png');
-    this.load.image('bin', 'assets/img/bin.jpg');
+    this.load.image('bin_top', 'assets/img/bin_top.png');
     this.load.image('paper', 'assets/img/paper.png');
     this.load.image('banana', 'assets/img/banana-sprite.png');
 }
 
 function create() {
+    this.gamecolliders = [];
+
     background = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background');
     background.displayHeight = window.innerHeight;
     background.displayWidth = window.innerWidth;
+
+    // curve = new Phaser.Curves.Line([200, 750, 375, 750]);
+    // this.physics.world.enable(curve);
+    // curve.body.setCollideWorldBounds(true);
+    // curve.body.setImmovable(true);
+    // curve.body.checkCollision.down = true;
+
 
     paper = this.physics.add.image(530, 1400, 'paper');
     paper.setInteractive();
@@ -42,10 +51,13 @@ function create() {
     paper.displayWidth = 150;
     paper.body.onWorldBounds = true;
     paper.body.setCollideWorldBounds(true);
+    paper.setBounce(0.4);
 
-    // bin = this.physics.add.image(400, 100, 'bin');
-    // bin.displayHeight = 150;
-    // bin.displayWidth = 150;
+    bin_top = this.physics.add.image(290, 750, 'bin_top');
+    bin_top_2 = this.physics.add.image(650, 750, 'bin_top');
+    floor = this.physics.add.image(window.innerWidth / 2, 975, 'bin_top');
+    floor.displayWidth = window.innerWidth;
+    floor.setImmovable(true);
 
     // this.physics.add.collider(paper, bin);
     // this.physics.add.overlap(paper, bin, hitTarget, null, this);
@@ -61,7 +73,7 @@ function create() {
     let velocityFromRotation = this.physics.velocityFromRotation;
     // let velocity = new Phaser.Math.Vector2(-100.0, 100.0);
     let line = new Phaser.Geom.Line();
-    let gfx = this.add.graphics().setDefaultStyles({lineStyle: {width: 10, color: 0xffdd00, alpha: 0.5}});
+    gfx = this.add.graphics().setDefaultStyles({lineStyle: {width: 10, color: 0xffdd00, alpha: 0.5}});
 
     // spawn paper and object physiscs
     paper.on('pointerdown', function (pointerdown) {
@@ -74,34 +86,64 @@ function create() {
                 let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
                 velocity.scale(1000);
 
-                paper.enableBody(true, paper.x, paper.y, true, true).body.setVelocity(velocity.x, velocity.y);
+                paper.enableBody(true, paper.x, paper.y, true, true).body.setVelocity(velocity.x * 0.2, velocity.y * 1.45);
                 paper.setAngularVelocity(500);
-                paper.body.setAccelerationY((velocity.y * -1) * 0.5);
+                paper.body.setAccelerationY((velocity.y * -1) * 0.75);
                 gfx.clear().strokeLineShape(line);
                 // todo: find the non-deprecated way to remove event listener
                 this.input.removeListener('pointerup');
 
-                v2 = pointerdown.position
+                v2 = pointerdown.position;
+
+
             }, this);
         }
 
-        // this.physics.add.overlap(paper, bin, hitTarget, null, this);
-        // function hitTarget(paper, bin) {
-        //     paper.disableBody(true, true);
-        //     paper.enableBody(true, 400, 550, true, true);
-        //     paper.visible = false;
-        //     banana.visible = true;
-        //     item_status = false;
-        //     paper.displayHeight = 50;
-        //     paper.displayWidth = 50;
-        // }
 
     }, this);
+
+    this.physics.add.overlap(paper, bin_top, hitTarget, null, this);
+    this.physics.add.overlap(paper, bin_top_2, hitTarget, null, this);
+    this.gamecolliders.push(this.physics.add.collider(paper, floor, missedTarget, null, this));
+    this.gamecolliders[0].active = false
+
 }
 
 function update() {
-    if (item_status) {
-        paper.displayHeight -= 0.6;
-        paper.displayWidth -= 0.6;
+    if (item_status && paper.displayHeight > 50 && paper.displayWidth > 50) {
+        paper.displayHeight -= 0.7;
+        paper.displayWidth -= 0.7;
+    }
+    if (paper.body.velocity.y > 0 && this.gamecolliders[0].active == false) {
+        this.gamecolliders[0].active = true
+    }
+    // curve.draw(gfx)
+}
+
+function hitTarget() {
+    if (paper.body.velocity.y > 0) {
+        paper.disableBody(true, true);
+        paper.enableBody(true, 530, 1400, true, true);
+        paper.visible = true;
+        item_status = false;
+        paper.displayHeight = 150;
+        paper.displayWidth = 150;
+    }
+    this.gamecolliders[0].active = false;
+}
+
+function missedTarget () {
+    paper.body.setAllowDrag(true);
+    paper.body.setDrag(20, 0);
+    paper.body.setAngularDrag(180);
+    this.gamecolliders[0].active = false;
+    if (paper.body.angularVelocity == 0) {
+        paper.disableBody(true, true);
+        paper.enableBody(true, 530, 1400, true, true);
+        paper.visible = true;
+        item_status = false;
+        paper.displayHeight = 150;
+        paper.displayWidth = 150;
+        paper.body.setAllowDrag(false);
     }
     }
