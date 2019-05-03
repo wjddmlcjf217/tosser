@@ -114,7 +114,7 @@ function update() {
         paper.displayHeight -= 0.7;
         paper.displayWidth -= 0.7;
     }
-    if (paper.body.velocity.y > 0 && this.gamecolliders[0].active == false) {
+    if (paper.body.velocity.y > 0 && this.gamecolliders[0].active === false) {
         this.gamecolliders[0].active = true
     }
     // curve.draw(gfx)
@@ -137,7 +137,7 @@ function missedTarget () {
     paper.body.setDrag(20, 0);
     paper.body.setAngularDrag(180);
     this.gamecolliders[0].active = false;
-    if (paper.body.angularVelocity == 0) {
+    if (paper.body.angularVelocity === 0) {
         paper.disableBody(true, true);
         paper.enableBody(true, 530, 1400, true, true);
         paper.visible = true;
@@ -146,4 +146,6 @@ function missedTarget () {
         paper.displayWidth = 150;
         paper.body.setAllowDrag(false);
     }
-    }
+}
+
+
