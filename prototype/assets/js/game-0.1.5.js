@@ -3,12 +3,12 @@
 
 let config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: window.innerWidth,
+    height: window.innerHeight,
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 0 },
+            gravity: {y: 0},
             debug: true,
         },
     },
@@ -20,121 +20,128 @@ let config = {
     }
 };
 
-let game = new Phaser.Game(config);
+new Phaser.Game(config);
 
 function preload() {
-    this.load.image('background', 'assets/img/background.jpg');
-    this.load.image('bin', 'assets/img/bin.jpg');
+    this.load.image('background', 'assets/img/school_scene.png');
+    this.load.image('bin_top', 'assets/img/bin_top.png');
     this.load.image('paper', 'assets/img/paper.png');
     this.load.image('banana', 'assets/img/banana-sprite.png');
 }
 
+
 function create() {
-    this.add.image(400, 300, 'background');
+    createBackground(this);
+    this.hero = createHeroProjectile(this, 'paper');
+    createPhysicsObjects(this);
 
-    banana = this.physics.add.sprite(100, 550, 'banana');
-    banana.setInteractive();
-    banana.displayHeight = 50;
-    banana.displayWidth = 50;
-    banana.visible = false;
-    banana.body.onWorldBounds = true;
-    banana.body.setCollideWorldBounds(true);
-
-    paper = this.physics.add.sprite(400, 550, 'paper');
-    paper.setInteractive();
-    paper.displayHeight = 50;
-    paper.displayWidth = 50;
-    paper.body.onWorldBounds = true;
-    paper.body.setCollideWorldBounds(true);
-
-    bin = this.physics.add.sprite(400, 100, 'bin');
-    bin.displayHeight = 150;
-    bin.displayWidth = 150;
-
-    // this.physics.add.collider(paper, bin);
-    // this.physics.add.overlap(paper, bin, hitTarget, null, this);
 
     // function that does something when an object collides with the bounds
-    this.physics.world.on('worldbounds', function () {
-        console.log('You hit the bounds!');
-    });
+    // this.physics.world.on('worldbounds', function () {
+    //     // console.log('You hit the bounds!');
+    // });
+    // let line = new Phaser.Geom.Line();
+    // let gfx = this.add.graphics().setDefaultStyles({lineStyle: {width: 10, color: 0xffdd00, alpha: 0.5}});
 
-    // function hitTarget() {
-    let BetweenPoints = Phaser.Math.Angle.BetweenPoints;
-    let SetToAngle = Phaser.Geom.Line.SetToAngle;
-    let velocityFromRotation = this.physics.velocityFromRotation;
-    // let velocity = new Phaser.Math.Vector2(-100.0, 100.0);
-    let line = new Phaser.Geom.Line();
-    let gfx = this.add.graphics().setDefaultStyles({ lineStyle: { width: 10, color: 0xffdd00, alpha: 0.5 } });
-
-    // spawn paper and object physiscs
-    paper.on('pointerdown', function (pointerdown) {
-        if (paper.getBounds().contains(pointerdown.downX, pointerdown.downY)) {
-            this.input.on('pointerup', function (pointerup) {
-                let angle = BetweenPoints(paper, pointerup);
-                let velocityX = pointerup.upX - pointerdown.downX;
-                let velocityY = pointerup.upY - pointerdown.downY;
-
-                let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
-                velocity.scale(500);
-
-                // console.log(velocityX);
-                // console.log(velocityY);
-                // console.log(velocity);
-
-                paper.enableBody(true, paper.x, paper.y, true, true).body.setVelocity(velocity.x, velocity.y);
-                gfx.clear().strokeLineShape(line);
-                // todo: find the non-deprecated way to remove event listener
-                this.input.removeListener('pointerup');
-
-                v2 = pointerdown.position
-            }, this);
-        }
-
-        this.physics.add.overlap(paper, bin, hitTarget, null, this);
-        function hitTarget(paper, bin) {
-            paper.disableBody(true, true);
-            paper.enableBody(true, 400, 550, true, true);
-            paper.visible = false;
-            banana.visible = true;
-
-        }
-
-    }, this);
-
-    banana.on('pointerdown', function (pointerdown) {
-        if (banana.getBounds().contains(pointerdown.downX, pointerdown.downY)) {
-            this.input.on('pointerup', function (pointerup) {
-                let angle = BetweenPoints(banana, pointerup);
-                let velocityX = pointerup.upX - pointerdown.downX;
-                let velocityY = pointerup.upY - pointerdown.downY;
-
-                let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
-                velocity.scale(500);
-
-                // console.log(velocityX);
-                // console.log(velocityY);
-                // console.log(velocity);
-
-                banana.enableBody(true, banana.x, banana.y, true, true).body.setVelocity(velocity.x, velocity.y);
-                gfx.clear().strokeLineShape(line);
-                // todo: find the non-deprecated way to remove event listener
-                this.input.removeListener('pointerup');
-
-                v2 = pointerdown.position
-            }, this);
-        }
-
-        this.physics.add.overlap(banana, bin, hitTarget, null, this);
-        function hitTarget(banana, bin) {
-            banana.disableBody(true, true);
-            banana.enableBody(true, 100, 550, true, true);
-            banana.visible = false;
-            paper.visible = true;
-        }
-    }, this);
+    this.hero.on('pointerdown', pointerDownHandler, this);
 }
 
 function update() {
-
+    if (this.hero.isFlying && this.hero.displayHeight > 35 && this.hero.displayWidth > 35) {
+        this.hero.displayHeight -= 0.8;
+        this.hero.displayWidth -= 0.8;
+    }
+    if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
+        this.floorCollider.active = true
+    }
 }
+
+function pointerDownHandler (pointer) {
+    if (this.hero.getBounds().contains(pointer.downX, pointer.downY)) {
+        this.input.on('pointerup', pointerUpHandler, this);
+    }
+}
+
+function pointerUpHandler (pointer) {
+    let velocityX = pointer.upX - pointer.downX;
+    let velocityY = pointer.upY - pointer.downY;
+    let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
+    velocity.scale(1000);
+    this.hero.isFlying = true;
+    this.hero.enableBody(true, this.hero.x, this.hero.y, true, true);
+    this.hero.body.setVelocity(velocity.x * 0.2, velocity.y * 1.45);
+    this.hero.body.setAngularVelocity(500);
+    this.hero.body.setAccelerationY((velocity.y * -1) * 0.75);
+    // gfx.clear().strokeLineShape(line);
+    this.input.off('pointerup');
+}
+
+function createBackground (game) {
+    let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background');
+    background.displayHeight = window.innerHeight;
+    background.displayWidth = window.innerWidth;
+}
+
+function createHeroProjectile (game, image) {
+    let hero = game.physics.add.image(530, 1400, image);
+    hero.setInteractive();
+    hero.isFlying = false;
+    hero.displayHeight = 150;
+    hero.displayWidth = 150;
+    hero.body.onWorldBounds = true;
+    hero.body.setCollideWorldBounds(true);
+    hero.setBounce(0.4);
+    return hero;
+}
+
+function createPhysicsObjects (game) {
+    let binOne = game.add.rectangle(295, 750, 170, 1);
+    let binTwo = game.add.rectangle(635, 750, 170, 1);
+    let floor = game.add.rectangle(window.innerWidth / 2, 975, window.innerWidth, 1);
+    game.physics.add.existing(binOne);
+    game.physics.add.existing(binTwo);
+    game.physics.add.existing(floor);
+    floor.body.setImmovable(true);
+
+    // Add physical interactions
+    game.physics.add.overlap(game.hero, binOne, hitTarget, null, game);
+    game.physics.add.overlap(game.hero, binTwo, hitTarget, null, game);
+    game.floorCollider = game.physics.add.collider(game.hero, floor, missedTarget, null, game);
+    game.floorCollider.active = false;
+}
+
+function hitTarget (projectile) {
+    console.log('function hitTarget called');
+    if (projectile.body.velocity.y > 0) {
+        resetProjectile(projectile);
+        console.log(this);
+        this.floorCollider.active = false;
+    }
+}
+
+function missedTarget (projectile) {
+    console.log('function missTarget called');
+    setProjectileDrag(projectile);
+    if (projectile.body.angularVelocity === 0) {
+        resetProjectile(projectile);
+        this.floorCollider.active = false;
+    }
+}
+
+function resetProjectile (projectile) {
+    projectile.disableBody(true, true);
+    projectile.enableBody(true, 530, 1400, true, true);
+    projectile.visible = true;
+    projectile.isFlying = false;
+    projectile.displayHeight = 150;
+    projectile.displayWidth = 150;
+    projectile.body.setAllowDrag(false);
+}
+
+function setProjectileDrag (projectile) {
+    projectile.body.setAllowDrag(true);
+    projectile.body.setDrag(20, 0);
+    projectile.body.setAngularDrag(180);
+}
+
+
