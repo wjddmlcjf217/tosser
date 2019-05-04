@@ -20,7 +20,7 @@ let config = {
     }
 };
 
-let game = new Phaser.Game(config);
+new Phaser.Game(config);
 
 function preload() {
     this.load.image('background', 'assets/img/school_scene.png');
@@ -31,85 +31,49 @@ function preload() {
 
 
 function create() {
-    this.projectiles = {
-        hero: {
-            name: 'Paper',
-            path: 'assets/img/paper.png',
-            gameObject: null,
-        },
-        first: {
-            name: 'Banana',
-            path: 'assets/img/banana-sprite.png',
-            gameObject: null,
-        },
-        second: {
-            name: 'Banana',
-            path: 'assets/img/banana-sprite.png',
-            gameObject: null,
-        }
-    };
-
     createBackground(this);
-    this.colliders = [];
-    this.projectiles.hero.gameObject = createHeroProjectile(this);
-    let hero = this.projectiles.hero.gameObject;
+    this.hero = createHeroProjectile(this, 'paper');
+    createPhysicsObjects(this);
 
-    bin_top = this.physics.add.image(290, 750, 'bin_top');
-    bin_top_2 = this.physics.add.image(650, 750, 'bin_top');
-    floor = this.physics.add.image(window.innerWidth / 2, 975, 'bin_top');
-    floor.displayWidth = window.innerWidth;
-    floor.setImmovable(true);
-
-    this.physics.add.overlap(hero, bin_top, hitTarget, null, this);
-    this.physics.add.overlap(hero, bin_top_2, hitTarget, null, this);
-    let floorCollider = this.physics.add.collider(hero, floor, missedTarget, null, this);
-    floorCollider.active = false;
-    this.colliders.push(floorCollider);
 
     // function that does something when an object collides with the bounds
     // this.physics.world.on('worldbounds', function () {
     //     // console.log('You hit the bounds!');
     // });
-    let line = new Phaser.Geom.Line();
-    let gfx = this.add.graphics().setDefaultStyles({lineStyle: {width: 10, color: 0xffdd00, alpha: 0.5}});
+    // let line = new Phaser.Geom.Line();
+    // let gfx = this.add.graphics().setDefaultStyles({lineStyle: {width: 10, color: 0xffdd00, alpha: 0.5}});
 
-    // spawn paper and object physics
-    hero.on('pointerdown', function (pointerdown) {
-        if (hero.getBounds().contains(pointerdown.downX, pointerdown.downY)) {
-            this.input.on('pointerup', function (pointerup) {
-                let velocityX = pointerup.upX - pointerdown.downX;
-                let velocityY = pointerup.upY - pointerdown.downY;
-                let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
-                velocity.scale(1000);
-                hero.isFlying = true;
-                hero.enableBody(true, hero.x, hero.y, true, true);
-                hero.body.setVelocity(velocity.x * 0.2, velocity.y * 1.45)
-                hero.body.setAngularVelocity(500);
-                hero.body.setAccelerationY((velocity.y * -1) * 0.75);
-                gfx.clear().strokeLineShape(line);
-                this.input.off('pointerup');
-            }, this);
-        }
-
-    }, this);
-
-
+    this.hero.on('pointerdown', pointerDownHandler, this);
 }
 
 function update() {
-    let hero = this.projectiles.hero.gameObject;
-    if (hero.isFlying && hero.displayHeight > 50 && hero.displayWidth > 50) {
-        hero.displayHeight -= 0.7;
-        hero.displayWidth -= 0.7;
+    if (this.hero.isFlying && this.hero.displayHeight > 35 && this.hero.displayWidth > 35) {
+        this.hero.displayHeight -= 0.8;
+        this.hero.displayWidth -= 0.8;
     }
-    if (hero.body.velocity.y > 0 && this.colliders[0].active === false) {
-        this.colliders[0].active = true
+    if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
+        this.floorCollider.active = true
     }
-    // curve.draw(gfx)
 }
 
-function pointerDownHandler () {
+function pointerDownHandler (pointer) {
+    if (this.hero.getBounds().contains(pointer.downX, pointer.downY)) {
+        this.input.on('pointerup', pointerUpHandler, this);
+    }
+}
 
+function pointerUpHandler (pointer) {
+    let velocityX = pointer.upX - pointer.downX;
+    let velocityY = pointer.upY - pointer.downY;
+    let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
+    velocity.scale(1000);
+    this.hero.isFlying = true;
+    this.hero.enableBody(true, this.hero.x, this.hero.y, true, true);
+    this.hero.body.setVelocity(velocity.x * 0.2, velocity.y * 1.45);
+    this.hero.body.setAngularVelocity(500);
+    this.hero.body.setAccelerationY((velocity.y * -1) * 0.75);
+    // gfx.clear().strokeLineShape(line);
+    this.input.off('pointerup');
 }
 
 function createBackground (game) {
@@ -118,8 +82,8 @@ function createBackground (game) {
     background.displayWidth = window.innerWidth;
 }
 
-function createHeroProjectile (game) {
-    let hero = game.physics.add.image(530, 1400, game.projectiles.hero.name);
+function createHeroProjectile (game, image) {
+    let hero = game.physics.add.image(530, 1400, image);
     hero.setInteractive();
     hero.isFlying = false;
     hero.displayHeight = 150;
@@ -130,22 +94,41 @@ function createHeroProjectile (game) {
     return hero;
 }
 
+function createPhysicsObjects (game) {
+    let binOne = game.add.rectangle(295, 750, 170, 1);
+    let binTwo = game.add.rectangle(635, 750, 170, 1);
+    let floor = game.add.rectangle(window.innerWidth / 2, 975, window.innerWidth, 1);
+    game.physics.add.existing(binOne);
+    game.physics.add.existing(binTwo);
+    game.physics.add.existing(floor);
+    floor.body.setImmovable(true);
+
+    // Add physical interactions
+    game.physics.add.overlap(game.hero, binOne, hitTarget, null, game);
+    game.physics.add.overlap(game.hero, binTwo, hitTarget, null, game);
+    game.floorCollider = game.physics.add.collider(game.hero, floor, missedTarget, null, game);
+    game.floorCollider.active = false;
+}
+
 function hitTarget (projectile) {
+    console.log('function hitTarget called');
     if (projectile.body.velocity.y > 0) {
-        resetProjectile(this, projectile);
-        this.colliders[0].active = false;
+        resetProjectile(projectile);
+        console.log(this);
+        this.floorCollider.active = false;
     }
 }
 
 function missedTarget (projectile) {
+    console.log('function missTarget called');
     setProjectileDrag(projectile);
     if (projectile.body.angularVelocity === 0) {
-        resetProjectile(this, projectile);
-        this.colliders[0].active = false;
+        resetProjectile(projectile);
+        this.floorCollider.active = false;
     }
 }
 
-function resetProjectile (game, projectile) {
+function resetProjectile (projectile) {
     projectile.disableBody(true, true);
     projectile.enableBody(true, 530, 1400, true, true);
     projectile.visible = true;
