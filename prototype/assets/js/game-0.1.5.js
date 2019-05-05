@@ -33,6 +33,7 @@ function preload() {
 function create() {
     createBackground(this);
     this.hero = createHeroProjectile(this, 'paper');
+    this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
 
 
@@ -42,24 +43,16 @@ function create() {
     // });
     // let line = new Phaser.Geom.Line();
     // let gfx = this.add.graphics().setDefaultStyles({lineStyle: {width: 10, color: 0xffdd00, alpha: 0.5}});
-
-    this.hero.on('pointerdown', pointerDownHandler, this);
 }
 
 function update() {
-    if (this.hero.isFlying && this.hero.displayHeight > 35 && this.hero.displayWidth > 35) {
-        this.hero.displayHeight -= 0.8;
-        this.hero.displayWidth -= 0.8;
-    }
     if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
         this.floorCollider.active = true
     }
 }
 
-function pointerDownHandler (pointer) {
-    if (this.hero.getBounds().contains(pointer.downX, pointer.downY)) {
+function pointerDownHandler () {
         this.input.on('pointerup', pointerUpHandler, this);
-    }
 }
 
 function pointerUpHandler (pointer) {
@@ -67,11 +60,12 @@ function pointerUpHandler (pointer) {
     let velocityY = pointer.upY - pointer.downY;
     let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
     velocity.scale(1000);
-    this.hero.isFlying = true;
-    this.hero.enableBody(true, this.hero.x, this.hero.y, true, true);
-    this.hero.body.setVelocity(velocity.x * 0.2, velocity.y * 1.45);
+    this.hero.state = 'flying';
+    this.hero.disableInteractive();
+    this.hero.body.setVelocity(velocity.x * 0.2, velocity.y * 2.0);
     this.hero.body.setAngularVelocity(500);
-    this.hero.body.setAccelerationY((velocity.y * -1) * 0.75);
+    this.hero.body.setAccelerationY((velocity.y * -1) * 1.2);
+    addProjectileScalingTween(this, this.hero);
     // gfx.clear().strokeLineShape(line);
     this.input.off('pointerup');
 }
@@ -85,12 +79,12 @@ function createBackground (game) {
 function createHeroProjectile (game, image) {
     let hero = game.physics.add.image(530, 1400, image);
     hero.setInteractive();
-    hero.isFlying = false;
+    hero.state = 'resting';
     hero.displayHeight = 150;
     hero.displayWidth = 150;
-    hero.body.onWorldBounds = true;
-    hero.body.setCollideWorldBounds(true);
     hero.setBounce(0.4);
+    // hero.body.onWorldBounds = true;
+    // hero.body.setCollideWorldBounds(true);
     return hero;
 }
 
@@ -98,10 +92,9 @@ function createPhysicsObjects (game) {
     let binOne = game.add.rectangle(295, 750, 170, 1);
     let binTwo = game.add.rectangle(635, 750, 170, 1);
     let floor = game.add.rectangle(window.innerWidth / 2, 975, window.innerWidth, 1);
-    game.physics.add.existing(binOne);
-    game.physics.add.existing(binTwo);
-    game.physics.add.existing(floor);
-    floor.body.setImmovable(true);
+    game.physics.add.existing(binOne, true);
+    game.physics.add.existing(binTwo, true);
+    game.physics.add.existing(floor, true);
 
     // Add physical interactions
     game.physics.add.overlap(game.hero, binOne, hitTarget, null, game);
@@ -111,16 +104,13 @@ function createPhysicsObjects (game) {
 }
 
 function hitTarget (projectile) {
-    console.log('function hitTarget called');
     if (projectile.body.velocity.y > 0) {
         resetProjectile(projectile);
-        console.log(this);
         this.floorCollider.active = false;
     }
 }
 
 function missedTarget (projectile) {
-    console.log('function missTarget called');
     setProjectileDrag(projectile);
     if (projectile.body.angularVelocity === 0) {
         resetProjectile(projectile);
@@ -129,10 +119,12 @@ function missedTarget (projectile) {
 }
 
 function resetProjectile (projectile) {
+    projectile.scene.tweens.killTweensOf(projectile);
     projectile.disableBody(true, true);
     projectile.enableBody(true, 530, 1400, true, true);
+    projectile.setInteractive();
     projectile.visible = true;
-    projectile.isFlying = false;
+    projectile.state = 'flying';
     projectile.displayHeight = 150;
     projectile.displayWidth = 150;
     projectile.body.setAllowDrag(false);
@@ -144,4 +136,15 @@ function setProjectileDrag (projectile) {
     projectile.body.setAngularDrag(180);
 }
 
+function addProjectileScalingTween (game, projectile) {
+    game.tweens.add({
+        targets: projectile,
+        displayWidth: 30,
+        displayHeight: 30,
+        ease: 'Linear',
+        duration: 2500,
+        repeat: 0,
+        yoyo: false
+    });
+}
 
