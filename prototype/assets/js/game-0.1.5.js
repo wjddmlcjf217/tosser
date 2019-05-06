@@ -83,8 +83,8 @@ function createHeroProjectile (game, image) {
     hero.displayHeight = 150;
     hero.displayWidth = 150;
     hero.setBounce(0.4);
-    // hero.body.onWorldBounds = true;
-    // hero.body.setCollideWorldBounds(true);
+    hero.body.onWorldBounds = true;
+    hero.body.setCollideWorldBounds(true);
     return hero;
 }
 
