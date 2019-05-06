@@ -23,7 +23,7 @@ let config = {
 new Phaser.Game(config);
 
 function preload() {
-    this.load.image('background', 'assets/img/school_scene.png');
+    this.load.image('background', 'assets/img/study_area.png');
     this.load.image('bin_top', 'assets/img/bin_top.png');
     this.load.image('paper', 'assets/img/paper.png');
     this.load.image('banana', 'assets/img/banana-sprite.png');
@@ -124,7 +124,7 @@ function resetProjectile (projectile) {
     projectile.enableBody(true, 530, 1400, true, true);
     projectile.setInteractive();
     projectile.visible = true;
-    projectile.state = 'flying';
+    projectile.state = 'resting';
     projectile.displayHeight = 150;
     projectile.displayWidth = 150;
     projectile.body.setAllowDrag(false);
