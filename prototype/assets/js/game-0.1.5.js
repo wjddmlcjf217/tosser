@@ -77,7 +77,7 @@ function createBackground (game) {
 }
 
 function createHeroProjectile (game, image) {
-    let hero = game.physics.add.image(530, 1400, image);
+    let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
     hero.setInteractive();
     hero.state = 'resting';
     hero.displayHeight = 150;
@@ -121,7 +121,7 @@ function missedTarget (projectile) {
 function resetProjectile (projectile) {
     projectile.scene.tweens.killTweensOf(projectile);
     projectile.disableBody(true, true);
-    projectile.enableBody(true, 530, 1400, true, true);
+    projectile.enableBody(true, window.innerWidth / 2, window.innerHeight * 0.9, true, true);
     projectile.setInteractive();
     projectile.visible = true;
     projectile.state = 'resting';
