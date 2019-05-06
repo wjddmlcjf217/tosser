@@ -36,7 +36,6 @@ function create() {
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
 
-
     // function that does something when an object collides with the bounds
     // this.physics.world.on('worldbounds', function () {
     //     // console.log('You hit the bounds!');
@@ -82,7 +81,7 @@ function createHeroProjectile (game, image) {
     hero.state = 'resting';
     hero.displayHeight = 150;
     hero.displayWidth = 150;
-    hero.setBounce(0.4);
+    hero.setBounce(0.3);
     hero.body.onWorldBounds = true;
     hero.body.setCollideWorldBounds(true);
     return hero;
@@ -146,5 +145,12 @@ function addProjectileScalingTween (game, projectile) {
         repeat: 0,
         yoyo: false
     });
+}
+
+function turnLightsOff(game) {
+    let lightsOff = game.add.rectangle(window.innerWidth / 2, window.innerHeight /2,
+        window.innerWidth, window.innerHeight);
+    lightsOff.setFillStyle(0x202030, 100);
+    lightsOff.setBlendMode('MULTIPLY');
 }
 
