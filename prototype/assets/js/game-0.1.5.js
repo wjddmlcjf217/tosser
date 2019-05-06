@@ -89,9 +89,9 @@ function createHeroProjectile (game, image) {
 }
 
 function createPhysicsObjects (game) {
-    let binOne = game.add.rectangle(295, 750, 170, 1);
-    let binTwo = game.add.rectangle(635, 750, 170, 1);
-    let floor = game.add.rectangle(window.innerWidth / 2, 975, window.innerWidth, 1);
+    let binOne = game.add.rectangle(window.innerWidth * 0.295, window.innerHeight * 0.430, 170, 1);
+    let binTwo = game.add.rectangle(window.innerWidth * 0.640, window.innerHeight * 0.430, 170, 1);
+    let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth, 1);
     game.physics.add.existing(binOne, true);
     game.physics.add.existing(binTwo, true);
     game.physics.add.existing(floor, true);
