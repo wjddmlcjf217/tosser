@@ -27,12 +27,17 @@ function preload() {
     this.load.image('bin_top', 'assets/img/bin_top.png');
     this.load.image('paper', 'assets/img/paper.png');
     this.load.image('banana', 'assets/img/banana-sprite.png');
+    this.load.image('waterbottle', 'assets/img/water_bottle.png');
+
 }
 
 
 function create() {
     createBackground(this);
-    this.hero = createHeroProjectile(this, 'paper');
+
+    this.queue = ['paper', 'banana', 'waterbottle'];
+
+    this.hero = createHeroProjectile(this, this.queue[Math.floor(Math.random() * 3)]);
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
 
@@ -118,9 +123,16 @@ function missedTarget (projectile) {
 }
 
 function resetProjectile (projectile) {
+    let queue = projectile.scene.queue;
+    console.log(queue);
+
     projectile.scene.tweens.killTweensOf(projectile);
     projectile.disableBody(true, true);
+
+    projectile.setTexture(queue[Math.floor(Math.random() * 3)]);
+
     projectile.enableBody(true, window.innerWidth / 2, window.innerHeight * 0.9, true, true);
+
     projectile.setInteractive();
     projectile.visible = true;
     projectile.state = 'resting';
