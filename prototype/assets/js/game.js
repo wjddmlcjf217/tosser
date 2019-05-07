@@ -38,13 +38,6 @@ function create() {
     this.hero = createHeroProjectile(this, 'paper');
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
-
-    // function that does something when an object collides with the bounds
-    // this.physics.world.on('worldbounds', function () {
-    //     // console.log('You hit the bounds!');
-    // });
-    // let line = new Phaser.Geom.Line();
-    // let gfx = this.add.graphics().setDefaultStyles({lineStyle: {width: 10, color: 0xffdd00, alpha: 0.5}});
 }
 
 function update() {
