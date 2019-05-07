@@ -41,6 +41,8 @@ function create() {
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
 
+    // this.hero.debugShowBody = false;
+
     // function that does something when an object collides with the bounds
     // this.physics.world.on('worldbounds', function () {
     //     // console.log('You hit the bounds!');
@@ -123,22 +125,13 @@ function missedTarget (projectile) {
 }
 
 function resetProjectile (projectile) {
-    let queue = projectile.scene.queue;
-    console.log(queue);
+    let scene = projectile.scene;
 
-    projectile.scene.tweens.killTweensOf(projectile);
-    projectile.disableBody(true, true);
+    projectile.destroy();
 
-    projectile.setTexture(queue[Math.floor(Math.random() * 3)]);
-
-    projectile.enableBody(true, window.innerWidth / 2, window.innerHeight * 0.9, true, true);
-
-    projectile.setInteractive();
-    projectile.visible = true;
-    projectile.state = 'resting';
-    projectile.displayHeight = 150;
-    projectile.displayWidth = 150;
-    projectile.body.setAllowDrag(false);
+    scene.hero = createHeroProjectile(scene, scene.queue[Math.floor(Math.random() * 3)]);
+    scene.hero.on('pointerdown', pointerDownHandler, scene);
+    createPhysicsObjects(scene);
 }
 
 function setProjectileDrag (projectile) {
