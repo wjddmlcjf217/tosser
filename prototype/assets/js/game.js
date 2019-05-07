@@ -43,12 +43,13 @@ function create() {
     this.hero.visible = true;
     this.hero.setInteractive();
     this.hero.on('pointerdown', pointerDownHandler, this);
+    createPhysicsObjects(this);
 
-    for (let i = 0; i < len(this.queue); i++){
-        createPhysicsObjects(this, this.queue[i]);
 
-    }
-    // createPhysicsObjects(this);
+    // for (let i = 0; i < len(this.queue); i++){
+    //     createPhysicsObjects(this, this.queue[i]);
+    //
+    // }
 
     // this.hero.debugShowBody = false;
 
@@ -122,11 +123,11 @@ function createProjectile (game, image) {
     return hero;
 }
 
-function addPhysicsObject(projectile) {
+// function addPhysicsObject(projectile) {
+//
+// }
 
-}
-
-function createPhysicsObjects (game) { // should be called only once to not remake rectangles
+function createPhysicsObjects (game) { // should be called only once
     let binOne = game.add.rectangle(window.innerWidth * 0.295, window.innerHeight * 0.430, 170, 1);
     let binTwo = game.add.rectangle(window.innerWidth * 0.640, window.innerHeight * 0.430, 170, 1);
     let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth, 1);
@@ -177,7 +178,7 @@ function resetProjectile (projectile) {
     scene.hero.visible = true;
     scene.hero.setInteractive();
     scene.hero.on('pointerdown', pointerDownHandler, scene);
-    // createPhysicsObjects(scene);
+    createPhysicsObjects(scene);
 
 
     // projectile.destroy();
