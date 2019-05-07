@@ -48,10 +48,14 @@ function create() {
     // Create Lives
     this.lives = this.add.group();
     for (let i = 0; i < 3; i++) {
-        let life = this.lives.create(190 - (75 * i), 50, 'life');
-        life.displayWidth = 69;
-        life.displayHeight = 69;
+        let life = this.lives.create(window.innerWidth * 0.193 - ((window.innerWidth * 0.076) * i), window.innerHeight * 0.028, 'life');
+        life.displayWidth = window.innerWidth * 0.070;
+        life.displayHeight = window.innerHeight * 0.039;
     }
+
+    this.scoreValue = 0;
+    this.scoreText = this.add.text(window.innerWidth * 0.32, window.innerHeight * 0.28, 'Score: ' + this.scoreValue, {fontStyle: 'Bolder', fontSize: 69, color: 'black'})
+
 
     // function that does something when an object collides with the bounds
     // this.physics.world.on('worldbounds', function () {
@@ -138,6 +142,7 @@ function createPhysicsObjects (game) {
 function hitTarget (projectile) {
     if (projectile.body.velocity.y > 0) {
         resetProjectile(projectile);
+        scoreHandler(this);
         this.floorCollider.active = false;
         this.sound.play('hit-target');
     }
@@ -191,4 +196,10 @@ function lifeHandler (scene) {
     if (scene.lives.countActive() < 1) {
         console.log('game over');
     }
+}
+
+
+function scoreHandler (scene) {
+    let score = scene.scoreValue += 1;
+    scene.scoreText.setText('Score: ' + score)
 }
