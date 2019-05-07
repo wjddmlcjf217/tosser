@@ -35,11 +35,20 @@ function preload() {
 function create() {
     createBackground(this);
 
-    this.queue = ['paper', 'banana', 'waterbottle'];
+    this.queue = [createProjectile(this, 'paper'), createProjectile(this, 'banana'),
+        createProjectile(this, 'waterbottle')];
 
-    this.hero = createHeroProjectile(this, this.queue[Math.floor(Math.random() * 3)]);
+
+    this.hero = this.queue[Math.floor(Math.random() * 3)];
+    this.hero.visible = true;
+    this.hero.setInteractive();
     this.hero.on('pointerdown', pointerDownHandler, this);
-    createPhysicsObjects(this);
+
+    for (let i = 0; i < len(this.queue); i++){
+        createPhysicsObjects(this, this.queue[i]);
+
+    }
+    // createPhysicsObjects(this);
 
     // this.hero.debugShowBody = false;
 
@@ -53,8 +62,14 @@ function create() {
 
 function update() {
     if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
-        this.floorCollider.active = true
+        this.floorCollider.active = true;
+        console.log('inside' + this.hero.body.velocity.y)
+
+        // console.log(this.hero)
     }
+
+    console.log(this.floorCollider.active);
+    console.log(this.hero.body.velocity.y)
 }
 
 function pointerDownHandler () {
@@ -82,22 +97,40 @@ function createBackground (game) {
     background.displayWidth = window.innerWidth;
 }
 
-function createHeroProjectile (game, image) {
+// function createHeroProjectile (game, image) {
+//     let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
+//     hero.setInteractive();
+//     hero.state = 'resting';
+//     hero.displayHeight = 150;
+//     hero.displayWidth = 150;
+//     hero.setBounce(0.3);
+//     hero.body.onWorldBounds = true;
+//     hero.body.setCollideWorldBounds(true);
+//     return hero;
+// }
+
+function createProjectile (game, image) {
     let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
-    hero.setInteractive();
+
     hero.state = 'resting';
     hero.displayHeight = 150;
     hero.displayWidth = 150;
     hero.setBounce(0.3);
     hero.body.onWorldBounds = true;
     hero.body.setCollideWorldBounds(true);
+    hero.visible = false;
     return hero;
 }
 
-function createPhysicsObjects (game) {
+function addPhysicsObject(projectile) {
+
+}
+
+function createPhysicsObjects (game) { // should be called only once to not remake rectangles
     let binOne = game.add.rectangle(window.innerWidth * 0.295, window.innerHeight * 0.430, 170, 1);
     let binTwo = game.add.rectangle(window.innerWidth * 0.640, window.innerHeight * 0.430, 170, 1);
     let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth, 1);
+
     game.physics.add.existing(binOne, true);
     game.physics.add.existing(binTwo, true);
     game.physics.add.existing(floor, true);
@@ -127,11 +160,31 @@ function missedTarget (projectile) {
 function resetProjectile (projectile) {
     let scene = projectile.scene;
 
-    projectile.destroy();
+    projectile.body.stop();
+    projectile.scene.tweens.killTweensOf(projectile);
+    // projectile.disableBody(true, true);
+    projectile.enableBody(true, window.innerWidth / 2, window.innerHeight * 0.9, true, true); // resets projectile position
 
-    scene.hero = createHeroProjectile(scene, scene.queue[Math.floor(Math.random() * 3)]);
+    projectile.setInteractive();
+    projectile.visible = false;
+    projectile.state = 'resting';
+    projectile.displayHeight = 150;
+    projectile.displayWidth = 150;
+
+    projectile.body.setAllowDrag(false);
+
+    scene.hero = scene.queue[Math.floor(Math.random() * 3)];
+    scene.hero.visible = true;
+    scene.hero.setInteractive();
     scene.hero.on('pointerdown', pointerDownHandler, scene);
-    createPhysicsObjects(scene);
+    // createPhysicsObjects(scene);
+
+
+    // projectile.destroy();
+    //
+    // scene.hero = createHeroProjectile(scene, scene.queue[Math.floor(Math.random() * 3)]);
+    // scene.hero.on('pointerdown', pointerDownHandler, scene);
+    // createPhysicsObjects(scene);
 }
 
 function setProjectileDrag (projectile) {
