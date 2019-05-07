@@ -28,10 +28,11 @@ function preload() {
     this.load.image('bin_top', 'assets/img/bin_top.png');
     this.load.image('paper', 'assets/img/paper.png');
     this.load.image('banana', 'assets/img/banana-sprite.png');
+    this.load.image('life', 'assets/img/life.gif');
     // audio assets
     // todo: "Audio cache entry missing hit-target" error on console
     this.load.audio('hit-target', 'assets/audio/bin-sound.mp3');
-    this.sound.add('hit-target', {loop: true})
+    this.sound.add('hit-target', {loop: true});
     this.load.image('light_off', 'assets/img/light_off.png');
     this.load.image('light_on', 'assets/img/light_on.png');
 }
@@ -44,7 +45,13 @@ function create() {
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
 
-
+    // Create Lives
+    this.lives = this.add.group();
+    for (let i = 0; i < 3; i++) {
+        let life = this.lives.create(190 - (75 * i), 50, 'life');
+        life.displayWidth = 69;
+        life.displayHeight = 69;
+    }
 
     // function that does something when an object collides with the bounds
     // this.physics.world.on('worldbounds', function () {
@@ -139,6 +146,7 @@ function hitTarget (projectile) {
 function missedTarget (projectile) {
     setProjectileDrag(projectile);
     if (projectile.body.angularVelocity === 0) {
+        lifeHandler(this);
         resetProjectile(projectile);
         this.floorCollider.active = false;
     }
@@ -174,3 +182,13 @@ function addProjectileScalingTween (game, projectile) {
     });
 }
 
+function lifeHandler (scene) {
+    let life = scene.lives.getFirstAlive();
+    if (life) {
+        scene.lives.killAndHide(life);
+    }
+
+    if (scene.lives.countActive() < 1) {
+        console.log('game over');
+    }
+}
