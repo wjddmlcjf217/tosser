@@ -109,6 +109,7 @@ function hitTarget (projectile) {
     if (projectile.body.velocity.y > 0) {
         resetProjectile(projectile);
         this.floorCollider.active = false;
+        this.sound.play('hit-target');
     }
 }
 
