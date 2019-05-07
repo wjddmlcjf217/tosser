@@ -23,10 +23,14 @@ let config = {
 new Phaser.Game(config);
 
 function preload() {
+    // image assets
     this.load.image('background', 'assets/img/study_area.png');
     this.load.image('bin_top', 'assets/img/bin_top.png');
     this.load.image('paper', 'assets/img/paper.png');
     this.load.image('banana', 'assets/img/banana-sprite.png');
+    // audio assets
+    this.load.audio('hit-target', 'assets/audio/bin-sound.mp3');
+    this.sound.add('hit-target', {loop: true})
 }
 
 function create() {
