@@ -37,27 +37,11 @@ function create() {
 
     this.queue = ['paper', 'banana', 'waterbottle'];
 
-    // for (let i = 0; i < this.queue.length; i++) {
-    //     this.hero = createProjectile(this, this.queue[i])
-    // }
-
-    // this.queue = [createProjectile(this, 'paper'), createProjectile(this, 'banana'),
-    //     createProjectile(this, 'waterbottle')];
-
-
     this.hero = createProjectile(this, this.queue[Math.floor(Math.random() * 3)]);
     this.hero.visible = true;
     this.hero.setInteractive();
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
-
-
-    // for (let i = 0; i < len(this.queue); i++){
-    //     createPhysicsObjects(this, this.queue[i]);
-    //
-    // }
-
-    // this.hero.debugShowBody = false;
 
     // function that does something when an object collides with the bounds
     // this.physics.world.on('worldbounds', function () {
@@ -72,18 +56,16 @@ function update() {
         this.floorCollider.active = true;
         console.log('inside' + this.hero.body.velocity.y)
 
-        // console.log(this.hero)
     }
 
-    // console.log(this.floorCollider.active);
-    // console.log(this.hero.body.velocity.y)
+
 }
 
-function pointerDownHandler () {
-        this.input.on('pointerup', pointerUpHandler, this);
+function pointerDownHandler() {
+    this.input.on('pointerup', pointerUpHandler, this);
 }
 
-function pointerUpHandler (pointer) {
+function pointerUpHandler(pointer) {
     let velocityX = pointer.upX - pointer.downX;
     let velocityY = pointer.upY - pointer.downY;
     let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
@@ -98,7 +80,7 @@ function pointerUpHandler (pointer) {
     this.input.off('pointerup');
 }
 
-function createBackground (game) {
+function createBackground(game) {
     let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background');
     background.displayHeight = window.innerHeight;
     background.displayWidth = window.innerWidth;
@@ -116,7 +98,7 @@ function createBackground (game) {
 //     return hero;
 // }
 
-function createProjectile (game, image) {
+function createProjectile(game, image) {
     let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
 
     hero.state = 'resting';
@@ -133,7 +115,7 @@ function createProjectile (game, image) {
 //
 // }
 
-function createPhysicsObjects (game) { // should be called only once
+function createPhysicsObjects(game) { // should be called only once
     let binOne = game.add.rectangle(window.innerWidth * 0.295, window.innerHeight * 0.430, 170, 1);
     let binTwo = game.add.rectangle(window.innerWidth * 0.640, window.innerHeight * 0.430, 170, 1);
     let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth, 1);
@@ -149,7 +131,7 @@ function createPhysicsObjects (game) { // should be called only once
     game.floorCollider.active = false;
 }
 
-function hitTarget (projectile) {
+function hitTarget(projectile) {
     if (projectile.body.velocity.y > 0) {
         projectile.disableBody(false, true);
         resetProjectile(projectile);
@@ -157,7 +139,7 @@ function hitTarget (projectile) {
     }
 }
 
-function missedTarget (projectile) {
+function missedTarget(projectile) {
     setProjectileDrag(projectile);
     if (projectile.body.angularVelocity === 0) {
         projectile.disableBody(false, false);
@@ -166,20 +148,19 @@ function missedTarget (projectile) {
     }
 }
 
-function spawnProjectile (projectile) {
+function spawnProjectile(projectile) {
     let scene = projectile.scene;
 
-    // scene.hero = scene.queue[Math.floor(Math.random() * 3)];
     scene.hero = createProjectile(scene, scene.queue[Math.floor(Math.random() * 3)]);
 
-    // projectile.enableBody(true, window.innerWidth / 2, window.innerHeight * 0.9, true, true);
     scene.hero.visible = true;
     scene.hero.setInteractive();
     scene.hero.on('pointerdown', pointerDownHandler, scene);
 
     createPhysicsObjects(scene)
 }
-function resetProjectile (projectile) {
+
+function resetProjectile(projectile) {
     projectile.body.stop();
     console.log(projectile);
     projectile.scene.tweens.killTweensOf(projectile);
@@ -188,27 +169,15 @@ function resetProjectile (projectile) {
 
     spawnProjectile(projectile);
 
-    // let floor = scene.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth, 1);
-    // scene.floorCollider = scene.physics.add.collider(scene.hero, floor, missedTarget, null, scene);
-    // scene.floorCollider.active = true;
-
-    // createPhysicsObjects(scene);
-
-
-    // projectile.destroy();
-    //
-    // scene.hero = createHeroProjectile(scene, scene.queue[Math.floor(Math.random() * 3)]);
-    // scene.hero.on('pointerdown', pointerDownHandler, scene);
-    // createPhysicsObjects(scene);
 }
 
-function setProjectileDrag (projectile) {
+function setProjectileDrag(projectile) {
     projectile.body.setAllowDrag(true);
     projectile.body.setDrag(20, 0);
     projectile.body.setAngularDrag(180);
 }
 
-function addProjectileScalingTween (game, projectile) {
+function addProjectileScalingTween(game, projectile) {
     game.tweens.add({
         targets: projectile,
         displayWidth: 30,
@@ -221,7 +190,7 @@ function addProjectileScalingTween (game, projectile) {
 }
 
 function turnLightsOff(game) {
-    let lightsOff = game.add.rectangle(window.innerWidth / 2, window.innerHeight /2,
+    let lightsOff = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2,
         window.innerWidth, window.innerHeight);
     lightsOff.setFillStyle(0x202030, 100);
     lightsOff.setBlendMode('MULTIPLY');
