@@ -34,13 +34,12 @@ function preload() {
 
 function create() {
     createBackground(this);
+    createLight(this);
     this.hero = createHeroProjectile(this, 'paper');
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
-    createLight(this).on('pointerdown', function () {
-        this.setTexture(this.texture.key === 'light_on'? 'light_off' : 'light_on');
-        this.darkenEffect.setVisible(!this.darkenEffect.visible);
-    });
+
+
 
     // function that does something when an object collides with the bounds
     // this.physics.world.on('worldbounds', function () {
@@ -81,15 +80,20 @@ function createBackground (game) {
     background.displayWidth = window.innerWidth;
 }
 
-function createLight (game) {
-    let light = game.add.image(window.innerWidth / 2, window.innerHeight * 0.027, 'light_on');
+function createLight (scene) {
+    let light, darkenEffect;
+    light = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.027, 'light_on');
     light.setInteractive();
-    light.darkenEffect = game.add.rectangle(window.innerWidth / 2, window.innerHeight /2,
+    darkenEffect = scene.add.rectangle(window.innerWidth / 2, window.innerHeight /2,
         window.innerWidth, window.innerHeight);
-    light.darkenEffect.setVisible(false);
-    light.darkenEffect.setFillStyle(0x202030, 100);
-    light.darkenEffect.setBlendMode('MULTIPLY');
-    return light;
+    darkenEffect.setDepth(1000);
+    darkenEffect.setVisible(false);
+    darkenEffect.setFillStyle(0x000000, 100);
+    darkenEffect.setBlendMode('MULTIPLY');
+    light.on('pointerdown', function () {
+        this.setTexture(this.texture.key === 'light_on'? 'light_off' : 'light_on');
+        darkenEffect.setVisible(!darkenEffect.visible);
+    });
 }
 
 function createHeroProjectile (game, image) {
