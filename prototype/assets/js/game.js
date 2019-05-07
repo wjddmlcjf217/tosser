@@ -27,6 +27,8 @@ function preload() {
     this.load.image('bin_top', 'assets/img/bin_top.png');
     this.load.image('paper', 'assets/img/paper.png');
     this.load.image('banana', 'assets/img/banana-sprite.png');
+    this.load.image('light_off', 'assets/img/light_off.png');
+    this.load.image('light_on', 'assets/img/light_on.png');
 }
 
 
@@ -35,6 +37,10 @@ function create() {
     this.hero = createHeroProjectile(this, 'paper');
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
+    createLight(this).on('pointerdown', function () {
+        this.setTexture(this.texture.key === 'light_on'? 'light_off' : 'light_on');
+        this.darkenEffect.setVisible(!this.darkenEffect.visible);
+    });
 
     // function that does something when an object collides with the bounds
     // this.physics.world.on('worldbounds', function () {
@@ -73,6 +79,17 @@ function createBackground (game) {
     let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background');
     background.displayHeight = window.innerHeight;
     background.displayWidth = window.innerWidth;
+}
+
+function createLight (game) {
+    let light = game.add.image(window.innerWidth / 2, window.innerHeight * 0.027, 'light_on');
+    light.setInteractive();
+    light.darkenEffect = game.add.rectangle(window.innerWidth / 2, window.innerHeight /2,
+        window.innerWidth, window.innerHeight);
+    light.darkenEffect.setVisible(false);
+    light.darkenEffect.setFillStyle(0x202030, 100);
+    light.darkenEffect.setBlendMode('MULTIPLY');
+    return light;
 }
 
 function createHeroProjectile (game, image) {
@@ -145,12 +162,5 @@ function addProjectileScalingTween (game, projectile) {
         repeat: 0,
         yoyo: false
     });
-}
-
-function turnLightsOff(game) {
-    let lightsOff = game.add.rectangle(window.innerWidth / 2, window.innerHeight /2,
-        window.innerWidth, window.innerHeight);
-    lightsOff.setFillStyle(0x202030, 100);
-    lightsOff.setBlendMode('MULTIPLY');
 }
 
