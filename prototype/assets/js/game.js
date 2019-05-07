@@ -28,13 +28,13 @@ function preload() {
     this.load.image('bin_top', 'assets/img/bin_top.png');
     this.load.image('paper', 'assets/img/paper.png');
     this.load.image('banana', 'assets/img/banana-sprite.png');
+    this.load.image('life', 'assets/img/life.gif');
     // audio assets
     this.load.audio('hit-target', [
         'assets/audio/bin-sound.m4a',
         'assets/audio/bin-sound.mp3',
     ]);
     this.load.audio('hit-target', 'assets/audio/bin-sound.mp3');
-    this.sound.add('hit-target', {loop: true});
     this.load.image('light_off', 'assets/img/light_off.png');
     this.load.image('light_on', 'assets/img/light_on.png');
 }
@@ -42,9 +42,23 @@ function preload() {
 function create() {
     createBackground(this);
     createLight(this);
+
+    // Create Score
+    this.scoreValue = 0;
+    this.scoreText = this.add.text(window.innerWidth * 0.32, window.innerHeight * 0.28, 'Score: ' + this.scoreValue, {fontStyle: 'Bolder', fontSize: 69, color: 'black'});
+
+    // Create Hero
     this.hero = createHeroProjectile(this, 'paper');
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
+
+    // Create Lives
+    this.lives = this.add.group();
+    for (let i = 0; i < 3; i++) {
+        let life = this.lives.create(window.innerWidth * 0.193 - ((window.innerWidth * 0.076) * i), window.innerHeight * 0.028, 'life');
+        life.displayWidth = window.innerWidth * 0.070;
+        life.displayHeight = window.innerHeight * 0.039;
+    }
 }
 
 function update() {
@@ -124,6 +138,7 @@ function createPhysicsObjects (game) {
 function hitTarget (projectile) {
     if (projectile.body.velocity.y > 0) {
         resetProjectile(projectile);
+        scoreHandler(this);
         this.floorCollider.active = false;
         this.sound.play('hit-target');
     }
@@ -132,6 +147,7 @@ function hitTarget (projectile) {
 function missedTarget (projectile) {
     setProjectileDrag(projectile);
     if (projectile.body.angularVelocity === 0) {
+        lifeHandler(this);
         resetProjectile(projectile);
         this.floorCollider.active = false;
     }
@@ -165,4 +181,21 @@ function addProjectileScalingTween (game, projectile) {
         repeat: 0,
         yoyo: false
     });
+}
+
+function lifeHandler (scene) {
+    let life = scene.lives.getFirstAlive();
+    if (life) {
+        scene.lives.killAndHide(life);
+    }
+
+    if (scene.lives.countActive() < 1) {
+        console.log('game over');
+    }
+}
+
+
+function scoreHandler (scene) {
+    let score = scene.scoreValue += 1;
+    scene.scoreText.setText('Score: ' + score)
 }
