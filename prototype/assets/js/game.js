@@ -29,7 +29,6 @@ function preload() {
     this.load.image('banana', 'assets/img/banana-sprite.png');
 }
 
-
 function create() {
     createBackground(this);
     this.hero = createHeroProjectile(this, 'paper');
@@ -51,7 +50,7 @@ function update() {
 }
 
 function pointerDownHandler () {
-        this.input.on('pointerup', pointerUpHandler, this);
+    this.input.on('pointerup', pointerUpHandler, this);
 }
 
 function pointerUpHandler (pointer) {
