@@ -32,13 +32,26 @@ function preload() {
     // todo: "Audio cache entry missing hit-target" error on console
     this.load.audio('hit-target', 'assets/audio/bin-sound.mp3');
     this.sound.add('hit-target', {loop: true})
+    this.load.image('light_off', 'assets/img/light_off.png');
+    this.load.image('light_on', 'assets/img/light_on.png');
 }
+
 
 function create() {
     createBackground(this);
+    createLight(this);
     this.hero = createHeroProjectile(this, 'paper');
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
+
+
+
+    // function that does something when an object collides with the bounds
+    // this.physics.world.on('worldbounds', function () {
+    //     // console.log('You hit the bounds!');
+    // });
+    // let line = new Phaser.Geom.Line();
+    // let gfx = this.add.graphics().setDefaultStyles({lineStyle: {width: 10, color: 0xffdd00, alpha: 0.5}});
 }
 
 function update() {
@@ -70,6 +83,22 @@ function createBackground (game) {
     let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background');
     background.displayHeight = window.innerHeight;
     background.displayWidth = window.innerWidth;
+}
+
+function createLight (scene) {
+    let light, darkenEffect;
+    light = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.027, 'light_on');
+    light.setInteractive();
+    darkenEffect = scene.add.rectangle(window.innerWidth / 2, window.innerHeight /2,
+        window.innerWidth, window.innerHeight);
+    darkenEffect.setDepth(1000);
+    darkenEffect.setVisible(false);
+    darkenEffect.setFillStyle(0x000000, 100);
+    darkenEffect.setBlendMode('MULTIPLY');
+    light.on('pointerdown', function () {
+        this.setTexture(this.texture.key === 'light_on'? 'light_off' : 'light_on');
+        darkenEffect.setVisible(!darkenEffect.visible);
+    });
 }
 
 function createHeroProjectile (game, image) {
@@ -143,12 +172,5 @@ function addProjectileScalingTween (game, projectile) {
         repeat: 0,
         yoyo: false
     });
-}
-
-function turnLightsOff(game) {
-    let lightsOff = game.add.rectangle(window.innerWidth / 2, window.innerHeight /2,
-        window.innerWidth, window.innerHeight);
-    lightsOff.setFillStyle(0x202030, 100);
-    lightsOff.setBlendMode('MULTIPLY');
 }
 
