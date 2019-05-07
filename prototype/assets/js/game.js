@@ -41,6 +41,11 @@ function preload() {
 function create() {
     createBackground(this);
     createLight(this);
+
+    // Create Score
+    this.scoreValue = 0;
+    this.scoreText = this.add.text(window.innerWidth * 0.32, window.innerHeight * 0.28, 'Score: ' + this.scoreValue, {fontStyle: 'Bolder', fontSize: 69, color: 'black'});
+
     this.hero = createHeroProjectile(this, 'paper');
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
@@ -52,10 +57,6 @@ function create() {
         life.displayWidth = window.innerWidth * 0.070;
         life.displayHeight = window.innerHeight * 0.039;
     }
-
-    this.scoreValue = 0;
-    this.scoreText = this.add.text(window.innerWidth * 0.32, window.innerHeight * 0.28, 'Score: ' + this.scoreValue, {fontStyle: 'Bolder', fontSize: 69, color: 'black'})
-
 
     // function that does something when an object collides with the bounds
     // this.physics.world.on('worldbounds', function () {
