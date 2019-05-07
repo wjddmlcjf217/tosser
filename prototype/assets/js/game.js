@@ -29,13 +29,15 @@ function preload() {
     this.load.image('paper', 'assets/img/paper.png');
     this.load.image('banana', 'assets/img/banana-sprite.png');
     // audio assets
-    // todo: "Audio cache entry missing hit-target" error on console
+    this.load.audio('hit-target', [
+        'assets/audio/bin-sound.m4a',
+        'assets/audio/bin-sound.mp3',
+    ]);
     this.load.audio('hit-target', 'assets/audio/bin-sound.mp3');
     this.sound.add('hit-target', {loop: true})
     this.load.image('light_off', 'assets/img/light_off.png');
     this.load.image('light_on', 'assets/img/light_on.png');
 }
-
 
 function create() {
     createBackground(this);
@@ -43,20 +45,11 @@ function create() {
     this.hero = createHeroProjectile(this, 'paper');
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
-
-
-
-    // function that does something when an object collides with the bounds
-    // this.physics.world.on('worldbounds', function () {
-    //     // console.log('You hit the bounds!');
-    // });
-    // let line = new Phaser.Geom.Line();
-    // let gfx = this.add.graphics().setDefaultStyles({lineStyle: {width: 10, color: 0xffdd00, alpha: 0.5}});
 }
 
 function update() {
     if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
-        this.floorCollider.active = true
+        this.floorCollider.active = true;
     }
 }
 
@@ -173,4 +166,3 @@ function addProjectileScalingTween (game, projectile) {
         yoyo: false
     });
 }
-
