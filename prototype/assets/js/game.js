@@ -30,8 +30,10 @@ function preload() {
     this.load.image('banana', 'assets/img/banana-sprite.png');
     // audio assets
     // todo: "Audio cache entry missing hit-target" error on console
-    // git pull request test
-    this.load.audio('hit-target', 'assets/audio/bin-sound.mp3');
+    this.load.audio('hit-target', [
+        'assets/audio/bin-sound.m4a',
+        'assets/audio/bin-sound.mp3',
+    ]);
     this.sound.add('hit-target', {loop: true})
 }
 
