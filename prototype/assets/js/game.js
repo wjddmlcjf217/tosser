@@ -34,7 +34,6 @@ function preload() {
         'assets/audio/bin-sound.m4a',
         'assets/audio/bin-sound.mp3',
     ]);
-    this.sound.add('hit-target', {loop: true})
 }
 
 function create() {
