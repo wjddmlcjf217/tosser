@@ -42,13 +42,22 @@ function create() {
 
 function update() {
     if (this.leaderboardCreated === false) {
+        this.add.text(window.innerWidth * 0.30, window.innerHeight * 0.05, "Leaderboard", {
+            fontFamily: 'Arial',
+            fontSize: 64,
+            color: 'black'
+        });
         if (playerList.length > 0) {
             console.log("update");
             let y = 150;
             for (let i = 0; i < playerList.length; i++) {
-                let scores = playerList[i][0] + ' ' + playerList[i][1];
                 y += 100;
-                this.add.text(window.innerWidth / 2 - 150, y, scores, {
+                this.add.text(window.innerWidth * 0.20, y, playerList[i][0], {
+                    fontFamily: 'Arial',
+                    fontSize: 64,
+                    color: 'black'
+                });
+                this.add.text(window.innerWidth * 0.70, y, playerList[i][1], {
                     fontFamily: 'Arial',
                     fontSize: 64,
                     color: 'black'
