@@ -44,7 +44,7 @@ function create() {
 
 function update() {
     if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
-        this.floorCollider.active = true
+        this.floorCollider.active = true;
     }
 }
 
