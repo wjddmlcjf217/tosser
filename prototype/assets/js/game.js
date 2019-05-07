@@ -29,14 +29,14 @@ function preload() {
     this.load.image('paper', 'assets/img/paper.png');
     this.load.image('banana', 'assets/img/banana-sprite.png');
     this.load.image('life', 'assets/img/life.gif');
+    this.load.image('light_off', 'assets/img/light_off.png');
+    this.load.image('light_on', 'assets/img/light_on.png');
+
     // audio assets
     this.load.audio('hit-target', [
         'assets/audio/bin-sound.m4a',
         'assets/audio/bin-sound.mp3',
     ]);
-    this.load.audio('hit-target', 'assets/audio/bin-sound.mp3');
-    this.load.image('light_off', 'assets/img/light_off.png');
-    this.load.image('light_on', 'assets/img/light_on.png');
 }
 
 function create() {
