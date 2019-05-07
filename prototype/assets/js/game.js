@@ -34,7 +34,7 @@ function preload() {
         'assets/audio/bin-sound.mp3',
     ]);
     this.load.audio('hit-target', 'assets/audio/bin-sound.mp3');
-    this.sound.add('hit-target', {loop: true})
+    this.sound.add('hit-target', {loop: true});
     this.load.image('light_off', 'assets/img/light_off.png');
     this.load.image('light_on', 'assets/img/light_on.png');
 }
