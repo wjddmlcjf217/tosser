@@ -1,4 +1,5 @@
 // version 0.2.2
+import Button from '../objects/button.js'
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
