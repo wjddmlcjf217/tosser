@@ -5,7 +5,6 @@ export default class GameScene extends Phaser.Scene {
         super("Game");
     }
 
-
     preload() {
         // image assets
         this.load.image('background', 'assets/img/study_area.png');
@@ -24,8 +23,8 @@ export default class GameScene extends Phaser.Scene {
     }
 
     create() {
-        createBackground(this);
-        createLight(this);
+        this.createBackground(this);
+        this.createLight(this);
 
         // Create Score
         this.scoreValue = 0;
@@ -36,9 +35,9 @@ export default class GameScene extends Phaser.Scene {
         });
 
         // Create Hero
-        this.hero = createHeroProjectile(this, 'paper');
-        this.hero.on('pointerdown', pointerDownHandler, this);
-        createPhysicsObjects(this);
+        this.hero = this.createHeroProjectile(this, 'paper');
+        this.hero.on('pointerdown', this.pointerDownHandler, this);
+        this.createPhysicsObjects(this);
 
         // Create Lives
         this.lives = this.add.group();
@@ -56,7 +55,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     pointerDownHandler() {
-        this.input.on('pointerup', pointerUpHandler, this);
+        this.input.on('pointerup', this.pointerUpHandler, this);
     }
 
     pointerUpHandler(pointer) {
@@ -69,7 +68,7 @@ export default class GameScene extends Phaser.Scene {
         this.hero.body.setVelocity(velocity.x * 0.2, velocity.y * 2.0);
         this.hero.body.setAngularVelocity(500);
         this.hero.body.setAccelerationY((velocity.y * -1) * 1.2);
-        addProjectileScalingTween(this, this.hero);
+        this.addProjectileScalingTween(this, this.hero);
         // gfx.clear().strokeLineShape(line);
         this.input.off('pointerup');
     }
@@ -121,17 +120,17 @@ export default class GameScene extends Phaser.Scene {
         game.physics.add.existing(floor, true);
 
         // Add physical interactions
-        game.physics.add.overlap(game.hero, binOne, hitTarget, null, game);
-        game.physics.add.overlap(game.hero, binTwo, hitTarget, null, game);
-        game.floorCollider = game.physics.add.collider(game.hero, floor, missedTarget, null, game);
+        game.physics.add.overlap(game.hero, binOne, this.hitTarget, null, game);
+        game.physics.add.overlap(game.hero, binTwo, this.hitTarget, null, game);
+        game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
         game.floorCollider.active = false;
     }
 
 
     hitTarget(projectile) {
         if (projectile.body.velocity.y > 0) {
-            resetProjectile(projectile);
-            scoreHandler(this);
+            this.resetProjectile(projectile);
+            this.scoreHandler(this);
             this.floorCollider.active = false;
             this.sound.play('hit-target');
         }
@@ -139,10 +138,10 @@ export default class GameScene extends Phaser.Scene {
 
 
     missedTarget(projectile) {
-        setProjectileDrag(projectile);
+        this.setProjectileDrag(projectile);
         if (projectile.body.angularVelocity === 0) {
-            lifeHandler(this);
-            resetProjectile(projectile);
+            this.lifeHandler(this);
+            this.resetProjectile(projectile);
             this.floorCollider.active = false;
         }
     }
@@ -195,11 +194,5 @@ export default class GameScene extends Phaser.Scene {
     scoreHandler(scene) {
         let score = scene.scoreValue += 1;
         scene.scoreText.setText('Score: ' + score)
-    }
-
-    turnLighsOff(game) {
-        let lightsOff = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, window.innerWidth, window.innerHeight);
-        lightsOff.setFillStyle(0x202030, 100);
-        lightsOff.setBlendMode('MULTIPLY');
     }
 }
