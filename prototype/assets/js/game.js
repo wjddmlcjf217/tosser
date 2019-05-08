@@ -22,6 +22,9 @@ let config = {
 
 new Phaser.Game(config);
 
+/**
+ * Preload assets for Phaser Game
+ */
 function preload() {
     // image assets
     this.load.image('background', 'assets/img/study_area.png');
@@ -39,8 +42,14 @@ function preload() {
     ]);
 }
 
+/**
+ * Initial Object Creation for Phaser Game
+ */
 function create() {
+    // Create Background
     createBackground(this);
+
+    // Create Light
     createLight(this);
 
     // Create Score
@@ -61,16 +70,27 @@ function create() {
     }
 }
 
+/**
+ * Called Every Frame for Phaser Game
+ */
 function update() {
+    // Activate floor collider
     if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
         this.floorCollider.active = true;
     }
 }
 
+/**
+ * Handles Pointer Down Event
+ */
 function pointerDownHandler () {
     this.input.on('pointerup', pointerUpHandler, this);
 }
 
+/**
+ * Handles Pointer up Event
+ * @param pointer Phaser pointer
+ */
 function pointerUpHandler (pointer) {
     let velocityX = pointer.upX - pointer.downX;
     let velocityY = pointer.upY - pointer.downY;
@@ -86,12 +106,20 @@ function pointerUpHandler (pointer) {
     this.input.off('pointerup');
 }
 
+/**
+ * Creates Background in scene
+ * @param game Phaser Game
+ */
 function createBackground (game) {
     let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background');
     background.displayHeight = window.innerHeight;
     background.displayWidth = window.innerWidth;
 }
 
+/**
+ * Create Light in scene
+ * @param scene
+ */
 function createLight (scene) {
     let light, darkenEffect;
     light = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.027, 'light_on');
@@ -108,6 +136,12 @@ function createLight (scene) {
     });
 }
 
+/**
+ * Creates the hero projectile
+ * @param game Phaser game
+ * @param image Phaser image key
+ * @returns Hero image game object
+ */
 function createHeroProjectile (game, image) {
     let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
     hero.setInteractive();
@@ -120,6 +154,10 @@ function createHeroProjectile (game, image) {
     return hero;
 }
 
+/**
+ * Creates physics objects
+ * @param game Phaser Game
+ */
 function createPhysicsObjects (game) {
     let binOne = game.add.rectangle(window.innerWidth * 0.295, window.innerHeight * 0.430, 170, 1);
     let binTwo = game.add.rectangle(window.innerWidth * 0.640, window.innerHeight * 0.430, 170, 1);
@@ -135,6 +173,10 @@ function createPhysicsObjects (game) {
     game.floorCollider.active = false;
 }
 
+/**
+ * Projectile Hit target handler
+ * @param projectile
+ */
 function hitTarget (projectile) {
     if (projectile.body.velocity.y > 0) {
         resetProjectile(projectile);
@@ -144,6 +186,10 @@ function hitTarget (projectile) {
     }
 }
 
+/**
+ * Projectile missed target handler
+ * @param projectile
+ */
 function missedTarget (projectile) {
     setProjectileDrag(projectile);
     if (projectile.body.angularVelocity === 0) {
@@ -153,6 +199,10 @@ function missedTarget (projectile) {
     }
 }
 
+/**
+ * Reset projectile to original position
+ * @param projectile
+ */
 function resetProjectile (projectile) {
     projectile.scene.tweens.killTweensOf(projectile);
     projectile.disableBody(true, true);
@@ -165,12 +215,21 @@ function resetProjectile (projectile) {
     projectile.body.setAllowDrag(false);
 }
 
+/**
+ * Applies drag to projectile
+ * @param projectile
+ */
 function setProjectileDrag (projectile) {
     projectile.body.setAllowDrag(true);
     projectile.body.setDrag(20, 0);
     projectile.body.setAngularDrag(180);
 }
 
+/**
+ * Scales the projectile over time
+ * @param game
+ * @param projectile
+ */
 function addProjectileScalingTween (game, projectile) {
     game.tweens.add({
         targets: projectile,
@@ -183,6 +242,10 @@ function addProjectileScalingTween (game, projectile) {
     });
 }
 
+/**
+ * Reduce player lives
+ * @param scene
+ */
 function lifeHandler (scene) {
     let life = scene.lives.getFirstAlive();
     if (life) {
@@ -194,7 +257,10 @@ function lifeHandler (scene) {
     }
 }
 
-
+/**
+ * Increase player score
+ * @param scene
+ */
 function scoreHandler (scene) {
     let score = scene.scoreValue += 1;
     scene.scoreText.setText('Score: ' + score)
