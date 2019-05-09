@@ -90,6 +90,7 @@ export default class GameScene extends Phaser.Scene {
         if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
             this.floorCollider.active = true;
         }
+
     }
 
     /**
@@ -113,9 +114,14 @@ export default class GameScene extends Phaser.Scene {
         if (velocity.angle() > 3.5 && velocity.angle() < 5.8) {
             this.hero.state = 'flying';
             this.hero.disableInteractive();
-            this.hero.body.setVelocity(velocity.x * 0.2, velocity.y * 2.0);
-            this.hero.body.setAngularVelocity(500);
-            this.hero.body.setAccelerationY((velocity.y * -1) * 1.2);
+            // this.hero.body.setVelocity(velocity.x * 0.75, velocity.y * 4);
+            this.hero.body.setVelocity(velocity.x * window.innerWidth * 0.0008, velocity.y * window.innerHeight * 0.0022);
+
+            this.hero.body.setAngularVelocity(400);
+            this.hero.body.setAccelerationX(velocity.x * window.innerWidth * -0.00037001119); //-0.275
+            this.hero.body.setAccelerationY(velocity.y * window.innerHeight * -0.00259);
+            // this.hero.body.setAccelerationX(velocity.x * -0.275); //-0.275
+            // this.hero.body.setAccelerationY(velocity.y * -4.4);
             this.addProjectileScalingTween(this, this.hero);
             // gfx.clear().strokeLineShape(line);
             this.input.off('pointerup');
@@ -181,9 +187,9 @@ export default class GameScene extends Phaser.Scene {
         hero.state = 'resting';
         hero.displayHeight = 150;
         hero.displayWidth = 150;
-        hero.setBounce(0.3);
-        hero.body.onWorldBounds = true;
-        hero.body.setCollideWorldBounds(true);
+        hero.setBounce(0.4);
+        // hero.body.onWorldBounds = true;
+        // hero.body.setCollideWorldBounds(true);
         hero.visible = false;
         return hero;
     }
@@ -195,7 +201,7 @@ export default class GameScene extends Phaser.Scene {
     createPhysicsObjects(game) {
         let binOne = game.add.rectangle(window.innerWidth * 0.301, window.innerHeight * 0.430, window.innerWidth * 0.14, 1);
         let binTwo = game.add.rectangle(window.innerWidth * 0.645, window.innerHeight * 0.430, window.innerWidth * 0.14, 1);
-        let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth, 1);
+        let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth * 10, 1);
         game.physics.add.existing(binOne, true);
         game.physics.add.existing(binTwo, true);
         game.physics.add.existing(floor, true);
@@ -227,6 +233,8 @@ export default class GameScene extends Phaser.Scene {
      */
     missedTarget(projectile) {
         this.setProjectileDrag(projectile);
+        projectile.setAccelerationX(0);
+
         if (projectile.body.angularVelocity === 0) {
             this.lifeHandler(this);
             projectile.disableBody(false, false);
@@ -268,8 +276,8 @@ export default class GameScene extends Phaser.Scene {
      */
     setProjectileDrag(projectile) {
         projectile.body.setAllowDrag(true);
-        projectile.body.setDrag(20, 0);
-        projectile.body.setAngularDrag(180);
+        projectile.body.setDrag(100, 0);
+        projectile.body.setAngularDrag(360);
     }
 
     /**
@@ -280,10 +288,10 @@ export default class GameScene extends Phaser.Scene {
     addProjectileScalingTween(game, projectile) {
         game.tweens.add({
             targets: projectile,
-            displayWidth: 30,
-            displayHeight: 30,
+            displayWidth: 50,
+            displayHeight: 50,
             ease: 'Linear',
-            duration: 2500,
+            duration: 1500,
             repeat: 0,
             yoyo: false
         });
