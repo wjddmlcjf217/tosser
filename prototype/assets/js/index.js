@@ -3,8 +3,6 @@ import GameScene from './scenes/game.js'
 import TitleScene from './scenes/title.js'
 import LeaderBoard from './scenes/leaderboard.js'
 import CreditsScene from './scenes/credits.js'
-import LoginScene from './scenes/login.js'
-
 
 class Game extends Phaser.Game {
     constructor () {
