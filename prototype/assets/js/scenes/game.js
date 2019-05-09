@@ -60,9 +60,7 @@ export default class GameScene extends Phaser.Scene {
         if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
             this.floorCollider.active = true;
         }
-        console.log("x=", this.hero.body.velocity.x);
 
-        console.log("y=", this.hero.body.velocity.y);
     }
 
     pointerDownHandler() {
