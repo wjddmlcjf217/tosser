@@ -36,3 +36,10 @@ function sortLeaderBoard(leaderBoard) {
         return key1[1] - key2[1];
     });
 }
+
+function uploadScore(score) {
+    let scoreRoot = firebase.database().ref().child("users/");
+    let JSONobj = {};
+    JSONobj.user = score;
+    scoreRoot.set(JSONobj)
+}
