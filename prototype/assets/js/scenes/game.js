@@ -11,6 +11,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('background', 'assets/img/study_area.png');
         this.load.image('bin_top', 'assets/img/bin_top.png');
         this.load.image('paper', 'assets/img/paper.png');
+        this.load.image('waterbottle', 'assets/img/water_bottle.png');
         this.load.image('banana', 'assets/img/banana-sprite.png');
         this.load.image('life', 'assets/img/life.gif');
         this.load.image('light_off', 'assets/img/light_off.png');
@@ -37,6 +38,12 @@ export default class GameScene extends Phaser.Scene {
 
         // Create Hero
         this.hero = this.createHeroProjectile(this, 'paper');
+
+        this.queue = ['paper', 'banana', 'waterbottle'];
+
+        this.hero = this.createHeroProjectile(this, this.queue[Math.floor(Math.random() * 3)]);
+        this.hero.visible = true;
+        this.hero.setInteractive();
         this.hero.on('pointerdown', this.pointerDownHandler, this);
         this.createPhysicsObjects(this);
 
@@ -64,16 +71,32 @@ export default class GameScene extends Phaser.Scene {
         let velocityY = pointer.upY - pointer.downY;
         let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
         velocity.scale(1000);
-        this.hero.state = 'flying';
-        this.hero.disableInteractive();
-        this.hero.body.setVelocity(velocity.x * 0.2, velocity.y * 2.0);
-        this.hero.body.setAngularVelocity(500);
-        this.hero.body.setAccelerationY((velocity.y * -1) * 1.2);
-        this.addProjectileScalingTween(this, this.hero);
-        // gfx.clear().strokeLineShape(line);
-        this.input.off('pointerup');
+
+        console.log(velocity.angle());
+        if (velocity.angle() > 3.5 && velocity.angle() < 5.8) {
+            this.hero.state = 'flying';
+            this.hero.disableInteractive();
+            this.hero.body.setVelocity(velocity.x * 0.2, velocity.y * 2.0);
+            this.hero.body.setAngularVelocity(500);
+            this.hero.body.setAccelerationY((velocity.y * -1) * 1.2);
+            this.addProjectileScalingTween(this, this.hero);
+            // gfx.clear().strokeLineShape(line);
+            this.input.off('pointerup');
+
+            if (this.hero.body.velocity.y > 0) {
+                this.createShadow(this);
+            }
+        }
+
+
     }
 
+    //in progress shadow effect
+    createShadow(game) {
+        let shadow = game.add.image(window.innerWidth * .3, window.innerHeight * 0.559, 'shadow');
+        // shadow.tint = ;
+        shadow.visible = true;
+    }
 
     createBackground(game) {
         let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background');
@@ -108,6 +131,7 @@ export default class GameScene extends Phaser.Scene {
         hero.setBounce(0.3);
         hero.body.onWorldBounds = true;
         hero.body.setCollideWorldBounds(true);
+        hero.visible = false;
         return hero;
     }
 
@@ -130,6 +154,7 @@ export default class GameScene extends Phaser.Scene {
 
     hitTarget(projectile) {
         if (projectile.body.velocity.y > 0) {
+            projectile.disableBody(false, true);
             this.resetProjectile(projectile);
             this.scoreHandler(this);
             this.floorCollider.active = false;
@@ -142,21 +167,29 @@ export default class GameScene extends Phaser.Scene {
         this.setProjectileDrag(projectile);
         if (projectile.body.angularVelocity === 0) {
             this.lifeHandler(this);
+            projectile.disableBody(false, false);
             this.resetProjectile(projectile);
             this.floorCollider.active = false;
         }
     }
 
+    spawnProjectile(projectile) {
+        let scene = projectile.scene;
+
+        scene.hero = this.createHeroProjectile(scene, scene.queue[Math.floor(Math.random() * 3)]);
+
+        scene.hero.visible = true;
+        scene.hero.setInteractive();
+        scene.hero.on('pointerdown', this.pointerDownHandler, scene);
+
+        this.createPhysicsObjects(scene)
+    }
+
     resetProjectile(projectile) {
+        projectile.body.stop();
+        console.log(projectile);
         projectile.scene.tweens.killTweensOf(projectile);
-        projectile.disableBody(true, true);
-        projectile.enableBody(true, window.innerWidth / 2, window.innerHeight * 0.9, true, true);
-        projectile.setInteractive();
-        projectile.visible = true;
-        projectile.state = 'resting';
-        projectile.displayHeight = 150;
-        projectile.displayWidth = 150;
-        projectile.body.setAllowDrag(false);
+        this.spawnProjectile(projectile);
     }
 
 
