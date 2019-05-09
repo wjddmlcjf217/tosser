@@ -39,6 +39,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('light_off', 'assets/img/light_off.png');
         this.load.image('light_on', 'assets/img/light_on.png');
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
+        this.load.image('plus1', 'assets/img/plus1.jpg');
         this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
 
         // audio assets
@@ -136,6 +137,17 @@ export default class GameScene extends Phaser.Scene {
     }
 
     /**
+     * casts a plus 1 animation upon scoring correctly
+     * @param N/A
+     */
+    //in progress shadow effect
+    createPlus1() {
+        this.plus1 = this.add.image(window.innerWidth * .3, window.innerHeight * 0.330, 'plus1');
+        this.plus1.displayHeight = 420;
+        this.plus1.displayWidth = 420;
+    }
+
+    /**
      * casts a shadow under the hero projectile
      * @param game Phaser Game
      */
@@ -220,6 +232,8 @@ export default class GameScene extends Phaser.Scene {
      */
     hitTarget(projectile) {
         if (projectile.body.velocity.y > 0) {
+            this.createPlus1();
+            this.addplus1Tween(this.plus1);
             projectile.disableBody(false, true);
             this.resetProjectile(projectile);
             this.scoreHandler(this);
@@ -295,6 +309,18 @@ export default class GameScene extends Phaser.Scene {
             duration: 1500,
             repeat: 0,
             yoyo: false
+        });
+    }
+
+    addplus1Tween(image) {
+        this.tweens.add({
+            targets: image,
+            alpha: 0,
+            displayWidth: 50,
+            displayHeight: 50,
+            ease: 'Linear',
+            duration: 1500,
+            repeat: 0,
         });
     }
 
