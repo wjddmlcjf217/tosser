@@ -1,6 +1,6 @@
 export default class TitleScene extends Phaser.Scene {
     constructor() {
-        super('Leaderboard');
+        super('LeaderBoard');
     }
 
 
