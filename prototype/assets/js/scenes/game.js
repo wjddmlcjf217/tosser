@@ -6,6 +6,9 @@ export default class GameScene extends Phaser.Scene {
         super("Game");
     }
 
+    /**
+     * Preload assets for Phaser Game
+     */
     preload() {
         // image assets
         this.load.image('background', 'assets/img/study_area.png');
@@ -24,6 +27,9 @@ export default class GameScene extends Phaser.Scene {
         ]);
     }
 
+    /**
+     * Initial Object Creation for Phaser Game
+     */
     create() {
         this.createBackground(this);
         this.createLight(this);
@@ -56,16 +62,26 @@ export default class GameScene extends Phaser.Scene {
         }
     }
 
+    /**
+     * Called Every Frame for Phaser Game
+     */
     update() {
         if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
             this.floorCollider.active = true;
         }
     }
 
+    /**
+     * Handles Pointer Down Event
+     */
     pointerDownHandler() {
         this.input.on('pointerup', this.pointerUpHandler, this);
     }
 
+    /**
+     * Handles Pointer up Event
+     * @param pointer Phaser pointer
+     */
     pointerUpHandler(pointer) {
         let velocityX = pointer.upX - pointer.downX;
         let velocityY = pointer.upY - pointer.downY;
@@ -91,6 +107,10 @@ export default class GameScene extends Phaser.Scene {
 
     }
 
+    /**
+     * casts a shadow under the hero projectile
+     * @param game Phaser Game
+     */
     //in progress shadow effect
     createShadow(game) {
         let shadow = game.add.image(window.innerWidth * .3, window.innerHeight * 0.559, 'shadow');
@@ -98,13 +118,20 @@ export default class GameScene extends Phaser.Scene {
         shadow.visible = true;
     }
 
+    /**
+     * Creates Background in scene
+     * @param game Phaser Game
+     */
     createBackground(game) {
         let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background');
         background.displayHeight = window.innerHeight;
         background.displayWidth = window.innerWidth;
     }
 
-
+    /**
+     * Create Light in scene
+     * @param scene
+     */
     createLight(scene) {
         let light, darkenEffect;
         light = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.027, 'light_on');
@@ -121,7 +148,12 @@ export default class GameScene extends Phaser.Scene {
         });
     }
 
-
+    /**
+     * Creates the hero projectile
+     * @param game Phaser game
+     * @param image Phaser image key
+     * @returns Hero image game object
+     */
     createHeroProjectile(game, image) {
         let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
         hero.setInteractive();
@@ -135,7 +167,10 @@ export default class GameScene extends Phaser.Scene {
         return hero;
     }
 
-
+    /**
+     * Creates physics objects
+     * @param game Phaser Game
+     */
     createPhysicsObjects(game) {
         let binOne = game.add.rectangle(window.innerWidth * 0.295, window.innerHeight * 0.430, 170, 1);
         let binTwo = game.add.rectangle(window.innerWidth * 0.640, window.innerHeight * 0.430, 170, 1);
@@ -151,7 +186,10 @@ export default class GameScene extends Phaser.Scene {
         game.floorCollider.active = false;
     }
 
-
+    /**
+     * Projectile Hit target handler
+     * @param projectile
+     */
     hitTarget(projectile) {
         if (projectile.body.velocity.y > 0) {
             projectile.disableBody(false, true);
@@ -162,7 +200,10 @@ export default class GameScene extends Phaser.Scene {
         }
     }
 
-
+    /**
+     * Projectile missed target handler
+     * @param projectile
+     */
     missedTarget(projectile) {
         this.setProjectileDrag(projectile);
         if (projectile.body.angularVelocity === 0) {
@@ -173,6 +214,10 @@ export default class GameScene extends Phaser.Scene {
         }
     }
 
+    /**
+     * Spawns a new projectile
+     * @param projectile
+     */
     spawnProjectile(projectile) {
         let scene = projectile.scene;
 
@@ -185,6 +230,10 @@ export default class GameScene extends Phaser.Scene {
         this.createPhysicsObjects(scene)
     }
 
+    /**
+     * Reset projectile to original position
+     * @param projectile
+     */
     resetProjectile(projectile) {
         projectile.body.stop();
         console.log(projectile);
@@ -192,14 +241,21 @@ export default class GameScene extends Phaser.Scene {
         this.spawnProjectile(projectile);
     }
 
-
+    /**
+     * Applies drag to projectile
+     * @param projectile
+     */
     setProjectileDrag(projectile) {
         projectile.body.setAllowDrag(true);
         projectile.body.setDrag(20, 0);
         projectile.body.setAngularDrag(180);
     }
 
-
+    /**
+     * Scales the projectile over time
+     * @param game
+     * @param projectile
+     */
     addProjectileScalingTween(game, projectile) {
         game.tweens.add({
             targets: projectile,
@@ -212,7 +268,10 @@ export default class GameScene extends Phaser.Scene {
         });
     }
 
-
+    /**
+     * Reduce player lives
+     * @param scene
+     */
     lifeHandler(scene) {
         let life = scene.lives.getFirstAlive();
         if (life) {
@@ -224,7 +283,10 @@ export default class GameScene extends Phaser.Scene {
         }
     }
 
-
+    /**
+     * Increase player score
+     * @param scene
+     */
     scoreHandler(scene) {
         let score = scene.scoreValue += 1;
         scene.scoreText.setText('Score: ' + score)
