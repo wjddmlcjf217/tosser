@@ -316,6 +316,9 @@ export default class GameScene extends Phaser.Scene {
         scene.scoreText.setText('Score: ' + score)
     }
 
+    /**
+     * write to firebase with score
+     */
     // Write score
     writeLeaderBoard() {
         firebase.database().ref("users/").update({
