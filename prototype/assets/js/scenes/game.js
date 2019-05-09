@@ -1,6 +1,27 @@
 // version 0.2.2
 import Button from '../objects/button.js'
 
+// Get login info
+
+// takes all database profile data to display on profile page
+let displayName = null;
+function initApp() {
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+            displayName = user.displayName;
+        } else {
+
+        }
+    }, function (error) {
+        console.log(error);
+    });
+};
+
+window.addEventListener('load', function () {
+    initApp()
+});
+
 export default class GameScene extends Phaser.Scene {
     constructor() {
         super("Game");
@@ -221,6 +242,8 @@ export default class GameScene extends Phaser.Scene {
 
         if (scene.lives.countActive() < 1) {
             scene.scoreText.setText('Game Over');
+            // Write score to leaderboard
+            this.writeLeaderBoard();
             setTimeout(function() {scene.scene.start('LeaderBoard')}, 2000)
         }
     }
@@ -229,5 +252,12 @@ export default class GameScene extends Phaser.Scene {
     scoreHandler(scene) {
         let score = scene.scoreValue += 1;
         scene.scoreText.setText('Score: ' + score)
+    }
+
+    // Write score
+    writeLeaderBoard() {
+        firebase.database().ref("users/").update({
+            [(displayName.split(' '))[0]]: this.scoreValue
+        });
     }
 }

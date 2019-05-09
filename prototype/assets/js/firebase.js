@@ -25,21 +25,15 @@ function getLeaderBoard() {
         let leaderBoard = snapshot.val();
         this.sortLeaderBoard(leaderBoard);
         // this.add.text(0, 0, parseInt(leaderBoard[0]), { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
-    })
+    });
 }
 
 function sortLeaderBoard(leaderBoard) {
+    playerList = []
     for (name in leaderBoard) {
         playerList.push([name, leaderBoard[name]])
     }
     playerList.sort(function (key2, key1) {
         return key1[1] - key2[1];
     });
-}
-
-function uploadScore(score) {
-    let scoreRoot = firebase.database().ref().child("users/");
-    let JSONobj = {};
-    JSONobj.user = score;
-    scoreRoot.set(JSONobj)
 }

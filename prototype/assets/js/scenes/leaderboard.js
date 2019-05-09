@@ -10,7 +10,7 @@ export default class TitleScene extends Phaser.Scene {
 
     create() {
         this.leaderboardCreated = false;
-        this.createBackground(this)
+        this.createBackground(this);
         this.titleButton = this.add.text(window.innerWidth * 0.25, window.innerHeight * 0.65, 'Main Menu', {
             fontStyle: 'Bolder',
             fontSize: 100,
