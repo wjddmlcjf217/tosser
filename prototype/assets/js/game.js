@@ -9,7 +9,7 @@ let config = {
         default: 'arcade',
         arcade: {
             gravity: {y: 0},
-            debug: true,
+            debug: false,
         },
     },
 
@@ -23,11 +23,13 @@ let config = {
 new Phaser.Game(config);
 
 function preload() {
+    this.load.image('shadow', 'assets/img/shadow.png');
     this.load.image('background', 'assets/img/study_area.png');
     this.load.image('bin_top', 'assets/img/bin_top.png');
     this.load.image('paper', 'assets/img/paper.png');
     this.load.image('banana', 'assets/img/banana-sprite.png');
     this.load.image('waterbottle', 'assets/img/water_bottle.png');
+
 
 }
 
@@ -54,11 +56,9 @@ function create() {
 function update() {
     if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
         this.floorCollider.active = true;
-        console.log('inside' + this.hero.body.velocity.y)
-
     }
 
-
+    // console.log(this.hero.body.velocity.y)
 }
 
 function pointerDownHandler() {
@@ -70,14 +70,31 @@ function pointerUpHandler(pointer) {
     let velocityY = pointer.upY - pointer.downY;
     let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
     velocity.scale(1000);
-    this.hero.state = 'flying';
-    this.hero.disableInteractive();
-    this.hero.body.setVelocity(velocity.x * 0.2, velocity.y * 2.0);
-    this.hero.body.setAngularVelocity(500);
-    this.hero.body.setAccelerationY((velocity.y * -1) * 1.2);
-    addProjectileScalingTween(this, this.hero);
-    // gfx.clear().strokeLineShape(line);
-    this.input.off('pointerup');
+
+    console.log(velocity.angle());
+    if (velocity.angle() > 3.5 && velocity.angle() < 5.8){
+        this.hero.state = 'flying';
+        this.hero.disableInteractive();
+        this.hero.body.setVelocity(velocity.x * 0.2, velocity.y * 2.0);
+        this.hero.body.setAngularVelocity(500);
+        this.hero.body.setAccelerationY((velocity.y * -1) * 1.2);
+        addProjectileScalingTween(this, this.hero);
+        // gfx.clear().strokeLineShape(line);
+        this.input.off('pointerup');
+
+        if (this.hero.body.velocity.y > 0){
+            createShadow(this);
+        }
+    }
+
+
+
+}
+
+function createShadow(game) {
+    let shadow = game.add.image(window.innerWidth * .3, window.innerHeight * 0.559, 'shadow');
+    // shadow.tint = ;
+    shadow.visible = true;
 }
 
 function createBackground(game) {
@@ -86,17 +103,6 @@ function createBackground(game) {
     background.displayWidth = window.innerWidth;
 }
 
-// function createHeroProjectile (game, image) {
-//     let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
-//     hero.setInteractive();
-//     hero.state = 'resting';
-//     hero.displayHeight = 150;
-//     hero.displayWidth = 150;
-//     hero.setBounce(0.3);
-//     hero.body.onWorldBounds = true;
-//     hero.body.setCollideWorldBounds(true);
-//     return hero;
-// }
 
 function createProjectile(game, image) {
     let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
