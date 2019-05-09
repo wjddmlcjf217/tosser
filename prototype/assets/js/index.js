@@ -13,4 +13,6 @@ class Game extends Phaser.Game {
     }
 }
 
-window.game = new Game();
+loadLeaderBoard().then(function () {
+    window.game = new Game();
+});
