@@ -1,3 +1,4 @@
+
 // version 3.16.2
 
 
@@ -153,7 +154,6 @@ function createHeroProjectile (game, image) {
     hero.body.setCollideWorldBounds(true);
     return hero;
 }
-
 /**
  * Creates physics objects
  * @param game Phaser Game
