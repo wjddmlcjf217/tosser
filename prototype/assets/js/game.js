@@ -59,6 +59,12 @@ function create() {
 
     // Create Hero
     this.hero = createHeroProjectile(this, 'paper');
+
+    this.queue = ['paper', 'banana', 'waterbottle'];
+
+    this.hero = createProjectile(this, this.queue[Math.floor(Math.random() * 3)]);
+    this.hero.visible = true;
+    this.hero.setInteractive();
     this.hero.on('pointerdown', pointerDownHandler, this);
     createPhysicsObjects(this);
 
@@ -79,6 +85,8 @@ function update() {
     if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
         this.floorCollider.active = true;
     }
+
+    // console.log(this.hero.body.velocity.y)
 }
 
 /**
@@ -97,14 +105,31 @@ function pointerUpHandler (pointer) {
     let velocityY = pointer.upY - pointer.downY;
     let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
     velocity.scale(1000);
-    this.hero.state = 'flying';
-    this.hero.disableInteractive();
-    this.hero.body.setVelocity(velocity.x * 0.2, velocity.y * 2.0);
-    this.hero.body.setAngularVelocity(500);
-    this.hero.body.setAccelerationY((velocity.y * -1) * 1.2);
-    addProjectileScalingTween(this, this.hero);
-    // gfx.clear().strokeLineShape(line);
-    this.input.off('pointerup');
+
+    console.log(velocity.angle());
+    if (velocity.angle() > 3.5 && velocity.angle() < 5.8){
+        this.hero.state = 'flying';
+        this.hero.disableInteractive();
+        this.hero.body.setVelocity(velocity.x * 0.2, velocity.y * 2.0);
+        this.hero.body.setAngularVelocity(500);
+        this.hero.body.setAccelerationY((velocity.y * -1) * 1.2);
+        addProjectileScalingTween(this, this.hero);
+        // gfx.clear().strokeLineShape(line);
+        this.input.off('pointerup');
+
+        if (this.hero.body.velocity.y > 0){
+            createShadow(this);
+        }
+    }
+
+
+
+}
+
+function createShadow(game) {
+    let shadow = game.add.image(window.innerWidth * .3, window.innerHeight * 0.559, 'shadow');
+    // shadow.tint = ;
+    shadow.visible = true;
 }
 
 /**
@@ -152,6 +177,7 @@ function createHeroProjectile (game, image) {
     hero.setBounce(0.3);
     hero.body.onWorldBounds = true;
     hero.body.setCollideWorldBounds(true);
+    hero.visible = false;
     return hero;
 }
 /**
@@ -162,6 +188,7 @@ function createPhysicsObjects (game) {
     let binOne = game.add.rectangle(window.innerWidth * 0.295, window.innerHeight * 0.430, 170, 1);
     let binTwo = game.add.rectangle(window.innerWidth * 0.640, window.innerHeight * 0.430, 170, 1);
     let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth, 1);
+
     game.physics.add.existing(binOne, true);
     game.physics.add.existing(binTwo, true);
     game.physics.add.existing(floor, true);
@@ -179,6 +206,7 @@ function createPhysicsObjects (game) {
  */
 function hitTarget (projectile) {
     if (projectile.body.velocity.y > 0) {
+        projectile.disableBody(false, true);
         resetProjectile(projectile);
         scoreHandler(this);
         this.floorCollider.active = false;
@@ -194,25 +222,34 @@ function missedTarget (projectile) {
     setProjectileDrag(projectile);
     if (projectile.body.angularVelocity === 0) {
         lifeHandler(this);
+        projectile.disableBody(false, false);
         resetProjectile(projectile);
         this.floorCollider.active = false;
     }
+}
+
+function spawnProjectile(projectile) {
+    let scene = projectile.scene;
+
+    scene.hero = createProjectile(scene, scene.queue[Math.floor(Math.random() * 3)]);
+
+    scene.hero.visible = true;
+    scene.hero.setInteractive();
+    scene.hero.on('pointerdown', pointerDownHandler, scene);
+
+    createPhysicsObjects(scene)
 }
 
 /**
  * Reset projectile to original position
  * @param projectile
  */
-function resetProjectile (projectile) {
+function resetProjectile(projectile) {
+    projectile.body.stop();
+    console.log(projectile);
     projectile.scene.tweens.killTweensOf(projectile);
-    projectile.disableBody(true, true);
-    projectile.enableBody(true, window.innerWidth / 2, window.innerHeight * 0.9, true, true);
-    projectile.setInteractive();
-    projectile.visible = true;
-    projectile.state = 'resting';
-    projectile.displayHeight = 150;
-    projectile.displayWidth = 150;
-    projectile.body.setAllowDrag(false);
+    spawnProjectile(projectile);
+
 }
 
 /**
@@ -264,4 +301,11 @@ function lifeHandler (scene) {
 function scoreHandler (scene) {
     let score = scene.scoreValue += 1;
     scene.scoreText.setText('Score: ' + score)
+}
+
+function turnLightsOff(game) {
+    let lightsOff = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2,
+        window.innerWidth, window.innerHeight);
+    lightsOff.setFillStyle(0x202030, 100);
+    lightsOff.setBlendMode('MULTIPLY');
 }
