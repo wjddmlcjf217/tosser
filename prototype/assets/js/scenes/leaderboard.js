@@ -11,6 +11,13 @@ export default class TitleScene extends Phaser.Scene {
     create() {
         this.leaderboardCreated = false;
         this.createBackground(this)
+        this.titlebutton = this.add.text(window.innerWidth * 0.25, window.innerHeight * 0.65, 'Main Menu', {
+            fontStyle: 'Bolder',
+            fontSize: 100,
+            color: 'black'
+        });
+        this.titlebutton.setInteractive();
+        this.titlebutton.on('pointerdown', () => {this.scene.start('Title')})
     }
 
     update() {
