@@ -220,7 +220,8 @@ export default class GameScene extends Phaser.Scene {
         }
 
         if (scene.lives.countActive() < 1) {
-            console.log('game over');
+            scene.scoreText.setText('Game Over');
+            setTimeout(function() {scene.scene.start('LeaderBoard')}, 2000)
         }
     }
 
