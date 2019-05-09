@@ -38,6 +38,8 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('life', 'assets/img/life.gif');
         this.load.image('light_off', 'assets/img/light_off.png');
         this.load.image('light_on', 'assets/img/light_on.png');
+        this.load.image('scoreboard', 'assets/img/scoreboard.png');
+        this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
 
         // audio assets
         this.load.audio('hit-target', [
@@ -53,13 +55,14 @@ export default class GameScene extends Phaser.Scene {
         this.createBackground(this);
         this.createLight(this);
 
-        // Create Score
+        //Add Scoreboard
         this.scoreValue = 0;
-        this.scoreText = this.add.text(window.innerWidth * 0.32, window.innerHeight * 0.28, 'Score: ' + this.scoreValue, {
-            fontStyle: 'Bolder',
-            fontSize: 69,
-            color: 'black'
-        });
+        let scoreboard = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'scoreboard');
+        scoreboard.setX(window.innerWidth * 0.47);
+        scoreboard.setY(window.innerHeight * 0.31);
+
+        //Load Font
+        this.addScoreText(this);
 
         // Create Hero
         this.hero = this.createHeroProjectile(this, 'paper');
@@ -137,8 +140,8 @@ export default class GameScene extends Phaser.Scene {
      * @param game Phaser Game
      */
     //in progress shadow effect
-    createShadow(game) {
-        let shadow = game.add.image(window.innerWidth * .3, window.innerHeight * 0.559, 'shadow');
+    createShadow() {
+        let shadow = this.add.image(window.innerWidth * .3, window.innerHeight * 0.559, 'shadow');
         // shadow.tint = ;
         shadow.visible = true;
     }
@@ -319,7 +322,32 @@ export default class GameScene extends Phaser.Scene {
      */
     scoreHandler(scene) {
         let score = scene.scoreValue += 1;
-        scene.scoreText.setText('Score: ' + score)
+        scene.scoreText.setText(score);
+    }
+
+
+    addScoreText(scene) {
+        WebFont.load({
+            google: {
+                families: ['Kalam']
+            },
+            active: function () {
+                scene.add.text(
+                    window.innerWidth * 0.31, window.innerHeight * 0.285, 'Score:', {
+                        fontFamily: 'Kalam',
+                        fontSize: 80,
+                        color: '#84BCCE',
+                    });
+                scene.scoreText = scene.add.text(
+                    window.innerWidth * 0.59, window.innerHeight * 0.285, scene.scoreValue, {
+                        fontFamily: 'Kalam',
+                        fontSize: 80,
+                        color: '#84BCCE',
+                    });
+                scene.scoreText.setOrigin(0.5, 0);
+                scene.scoreText.setAlign('center');
+            }
+        });
     }
 
     /**
