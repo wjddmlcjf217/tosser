@@ -1,10 +1,8 @@
 // version 0.5
-import Button from '../objects/button.js'
-
-// Get login info
 
 // takes all database profile data to display on profile page
 let displayName = null;
+
 function initApp() {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -16,7 +14,7 @@ function initApp() {
     }, function (error) {
         console.log(error);
     });
-};
+}
 
 window.addEventListener('load', function () {
     initApp()
