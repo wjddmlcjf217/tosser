@@ -38,7 +38,7 @@ export default class TitleScene extends Phaser.Scene {
             color: 'black',
         });
         this.creditsButton.setInteractive();
-        this.creditsButton.on('pointerdown', () => {this.scene.start('Credit')})
+        this.creditsButton.on('pointerdown', () => {this.scene.start('Credits')})
 
     }
 
