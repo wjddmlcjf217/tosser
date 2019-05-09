@@ -38,8 +38,16 @@ export default class TitleScene extends Phaser.Scene {
             color: 'black',
         });
         this.creditsButton.setInteractive();
-        this.creditsButton.on('pointerdown', () => {this.scene.start('Credits')})
+        this.creditsButton.on('pointerdown', () => {this.scene.start('Credits')});
 
+        //Sign-out
+        this.signOutButton = this.add.text(window.innerWidth * 0.65, window.innerHeight * 0.95, 'Sign Out', {
+            fontStyle: 'Bolder',
+            fontSize: 70,
+            color: 'black',
+        })
+        this.signOutButton.setInteractive();
+        this.creditsButton.on('pointerdown', () => {firebase.auth().signOut()});
     }
 
     createBackground(game) {
