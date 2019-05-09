@@ -248,7 +248,6 @@ function resetProjectile(projectile) {
     projectile.body.stop();
     console.log(projectile);
     projectile.scene.tweens.killTweensOf(projectile);
-
     spawnProjectile(projectile);
 
 }
