@@ -40,7 +40,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('light_on', 'assets/img/light_on.png');
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
         this.load.image('plus1', 'assets/img/plus1.jpg');
-        this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
 
         // audio assets
@@ -94,6 +93,8 @@ export default class GameScene extends Phaser.Scene {
     update() {
         if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
             this.floorCollider.active = true;
+            this.rimOneLeftCollider.active = true;
+            this.rimOneRightCollider.active = true;
         }
 
     }
@@ -203,7 +204,7 @@ export default class GameScene extends Phaser.Scene {
         hero.state = 'resting';
         hero.displayHeight = 150;
         hero.displayWidth = 150;
-        hero.setBounce(0.4);
+        hero.setBounce(.45);
         // hero.body.onWorldBounds = true;
         // hero.body.setCollideWorldBounds(true);
         hero.visible = false;
@@ -215,15 +216,35 @@ export default class GameScene extends Phaser.Scene {
      * @param game Phaser Game
      */
     createPhysicsObjects(game) {
-        let binOne = game.add.rectangle(window.innerWidth * 0.301, window.innerHeight * 0.430, window.innerWidth * 0.14, 1);
+        let binOne = game.add.rectangle(window.innerWidth * 0.301, window.innerHeight * 0.445, window.innerWidth * 0.14, 1);
+        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.222, window.innerHeight * 0.425, window.innerWidth * 0.001, 10);//0.015
+        let rimOneRight = game.add.rectangle(window.innerWidth * 0.38, window.innerHeight * 0.425, window.innerWidth * 0.001, 10); //0.015
+
+
+
         let binTwo = game.add.rectangle(window.innerWidth * 0.645, window.innerHeight * 0.430, window.innerWidth * 0.14, 1);
         let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth * 10, 1);
+
         game.physics.add.existing(binOne, true);
+        game.physics.add.existing(rimOneLeft, true);
+        game.physics.add.existing(rimOneRight, true);
         game.physics.add.existing(binTwo, true);
         game.physics.add.existing(floor, true);
 
+
+        // rimOneLeft.body.setCircle(10);
+        // rimOneRight.body.setCircle(10);
+        rimOneLeft.setAngle(45);
+
         // Add physical interactions
+
         game.physics.add.overlap(game.hero, binOne, this.hitTarget, null, game);
+        game.rimOneLeftCollider = game.physics.add.collider(game.hero, rimOneLeft, this.missedTarget, null, game);
+        game.rimOneRightCollider = game.physics.add.collider(game.hero, rimOneRight, this.missedTarget, null, game);
+        game.rimOneLeftCollider.active = false;
+        game.rimOneRightCollider.active = false;
+
+
         game.physics.add.overlap(game.hero, binTwo, this.hitTarget, null, game);
         game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
         game.floorCollider.active = false;
@@ -241,6 +262,8 @@ export default class GameScene extends Phaser.Scene {
             this.resetProjectile(projectile);
             this.scoreHandler(this);
             this.floorCollider.active = false;
+            this.rimOneRightCollider.active = false;
+            this.rimOneLeftCollider.active = false;
             this.sound.play('hit-target');
         }
     }
@@ -258,6 +281,10 @@ export default class GameScene extends Phaser.Scene {
             projectile.disableBody(false, false);
             this.resetProjectile(projectile);
             this.floorCollider.active = false;
+            this.rimOneRightCollider.active = false;
+            this.rimOneLeftCollider.active = false;
+
+
         }
     }
 
@@ -294,8 +321,9 @@ export default class GameScene extends Phaser.Scene {
      */
     setProjectileDrag(projectile) {
         projectile.body.setAllowDrag(true);
-        projectile.body.setDrag(100, 0);
-        projectile.body.setAngularDrag(360);
+        projectile.body.setFriction(10, 0);
+        projectile.body.setDrag(0, 0);
+        projectile.body.setAngularDrag(275);
     }
 
     /**
