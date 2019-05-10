@@ -324,14 +324,20 @@ export default class GameScene extends Phaser.Scene {
     }
 
     /**
-     * write to firebase with score
+     * write to firebase with score ONLY if it's a higher score
      */
     // Write score
     writeLeaderBoard() {
-        firebase.database().ref("users/").update({
-            [(displayName.split(' '))[0]]: this.scoreValue
-        });
-    }
+        let first_name = displayName.split(' ')[0];
+        console.log(this.scoreValue);
+        console.log(leaderBoard[first_name]);
+        if (this.scoreValue > leaderBoard[first_name]) {
+            firebase.database().ref("users/").update({
+                [first_name]: this.scoreValue
+            });
+        }
+        }
+    // }
 
     /**
      * Add score related text to the canvas
