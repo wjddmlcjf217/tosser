@@ -88,6 +88,63 @@ export default class GameScene extends Phaser.Scene {
 
     }
 
+    game_objects = {
+        'banana' : {
+            'description': '',
+            'bin': '',
+            'path': 'assets/img/banana-sprite.png',
+            'scaling_factor': ''
+        },
+        'apple' : {
+            'description': '',
+            'bin': '',
+            'path': '',
+            'scaling_factor': ''
+        },
+        'bread' : {
+            'description': '',
+            'bin': '',
+            'path': '',
+            'scaling_factor': ''
+        },
+        'paper' : {
+            'description': '',
+            'bin': '',
+            'path': 'assets/img/paper_ball.png',
+            'scaling_factor': ''
+        },
+        'cardboard' : {
+            'description': '',
+            'bin': '',
+            'path': '',
+            'scaling_factor': ''
+        },
+        'magazine' : {
+            'description': '',
+            'bin': '',
+            'path': '',
+            'scaling_factor': ''
+        },
+        'waterbottle' : {
+            'description': '',
+            'bin': '',
+            'path': 'assets/img/paper_ball.png',
+            'scaling_factor': ''
+        },
+        'popcan' : {
+            'description': '',
+            'bin': '',
+            'path': '',
+            'scaling_factor': ''
+        },
+        'jug' : {
+            'description': '',
+            'bin': '',
+            'path': '',
+            'scaling_factor': ''
+        }
+    };
+
     /**
      * Handles Pointer Down Event
      */
