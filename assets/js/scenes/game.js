@@ -1,4 +1,4 @@
-// version 0.5
+// version 0.6.9
 
 // takes all database profile data to display on profile page
 let displayName = null;
