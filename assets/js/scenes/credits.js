@@ -1,4 +1,4 @@
-import config from '../scenes/config.js';
+import config from './config.js';
 
 export default class CreditsScene extends Phaser.Scene {
     constructor () {
