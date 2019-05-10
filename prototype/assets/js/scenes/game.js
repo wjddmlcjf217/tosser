@@ -426,6 +426,9 @@ export default class GameScene extends Phaser.Scene {
 
     addObjectText(scene) {
         scene.objectText = scene.add.text(
-            0, window.innerHeight * 0.9, null, LEADERBOARD_FONT);
+            window.innerWidth * 0.5, window.innerHeight * 0.97, null, LEADERBOARD_FONT);
+        scene.objectText.setOrigin(0.5);
+        scene.objectText.setFontSize(60);
+
     }
 }
