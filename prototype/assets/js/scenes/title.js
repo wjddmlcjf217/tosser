@@ -8,10 +8,15 @@ export default class TitleScene extends Phaser.Scene {
 
     preload() {
         this.load.image('background_blur', 'assets/img/study_area_blur.png');
+        this.load.image('logo', 'assets/img/tosser_logo.png');
     }
 
     create () {
         this.createBackground(this);
+
+        //Logo
+        this.logo = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.3, 'logo');
+        this.logo.setOrigin(0.5);
 
         // Game
         this.gameButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.55, 'Play', TITLE_FONT);
