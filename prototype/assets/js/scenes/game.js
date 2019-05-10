@@ -93,8 +93,12 @@ export default class GameScene extends Phaser.Scene {
     update() {
         if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
             this.floorCollider.active = true;
+
             this.rimOneLeftCollider.active = true;
             this.rimOneRightCollider.active = true;
+
+            this.rimTwoLeftCollider.active = true;
+            this.rimTwoRightCollider.active = true;
         }
 
     }
@@ -221,32 +225,41 @@ export default class GameScene extends Phaser.Scene {
         let rimOneRight = game.add.rectangle(window.innerWidth * 0.38, window.innerHeight * 0.425, window.innerWidth * 0.001, 10); //0.015
 
 
-
         let binTwo = game.add.rectangle(window.innerWidth * 0.645, window.innerHeight * 0.430, window.innerWidth * 0.14, 1);
+        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.566, window.innerHeight * 0.425, window.innerWidth * 0.001, 10);//0.015
+        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.724, window.innerHeight * 0.425, window.innerWidth * 0.001, 10); //0.015
+
         let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth * 10, 1);
 
         game.physics.add.existing(binOne, true);
         game.physics.add.existing(rimOneLeft, true);
         game.physics.add.existing(rimOneRight, true);
+        game.physics.add.existing(rimTwoLeft, true);
+        game.physics.add.existing(rimTwoRight, true);
         game.physics.add.existing(binTwo, true);
         game.physics.add.existing(floor, true);
 
 
-        // rimOneLeft.body.setCircle(10);
-        // rimOneRight.body.setCircle(10);
-        rimOneLeft.setAngle(45);
-
         // Add physical interactions
 
-        game.physics.add.overlap(game.hero, binOne, this.hitTarget, null, game);
+
+        game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
+
+
         game.rimOneLeftCollider = game.physics.add.collider(game.hero, rimOneLeft, this.missedTarget, null, game);
         game.rimOneRightCollider = game.physics.add.collider(game.hero, rimOneRight, this.missedTarget, null, game);
+
+        game.rimTwoLeftCollider = game.physics.add.collider(game.hero, rimTwoLeft, this.missedTarget, null, game);
+        game.rimTwoRightCollider = game.physics.add.collider(game.hero, rimTwoRight, this.missedTarget, null, game);
+
+        game.physics.add.overlap(game.hero, binOne, this.hitTarget, null, game);
+        game.physics.add.overlap(game.hero, binTwo, this.hitTarget, null, game);
+
+
         game.rimOneLeftCollider.active = false;
         game.rimOneRightCollider.active = false;
-
-
-        game.physics.add.overlap(game.hero, binTwo, this.hitTarget, null, game);
-        game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
+        game.rimTwoLeftCollider.active = false;
+        game.rimTwoRightCollider.active = false;
         game.floorCollider.active = false;
     }
 
@@ -264,6 +277,8 @@ export default class GameScene extends Phaser.Scene {
             this.floorCollider.active = false;
             this.rimOneRightCollider.active = false;
             this.rimOneLeftCollider.active = false;
+            this.rimTwoRightCollider.active = false;
+            this.rimTwoLeftCollider.active = false;
             this.sound.play('hit-target');
         }
     }
@@ -283,6 +298,8 @@ export default class GameScene extends Phaser.Scene {
             this.floorCollider.active = false;
             this.rimOneRightCollider.active = false;
             this.rimOneLeftCollider.active = false;
+            this.rimTwoRightCollider.active = false;
+            this.rimTwoLeftCollider.active = false;
 
 
         }
