@@ -220,14 +220,14 @@ export default class GameScene extends Phaser.Scene {
      * @param game Phaser Game
      */
     createPhysicsObjects(game) {
-        let binOne = game.add.rectangle(window.innerWidth * 0.301, window.innerHeight * 0.445, window.innerWidth * 0.14, 1);
-        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.222, window.innerHeight * 0.425, window.innerWidth * 0.001, 10);//0.015
-        let rimOneRight = game.add.rectangle(window.innerWidth * 0.38, window.innerHeight * 0.425, window.innerWidth * 0.001, 10); //0.015
+        let binOne = game.add.rectangle(window.innerWidth * 0.301, window.innerHeight * 0.430, window.innerWidth * 0.14, 1);
+        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.222, window.innerHeight * 0.425, window.innerWidth * 0.001, 1);//0.015
+        let rimOneRight = game.add.rectangle(window.innerWidth * 0.38, window.innerHeight * 0.425, window.innerWidth * 0.001, 1); //0.015
 
 
         let binTwo = game.add.rectangle(window.innerWidth * 0.645, window.innerHeight * 0.430, window.innerWidth * 0.14, 1);
-        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.566, window.innerHeight * 0.425, window.innerWidth * 0.001, 10);//0.015
-        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.724, window.innerHeight * 0.425, window.innerWidth * 0.001, 10); //0.015
+        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.566, window.innerHeight * 0.425, window.innerWidth * 0.001, 1);//0.015
+        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.724, window.innerHeight * 0.425, window.innerWidth * 0.001, 1); //0.015
 
         let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth * 10, 1);
 
@@ -246,11 +246,11 @@ export default class GameScene extends Phaser.Scene {
         game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
 
 
-        game.rimOneLeftCollider = game.physics.add.collider(game.hero, rimOneLeft, this.missedTarget, null, game);
-        game.rimOneRightCollider = game.physics.add.collider(game.hero, rimOneRight, this.missedTarget, null, game);
+        game.rimOneLeftCollider = game.physics.add.collider(game.hero, rimOneLeft, this.hitRimRight, null, game);
+        game.rimOneRightCollider = game.physics.add.collider(game.hero, rimOneRight, this.hitRimRight, null, game);
 
-        game.rimTwoLeftCollider = game.physics.add.collider(game.hero, rimTwoLeft, this.missedTarget, null, game);
-        game.rimTwoRightCollider = game.physics.add.collider(game.hero, rimTwoRight, this.missedTarget, null, game);
+        game.rimTwoLeftCollider = game.physics.add.collider(game.hero, rimTwoLeft, this.hitRimLeft, null, game);
+        game.rimTwoRightCollider = game.physics.add.collider(game.hero, rimTwoRight, this.hitRimLeft, null, game);
 
         game.physics.add.overlap(game.hero, binOne, this.hitTarget, null, game);
         game.physics.add.overlap(game.hero, binTwo, this.hitTarget, null, game);
@@ -263,6 +263,45 @@ export default class GameScene extends Phaser.Scene {
         game.floorCollider.active = false;
     }
 
+    hitRimRight(projectile) {
+        this.setProjectileDrag(projectile);
+        projectile.body.bounce.set(0.45);
+        projectile.body.gravity.set(-100, 0);
+        projectile.setAccelerationX(0);
+
+        if (projectile.body.angularVelocity === 0) {
+            this.lifeHandler(this);
+            projectile.disableBody(false, false);
+            this.resetProjectile(projectile);
+            this.floorCollider.active = false;
+            this.rimOneRightCollider.active = false;
+            this.rimOneLeftCollider.active = false;
+            this.rimTwoRightCollider.active = false;
+            this.rimTwoLeftCollider.active = false;
+
+
+        }
+
+    }
+    hitRimLeft(projectile) {
+        this.setProjectileDrag(projectile);
+        projectile.body.bounce.set(0.45);
+        projectile.body.gravity.set(100, 0);
+        projectile.setAccelerationX(0);
+
+        if (projectile.body.angularVelocity === 0) {
+            this.lifeHandler(this);
+            projectile.disableBody(false, false);
+            this.resetProjectile(projectile);
+            this.floorCollider.active = false;
+            this.rimOneRightCollider.active = false;
+            this.rimOneLeftCollider.active = false;
+            this.rimTwoRightCollider.active = false;
+            this.rimTwoLeftCollider.active = false;
+
+
+        }
+    }
     /**
      * Projectile Hit target handler
      * @param projectile
@@ -338,9 +377,9 @@ export default class GameScene extends Phaser.Scene {
      */
     setProjectileDrag(projectile) {
         projectile.body.setAllowDrag(true);
-        projectile.body.setFriction(10, 0);
-        projectile.body.setDrag(0, 0);
-        projectile.body.setAngularDrag(275);
+        // projectile.body.setFriction(30, 0);
+        projectile.body.setDrag(150, 0);
+        projectile.body.setAngularDrag(200);
     }
 
     /**
