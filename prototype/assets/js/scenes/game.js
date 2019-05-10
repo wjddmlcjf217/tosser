@@ -53,13 +53,8 @@ export default class GameScene extends Phaser.Scene {
         this.createBackground(this);
         this.createLight(this);
 
-        // Create Score
         this.scoreValue = 0;
-        this.scoreText = this.add.text(window.innerWidth * 0.32, window.innerHeight * 0.28, 'Score: ' + this.scoreValue, {
-            fontStyle: 'Bolder',
-            fontSize: 69,
-            color: 'black'
-        });
+        this.addScoreText(this);
 
         // Create Hero
         this.hero = this.createHeroProjectile(this, 'paper');
@@ -306,10 +301,14 @@ export default class GameScene extends Phaser.Scene {
         }
 
         if (scene.lives.countActive() < 1) {
-            scene.scoreText.setText('Game Over');
+            scene.staticScoreText.setVisible(false);
+            scene.scoreText.setVisible(false);
+            scene.gameOverText.setVisible(true);
             // Write score to leaderboard
             this.writeLeaderBoard();
-            setTimeout(function() {scene.scene.start('LeaderBoard')}, 2000)
+            setTimeout(function () {
+                scene.scene.start('LeaderBoard')
+            }, 2000)
         }
     }
 
@@ -319,7 +318,7 @@ export default class GameScene extends Phaser.Scene {
      */
     scoreHandler(scene) {
         let score = scene.scoreValue += 1;
-        scene.scoreText.setText('Score: ' + score)
+        scene.scoreText.setText(score);
     }
 
     /**
@@ -330,5 +329,26 @@ export default class GameScene extends Phaser.Scene {
         firebase.database().ref("users/").update({
             [(displayName.split(' '))[0]]: this.scoreValue
         });
+    }
+
+    /**
+     * Add score related text to the canvas
+     */
+    addScoreText(scene) {
+        let fontStyle = {
+            fontFamily: 'Kalam',
+            fontSize: 80,
+            color: '#84BCCE',
+        };
+
+        scene.gameOverText = scene.add.text(
+            window.innerWidth * 0.285, window.innerHeight * 0.285, 'Game Over', fontStyle);
+        scene.gameOverText.setVisible(false);
+        scene.staticScoreText = scene.add.text(
+            window.innerWidth * 0.31, window.innerHeight * 0.285, 'Score:', fontStyle);
+        scene.scoreText = scene.add.text(
+            window.innerWidth * 0.59, window.innerHeight * 0.285, scene.scoreValue, fontStyle);
+        scene.scoreText.setOrigin(0.5, 0);
+        scene.scoreText.setAlign('center');
     }
 }
