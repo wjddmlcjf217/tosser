@@ -57,13 +57,14 @@ export default class GameScene extends Phaser.Scene {
         this.scoreValue = 0;
         this.createScoreboard(this);
         this.addScoreText(this);
+        this.addObjectText(this);
 
         // Create Hero
-        this.hero = this.createHeroProjectile(this, 'paper');
-
         this.queue = ['paper', 'banana', 'waterbottle'];
+        let object = this.queue[Math.floor(Math.random() * 3)];
+        this.hero = this.createHeroProjectile(this, object);
+        this.objectText.setText(object);
 
-        this.hero = this.createHeroProjectile(this, this.queue[Math.floor(Math.random() * 3)]);
         this.hero.visible = true;
         this.hero.setInteractive();
         this.hero.on('pointerdown', this.pointerDownHandler, this);
@@ -301,9 +302,9 @@ export default class GameScene extends Phaser.Scene {
      */
     spawnProjectile(projectile) {
         let scene = projectile.scene;
-
-        scene.hero = this.createHeroProjectile(scene, scene.queue[Math.floor(Math.random() * 3)]);
-
+        let object = scene.queue[Math.floor(Math.random() * 3)];
+        scene.objectText.setText(object);
+        scene.hero = this.createHeroProjectile(scene, object);
         scene.hero.visible = true;
         scene.hero.setInteractive();
         scene.hero.on('pointerdown', this.pointerDownHandler, scene);
@@ -421,5 +422,10 @@ export default class GameScene extends Phaser.Scene {
         let scoreboard = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'scoreboard');
         scoreboard.setX(window.innerWidth * 0.47);
         scoreboard.setY(window.innerHeight * 0.31);
+    }
+
+    addObjectText(scene) {
+        scene.objectText = scene.add.text(
+            0, window.innerHeight * 0.9, null, LEADERBOARD_FONT);
     }
 }
