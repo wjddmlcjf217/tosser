@@ -27,23 +27,26 @@ export default class TitleScene extends Phaser.Scene {
                 fontSize: 64,
                 color: 'black'
             });
-            if (playerList.length > 0) {
-                let y = 150;
-                for (let i = 0; i < playerList.length; i++) {
-                    y += 100;
-                    this.add.text(window.innerWidth * 0.20, y, playerList[i][0], {
-                        fontFamily: 'Arial',
-                        fontSize: 64,
-                        color: 'black'
-                    });
-                    this.add.text(window.innerWidth * 0.70, y, playerList[i][1], {
-                        fontFamily: 'Arial',
-                        fontSize: 64,
-                        color: 'black'
-                    });
+            let y = 150;
+            let counter = 0;
+            for (let i = 0; i < playerList.length; i++) {
+                counter++;
+                y += 100;
+                this.add.text(window.innerWidth * 0.20, y, playerList[i][0], {
+                    fontFamily: 'Arial',
+                    fontSize: 64,
+                    color: 'black'
+                });
+                this.add.text(window.innerWidth * 0.70, y, playerList[i][1], {
+                    fontFamily: 'Arial',
+                    fontSize: 64,
+                    color: 'black'
+                });
+                if (counter === 8) {
+                    break
                 }
-                this.leaderboardCreated = true;
             }
+            this.leaderboardCreated = true;
         }
     }
 
