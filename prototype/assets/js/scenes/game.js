@@ -38,6 +38,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('life', 'assets/img/life.gif');
         this.load.image('light_off', 'assets/img/light_off.png');
         this.load.image('light_on', 'assets/img/light_on.png');
+        this.load.image('scoreboard', 'assets/img/scoreboard.png');
 
         // audio assets
         this.load.audio('hit-target', [
@@ -54,6 +55,7 @@ export default class GameScene extends Phaser.Scene {
         this.createLight(this);
 
         this.scoreValue = 0;
+        this.createScoreboard(this);
         this.addScoreText(this);
 
         // Create Hero
@@ -350,5 +352,11 @@ export default class GameScene extends Phaser.Scene {
             window.innerWidth * 0.59, window.innerHeight * 0.285, scene.scoreValue, fontStyle);
         scene.scoreText.setOrigin(0.5, 0);
         scene.scoreText.setAlign('center');
+    }
+
+    createScoreboard() {
+        let scoreboard = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'scoreboard');
+        scoreboard.setX(window.innerWidth * 0.47);
+        scoreboard.setY(window.innerHeight * 0.31);
     }
 }
