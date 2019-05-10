@@ -39,7 +39,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('light_off', 'assets/img/light_off.png');
         this.load.image('light_on', 'assets/img/light_on.png');
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
-        this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
 
         // audio assets
         this.load.audio('hit-target', [
@@ -55,13 +54,8 @@ export default class GameScene extends Phaser.Scene {
         this.createBackground(this);
         this.createLight(this);
 
-        //Add Scoreboard
         this.scoreValue = 0;
-        let scoreboard = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'scoreboard');
-        scoreboard.setX(window.innerWidth * 0.47);
-        scoreboard.setY(window.innerHeight * 0.31);
-
-        //Load Font
+        this.createScoreboard(this);
         this.addScoreText(this);
 
         // Create Hero
@@ -140,8 +134,8 @@ export default class GameScene extends Phaser.Scene {
      * @param game Phaser Game
      */
     //in progress shadow effect
-    createShadow() {
-        let shadow = this.add.image(window.innerWidth * .3, window.innerHeight * 0.559, 'shadow');
+    createShadow(game) {
+        let shadow = game.add.image(window.innerWidth * .3, window.innerHeight * 0.559, 'shadow');
         // shadow.tint = ;
         shadow.visible = true;
     }
@@ -309,10 +303,14 @@ export default class GameScene extends Phaser.Scene {
         }
 
         if (scene.lives.countActive() < 1) {
-            scene.scoreText.setText('Game Over');
+            scene.staticScoreText.setVisible(false);
+            scene.scoreText.setVisible(false);
+            scene.gameOverText.setVisible(true);
             // Write score to leaderboard
             this.writeLeaderBoard();
-            setTimeout(function() {scene.scene.start('LeaderBoard')}, 2000)
+            setTimeout(function () {
+                scene.scene.start('LeaderBoard')
+            }, 2000)
         }
     }
 
@@ -325,31 +323,6 @@ export default class GameScene extends Phaser.Scene {
         scene.scoreText.setText(score);
     }
 
-
-    addScoreText(scene) {
-        WebFont.load({
-            google: {
-                families: ['Kalam']
-            },
-            active: function () {
-                scene.add.text(
-                    window.innerWidth * 0.31, window.innerHeight * 0.285, 'Score:', {
-                        fontFamily: 'Kalam',
-                        fontSize: 80,
-                        color: '#84BCCE',
-                    });
-                scene.scoreText = scene.add.text(
-                    window.innerWidth * 0.59, window.innerHeight * 0.285, scene.scoreValue, {
-                        fontFamily: 'Kalam',
-                        fontSize: 80,
-                        color: '#84BCCE',
-                    });
-                scene.scoreText.setOrigin(0.5, 0);
-                scene.scoreText.setAlign('center');
-            }
-        });
-    }
-
     /**
      * write to firebase with score
      */
@@ -358,5 +331,32 @@ export default class GameScene extends Phaser.Scene {
         firebase.database().ref("users/").update({
             [(displayName.split(' '))[0]]: this.scoreValue
         });
+    }
+
+    /**
+     * Add score related text to the canvas
+     */
+    addScoreText(scene) {
+        let fontStyle = {
+            fontFamily: 'Kalam',
+            fontSize: 80,
+            color: '#84BCCE',
+        };
+
+        scene.gameOverText = scene.add.text(
+            window.innerWidth * 0.285, window.innerHeight * 0.285, 'Game Over', fontStyle);
+        scene.gameOverText.setVisible(false);
+        scene.staticScoreText = scene.add.text(
+            window.innerWidth * 0.31, window.innerHeight * 0.285, 'Score:', fontStyle);
+        scene.scoreText = scene.add.text(
+            window.innerWidth * 0.59, window.innerHeight * 0.285, scene.scoreValue, fontStyle);
+        scene.scoreText.setOrigin(0.5, 0);
+        scene.scoreText.setAlign('center');
+    }
+
+    createScoreboard() {
+        let scoreboard = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'scoreboard');
+        scoreboard.setX(window.innerWidth * 0.47);
+        scoreboard.setY(window.innerHeight * 0.31);
     }
 }

@@ -15,6 +15,6 @@ class Game extends Phaser.Game {
     }
 }
 
-loadLeaderBoard().then(function () {
+Promise.all([loadLeaderBoard(), loadFont()]).then(function () {
     window.game = new Game();
 });
