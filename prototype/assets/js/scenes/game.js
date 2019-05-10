@@ -150,13 +150,13 @@ export default class GameScene extends Phaser.Scene {
      */
     //in progress shadow effect
     createPlus1() {
-        this.plus1 = this.add.image(window.innerWidth * .3, window.innerHeight * 0.330, 'plus1');
+        this.plus1 = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'plus1');
         this.plus1.displayHeight = 420;
         this.plus1.displayWidth = 420;
     }
 
     /**
-     * casts a shadow under the hero projectile
+     * casts a shadow under the hero projectil
      * @param game Phaser Game
      */
     //in progress shadow effect
@@ -220,16 +220,16 @@ export default class GameScene extends Phaser.Scene {
      * @param game Phaser Game
      */
     createPhysicsObjects(game) {
-        let binOne = game.add.rectangle(window.innerWidth * 0.301, window.innerHeight * 0.430, window.innerWidth * 0.14, 1);
-        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.222, window.innerHeight * 0.425, window.innerWidth * 0.001, 1);//0.015
-        let rimOneRight = game.add.rectangle(window.innerWidth * 0.38, window.innerHeight * 0.425, window.innerWidth * 0.001, 1); //0.015
+        let binOne = game.add.rectangle(window.innerWidth * 0.301, window.innerHeight * 0.430, window.innerWidth * 0.163, 10);
+        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.215, window.innerHeight * 0.425, window.innerWidth * 0.001, 5);//0.015
+        let rimOneRight = game.add.rectangle(window.innerWidth * 0.390, window.innerHeight * 0.425, window.innerWidth * 0.001, 5); //0.015
 
 
-        let binTwo = game.add.rectangle(window.innerWidth * 0.645, window.innerHeight * 0.430, window.innerWidth * 0.14, 1);
-        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.566, window.innerHeight * 0.425, window.innerWidth * 0.001, 1);//0.015
-        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.724, window.innerHeight * 0.425, window.innerWidth * 0.001, 1); //0.015
+        let binTwo = game.add.rectangle(window.innerWidth * 0.645, window.innerHeight * 0.430, window.innerWidth * 0.163, 10);
+        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.559, window.innerHeight * 0.425, window.innerWidth * 0.001, 5);//0.015
+        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.731, window.innerHeight * 0.425, window.innerWidth * 0.001, 5); //0.015
 
-        let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth * 10, 1);
+        let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.57, window.innerWidth * 10, 50);
 
         game.physics.add.existing(binOne, true);
         game.physics.add.existing(rimOneLeft, true);
@@ -246,11 +246,11 @@ export default class GameScene extends Phaser.Scene {
         game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
 
 
-        game.rimOneLeftCollider = game.physics.add.collider(game.hero, rimOneLeft, this.hitRimRight, null, game);
-        game.rimOneRightCollider = game.physics.add.collider(game.hero, rimOneRight, this.hitRimRight, null, game);
+        game.rimOneLeftCollider = game.physics.add.collider(game.hero, rimOneLeft, this.hitRim, null, game);
+        game.rimOneRightCollider = game.physics.add.collider(game.hero, rimOneRight, this.hitRim, null, game);
 
-        game.rimTwoLeftCollider = game.physics.add.collider(game.hero, rimTwoLeft, this.hitRimLeft, null, game);
-        game.rimTwoRightCollider = game.physics.add.collider(game.hero, rimTwoRight, this.hitRimLeft, null, game);
+        game.rimTwoLeftCollider = game.physics.add.collider(game.hero, rimTwoLeft, this.hitRim, null, game);
+        game.rimTwoRightCollider = game.physics.add.collider(game.hero, rimTwoRight, this.hitRim, null, game);
 
         game.physics.add.overlap(game.hero, binOne, this.hitTarget, null, game);
         game.physics.add.overlap(game.hero, binTwo, this.hitTarget, null, game);
@@ -263,31 +263,20 @@ export default class GameScene extends Phaser.Scene {
         game.floorCollider.active = false;
     }
 
-    hitRimRight(projectile) {
+    hitRim(projectile, rim) {
         this.setProjectileDrag(projectile);
+        // projectile.setAccelerationX(0);
         projectile.body.bounce.set(0.45);
-        projectile.body.gravity.set(-100, 0);
-        projectile.setAccelerationX(0);
 
-        if (projectile.body.angularVelocity === 0) {
-            this.lifeHandler(this);
-            projectile.disableBody(false, false);
-            this.resetProjectile(projectile);
-            this.floorCollider.active = false;
-            this.rimOneRightCollider.active = false;
-            this.rimOneLeftCollider.active = false;
-            this.rimTwoRightCollider.active = false;
-            this.rimTwoLeftCollider.active = false;
+        if (projectile.x > rim.x) {
+            projectile.setVelocityX(Math.floor((Math.random() * 150) + 200));
 
-
+            // projectile.body.gravity.set(150, 0);
         }
-
-    }
-    hitRimLeft(projectile) {
-        this.setProjectileDrag(projectile);
-        projectile.body.bounce.set(0.45);
-        projectile.body.gravity.set(100, 0);
-        projectile.setAccelerationX(0);
+        else {
+            projectile.setVelocityX(Math.floor((Math.random() * 150) + 200) * -1);
+            // projectile.body.gravity.set(-150, 0);
+        }
 
         if (projectile.body.angularVelocity === 0) {
             this.lifeHandler(this);
@@ -302,6 +291,7 @@ export default class GameScene extends Phaser.Scene {
 
         }
     }
+
     /**
      * Projectile Hit target handler
      * @param projectile
@@ -377,8 +367,7 @@ export default class GameScene extends Phaser.Scene {
      */
     setProjectileDrag(projectile) {
         projectile.body.setAllowDrag(true);
-        // projectile.body.setFriction(30, 0);
-        projectile.body.setDrag(150, 0);
+        projectile.body.setDrag(175, 0);
         projectile.body.setAngularDrag(200);
     }
 
@@ -390,8 +379,8 @@ export default class GameScene extends Phaser.Scene {
     addProjectileScalingTween(game, projectile) {
         game.tweens.add({
             targets: projectile,
-            displayWidth: 50,
-            displayHeight: 50,
+            displayWidth: 40,
+            displayHeight: 40,
             ease: 'Linear',
             duration: 1500,
             repeat: 0,
