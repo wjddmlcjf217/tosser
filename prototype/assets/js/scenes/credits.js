@@ -6,14 +6,15 @@ export default class CreditsScene extends Phaser.Scene {
     }
 
     create () {
-        this.creditsText = this.add.text(0, 0, 'Credits', { fontSize: 64, fill: '#fff' });
-        this.madeByText = this.add.text(0, 0, 'Created By: ', { fontSize: 52, fill: '#fff' });
-        this.brydenText = this.add.text(0, 0, 'Bryden Mitchell', { fontSize: 52, fill: '#fff' });
-        this.dillonText = this.add.text(0, 0, 'Dillon Yeh', { fontSize: 52, fill: '#fff' });
-        this.kevinText = this.add.text(0, 0, 'Kevin Jeong', { fontSize: 52, fill: '#fff' });
-        this.jackyText = this.add.text(0, 0, 'Jacky Zheng', { fontSize: 52, fill: '#fff' });
-        this.jaredText = this.add.text(0, 0, 'Jared Hall', { fontSize: 52, fill: '#fff' });
-        this.thankYou = this.add.text(0, 0, 'Thank You!', { fontSize: 52, fill: '#fff'});
+        this.createBackground(this);
+        this.creditsText = this.add.text(0, 0, 'Credits', LEADERBOARD_FONT);
+        this.madeByText = this.add.text(0, 0, 'Created By: ', LEADERBOARD_FONT);
+        this.brydenText = this.add.text(0, 0, 'Bryden Mitchell', LEADERBOARD_FONT);
+        this.dillonText = this.add.text(0, 0, 'Dillon Yeh', LEADERBOARD_FONT);
+        this.kevinText = this.add.text(0, 0, 'Kevin Jeong', LEADERBOARD_FONT);
+        this.jackyText = this.add.text(0, 0, 'Jacky Zheng', LEADERBOARD_FONT);
+        this.jaredText = this.add.text(0, 0, 'Jared Hall', LEADERBOARD_FONT);
+        this.thankYou = this.add.text(0, 0, 'Thank You!', LEADERBOARD_FONT);
         this.zone = this.add.zone(config.width/2, config.height/2, config.width, config.height);
         this.tweenArray = [this.creditsText, this.madeByText, this.brydenText, this.dillonText, this.kevinText, this.jackyText, this.jaredText, this.thankYou];
         const offset = -3500;
@@ -61,5 +62,11 @@ export default class CreditsScene extends Phaser.Scene {
             text,
             this.zone
         )
+    }
+
+    createBackground(game) {
+        let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
+        background.displayHeight = window.innerHeight;
+        background.displayWidth = window.innerWidth;
     }
 };

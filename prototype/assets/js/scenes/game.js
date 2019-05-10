@@ -38,6 +38,9 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('life', 'assets/img/life.gif');
         this.load.image('light_off', 'assets/img/light_off.png');
         this.load.image('light_on', 'assets/img/light_on.png');
+        this.load.image('scoreboard', 'assets/img/scoreboard.png');
+        this.load.image('plus1', 'assets/img/plus1.jpg');
+        this.load.image('scoreboard', 'assets/img/scoreboard.png');
 
         // audio assets
         this.load.audio('hit-target', [
@@ -53,20 +56,18 @@ export default class GameScene extends Phaser.Scene {
         this.createBackground(this);
         this.createLight(this);
 
-        // Create Score
+        //Add Scoreboard
         this.scoreValue = 0;
-        this.scoreText = this.add.text(window.innerWidth * 0.32, window.innerHeight * 0.28, 'Score: ' + this.scoreValue, {
-            fontStyle: 'Bolder',
-            fontSize: 69,
-            color: 'black'
-        });
+        this.createScoreboard(this);
+        this.addScoreText(this);
+        this.addObjectText(this);
 
         // Create Hero
-        this.hero = this.createHeroProjectile(this, 'paper');
-
         this.queue = ['paper', 'banana', 'waterbottle'];
+        let object = this.queue[Math.floor(Math.random() * 3)];
+        this.hero = this.createHeroProjectile(this, object);
+        this.objectText.setText(object);
 
-        this.hero = this.createHeroProjectile(this, this.queue[Math.floor(Math.random() * 3)]);
         this.hero.visible = true;
         this.hero.setInteractive();
         this.hero.on('pointerdown', this.pointerDownHandler, this);
@@ -87,9 +88,72 @@ export default class GameScene extends Phaser.Scene {
     update() {
         if (this.hero.body.velocity.y > 0 && this.floorCollider.active === false) {
             this.floorCollider.active = true;
+
+            this.rimOneLeftCollider.active = true;
+            this.rimOneRightCollider.active = true;
+
+            this.rimTwoLeftCollider.active = true;
+            this.rimTwoRightCollider.active = true;
         }
 
     }
+
+    game_objects = {
+        'banana' : {
+            'description': '',
+            'bin': '',
+            'path': 'assets/img/banana-sprite.png',
+            'scaling_factor': ''
+        },
+        'apple' : {
+            'description': '',
+            'bin': '',
+            'path': '',
+            'scaling_factor': ''
+        },
+        'bread' : {
+            'description': '',
+            'bin': '',
+            'path': '',
+            'scaling_factor': ''
+        },
+        'paper' : {
+            'description': '',
+            'bin': '',
+            'path': 'assets/img/paper_ball.png',
+            'scaling_factor': ''
+        },
+        'cardboard' : {
+            'description': '',
+            'bin': '',
+            'path': '',
+            'scaling_factor': ''
+        },
+        'magazine' : {
+            'description': '',
+            'bin': '',
+            'path': '',
+            'scaling_factor': ''
+        },
+        'waterbottle' : {
+            'description': '',
+            'bin': '',
+            'path': 'assets/img/paper_ball.png',
+            'scaling_factor': ''
+        },
+        'popcan' : {
+            'description': '',
+            'bin': '',
+            'path': '',
+            'scaling_factor': ''
+        },
+        'jug' : {
+            'description': '',
+            'bin': '',
+            'path': '',
+            'scaling_factor': ''
+        }
+    };
 
     /**
      * Handles Pointer Down Event
@@ -133,7 +197,18 @@ export default class GameScene extends Phaser.Scene {
     }
 
     /**
-     * casts a shadow under the hero projectile
+     * casts a plus 1 animation upon scoring correctly
+     * @param N/A
+     */
+    //in progress shadow effect
+    createPlus1() {
+        this.plus1 = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'plus1');
+        this.plus1.displayHeight = 420;
+        this.plus1.displayWidth = 420;
+    }
+
+    /**
+     * casts a shadow under the hero projectil
      * @param game Phaser Game
      */
     //in progress shadow effect
@@ -185,7 +260,7 @@ export default class GameScene extends Phaser.Scene {
         hero.state = 'resting';
         hero.displayHeight = 150;
         hero.displayWidth = 150;
-        hero.setBounce(0.4);
+        hero.setBounce(.45);
         // hero.body.onWorldBounds = true;
         // hero.body.setCollideWorldBounds(true);
         hero.visible = false;
@@ -197,18 +272,76 @@ export default class GameScene extends Phaser.Scene {
      * @param game Phaser Game
      */
     createPhysicsObjects(game) {
-        let binOne = game.add.rectangle(window.innerWidth * 0.301, window.innerHeight * 0.430, window.innerWidth * 0.14, 1);
-        let binTwo = game.add.rectangle(window.innerWidth * 0.645, window.innerHeight * 0.430, window.innerWidth * 0.14, 1);
-        let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.559, window.innerWidth * 10, 1);
+        let binOne = game.add.rectangle(window.innerWidth * 0.301, window.innerHeight * 0.430, window.innerWidth * 0.163, 10);
+        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.215, window.innerHeight * 0.425, window.innerWidth * 0.001, 5);//0.015
+        let rimOneRight = game.add.rectangle(window.innerWidth * 0.390, window.innerHeight * 0.425, window.innerWidth * 0.001, 5); //0.015
+
+
+        let binTwo = game.add.rectangle(window.innerWidth * 0.645, window.innerHeight * 0.430, window.innerWidth * 0.163, 10);
+        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.559, window.innerHeight * 0.425, window.innerWidth * 0.001, 5);//0.015
+        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.731, window.innerHeight * 0.425, window.innerWidth * 0.001, 5); //0.015
+
+        let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.57, window.innerWidth * 10, 50);
+
         game.physics.add.existing(binOne, true);
+        game.physics.add.existing(rimOneLeft, true);
+        game.physics.add.existing(rimOneRight, true);
+        game.physics.add.existing(rimTwoLeft, true);
+        game.physics.add.existing(rimTwoRight, true);
         game.physics.add.existing(binTwo, true);
         game.physics.add.existing(floor, true);
 
+
         // Add physical interactions
+
+
+        game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
+
+
+        game.rimOneLeftCollider = game.physics.add.collider(game.hero, rimOneLeft, this.hitRim, null, game);
+        game.rimOneRightCollider = game.physics.add.collider(game.hero, rimOneRight, this.hitRim, null, game);
+
+        game.rimTwoLeftCollider = game.physics.add.collider(game.hero, rimTwoLeft, this.hitRim, null, game);
+        game.rimTwoRightCollider = game.physics.add.collider(game.hero, rimTwoRight, this.hitRim, null, game);
+
         game.physics.add.overlap(game.hero, binOne, this.hitTarget, null, game);
         game.physics.add.overlap(game.hero, binTwo, this.hitTarget, null, game);
-        game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
+
+
+        game.rimOneLeftCollider.active = false;
+        game.rimOneRightCollider.active = false;
+        game.rimTwoLeftCollider.active = false;
+        game.rimTwoRightCollider.active = false;
         game.floorCollider.active = false;
+    }
+
+    hitRim(projectile, rim) {
+        this.setProjectileDrag(projectile);
+        // projectile.setAccelerationX(0);
+        projectile.body.bounce.set(0.45);
+
+        if (projectile.x > rim.x) {
+            projectile.setVelocityX(Math.floor((Math.random() * 150) + 200));
+
+            // projectile.body.gravity.set(150, 0);
+        }
+        else {
+            projectile.setVelocityX(Math.floor((Math.random() * 150) + 200) * -1);
+            // projectile.body.gravity.set(-150, 0);
+        }
+
+        if (projectile.body.angularVelocity === 0) {
+            this.lifeHandler(this);
+            projectile.disableBody(false, false);
+            this.resetProjectile(projectile);
+            this.floorCollider.active = false;
+            this.rimOneRightCollider.active = false;
+            this.rimOneLeftCollider.active = false;
+            this.rimTwoRightCollider.active = false;
+            this.rimTwoLeftCollider.active = false;
+
+
+        }
     }
 
     /**
@@ -217,10 +350,16 @@ export default class GameScene extends Phaser.Scene {
      */
     hitTarget(projectile) {
         if (projectile.body.velocity.y > 0) {
+            this.createPlus1();
+            this.addplus1Tween(this.plus1);
             projectile.disableBody(false, true);
             this.resetProjectile(projectile);
             this.scoreHandler(this);
             this.floorCollider.active = false;
+            this.rimOneRightCollider.active = false;
+            this.rimOneLeftCollider.active = false;
+            this.rimTwoRightCollider.active = false;
+            this.rimTwoLeftCollider.active = false;
             this.sound.play('hit-target');
         }
     }
@@ -238,6 +377,12 @@ export default class GameScene extends Phaser.Scene {
             projectile.disableBody(false, false);
             this.resetProjectile(projectile);
             this.floorCollider.active = false;
+            this.rimOneRightCollider.active = false;
+            this.rimOneLeftCollider.active = false;
+            this.rimTwoRightCollider.active = false;
+            this.rimTwoLeftCollider.active = false;
+
+
         }
     }
 
@@ -247,9 +392,9 @@ export default class GameScene extends Phaser.Scene {
      */
     spawnProjectile(projectile) {
         let scene = projectile.scene;
-
-        scene.hero = this.createHeroProjectile(scene, scene.queue[Math.floor(Math.random() * 3)]);
-
+        let object = scene.queue[Math.floor(Math.random() * 3)];
+        scene.objectText.setText(object);
+        scene.hero = this.createHeroProjectile(scene, object);
         scene.hero.visible = true;
         scene.hero.setInteractive();
         scene.hero.on('pointerdown', this.pointerDownHandler, scene);
@@ -274,8 +419,8 @@ export default class GameScene extends Phaser.Scene {
      */
     setProjectileDrag(projectile) {
         projectile.body.setAllowDrag(true);
-        projectile.body.setDrag(100, 0);
-        projectile.body.setAngularDrag(360);
+        projectile.body.setDrag(175, 0);
+        projectile.body.setAngularDrag(200);
     }
 
     /**
@@ -286,12 +431,24 @@ export default class GameScene extends Phaser.Scene {
     addProjectileScalingTween(game, projectile) {
         game.tweens.add({
             targets: projectile,
+            displayWidth: 40,
+            displayHeight: 40,
+            ease: 'Linear',
+            duration: 1500,
+            repeat: 0,
+            yoyo: false
+        });
+    }
+
+    addplus1Tween(image) {
+        this.tweens.add({
+            targets: image,
+            alpha: 0,
             displayWidth: 50,
             displayHeight: 50,
             ease: 'Linear',
             duration: 1500,
             repeat: 0,
-            yoyo: false
         });
     }
 
@@ -306,10 +463,14 @@ export default class GameScene extends Phaser.Scene {
         }
 
         if (scene.lives.countActive() < 1) {
-            scene.scoreText.setText('Game Over');
+            scene.staticScoreText.setVisible(false);
+            scene.scoreText.setVisible(false);
+            scene.gameOverText.setVisible(true);
             // Write score to leaderboard
             this.writeLeaderBoard();
-            setTimeout(function() {scene.scene.start('LeaderBoard')}, 2000)
+            setTimeout(function () {
+                scene.scene.start('LeaderBoard')
+            }, 2000)
         }
     }
 
@@ -319,16 +480,55 @@ export default class GameScene extends Phaser.Scene {
      */
     scoreHandler(scene) {
         let score = scene.scoreValue += 1;
-        scene.scoreText.setText('Score: ' + score)
+        scene.scoreText.setText(score);
     }
 
     /**
-     * write to firebase with score
+     * write to firebase with score ONLY if it's a higher score
      */
     // Write score
     writeLeaderBoard() {
-        firebase.database().ref("users/").update({
-            [(displayName.split(' '))[0]]: this.scoreValue
-        });
+        let first_name = displayName.split(' ')[0];
+        if (this.scoreValue > leaderBoard[first_name]) {
+            firebase.database().ref("users/").update({
+                [first_name]: this.scoreValue
+            });
+        }
+        }
+    // }
+
+    /**
+     * Add score related text to the canvas
+     */
+    addScoreText(scene) {
+        let fontStyle = {
+            fontFamily: 'Kalam',
+            fontSize: 80,
+            color: '#84BCCE',
+        };
+
+        scene.gameOverText = scene.add.text(
+            window.innerWidth * 0.285, window.innerHeight * 0.285, 'Game Over', fontStyle);
+        scene.gameOverText.setVisible(false);
+        scene.staticScoreText = scene.add.text(
+            window.innerWidth * 0.31, window.innerHeight * 0.285, 'Score:', fontStyle);
+        scene.scoreText = scene.add.text(
+            window.innerWidth * 0.59, window.innerHeight * 0.285, scene.scoreValue, fontStyle);
+        scene.scoreText.setOrigin(0.5, 0);
+        scene.scoreText.setAlign('center');
+    }
+
+    createScoreboard() {
+        let scoreboard = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'scoreboard');
+        scoreboard.setX(window.innerWidth * 0.47);
+        scoreboard.setY(window.innerHeight * 0.31);
+    }
+
+    addObjectText(scene) {
+        scene.objectText = scene.add.text(
+            window.innerWidth * 0.5, window.innerHeight * 0.97, null, LEADERBOARD_FONT);
+        scene.objectText.setOrigin(0.5);
+        scene.objectText.setFontSize(60);
+
     }
 }

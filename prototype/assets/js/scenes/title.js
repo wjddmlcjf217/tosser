@@ -7,51 +7,47 @@ export default class TitleScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('background', 'assets/img/study_area.png');
+        this.load.image('background_blur', 'assets/img/study_area_blur.png');
+        this.load.image('logo', 'assets/img/tosser_logo.png');
     }
 
     create () {
         this.createBackground(this);
 
+        //Logo
+        this.logo = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.3, 'logo');
+        this.logo.setOrigin(0.5);
+
         // Game
-        this.gameButton = this.add.text(window.innerWidth * 0.38, window.innerHeight * 0.55, 'Play', {
-            fontStyle: 'Bolder',
-            fontSize: 100,
-            color: 'black'
-        });
+        this.gameButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.55, 'Play', TITLE_FONT);
+        this.gameButton.setOrigin(0.5);
         this.gameButton.setInteractive();
         this.gameButton.on('pointerdown', () => {this.scene.start('Game')});
 
         // Options
-        this.optionsButton = this.add.text(window.innerWidth * 0.18, window.innerHeight * 0.65, 'LeaderBoard', {
-            fontStyle: 'Bolder',
-            fontSize: 100,
-            color: 'black',
-        });
+        this.optionsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.65, 'LeaderBoard', TITLE_FONT);
+        this.optionsButton.setOrigin(0.5);
         this.optionsButton.setInteractive();
         this.optionsButton.on('pointerdown', () => {this.scene.start('LeaderBoard')});
 
         // Credits
-        this.creditsButton = this.add.text(window.innerWidth * 0.29, window.innerHeight * 0.75, 'Credits', {
-            fontStyle: 'Bolder',
-            fontSize: 100,
-            color: 'black',
-        });
+        this.creditsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.75, 'Credits', TITLE_FONT);
+        this.creditsButton.setOrigin(0.5);
         this.creditsButton.setInteractive();
         this.creditsButton.on('pointerdown', () => {this.scene.start('Credits')});
 
         //Sign-out
-        this.signOutButton = this.add.text(window.innerWidth * 0.65, window.innerHeight * 0.95, 'Sign Out', {
-            fontStyle: 'Bolder',
-            fontSize: 70,
-            color: 'black',
-        })
+        this.signOutButton = this.add.text(window.innerWidth * 0.98, window.innerHeight * 0.99, 'Sign Out', TITLE_FONT);
+        this.signOutButton.setFontSize(70);
+        this.signOutButton.setOrigin(1);
         this.signOutButton.setInteractive();
-        this.creditsButton.on('pointerdown', () => {firebase.auth().signOut()});
+        this.signOutButton.on('pointerdown', () => {
+            firebase.auth().signOut();
+            window.location.href = 'index.html'});
     }
 
     createBackground(game) {
-        let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background');
+        let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
         background.displayHeight = window.innerHeight;
         background.displayWidth = window.innerWidth;
     }
