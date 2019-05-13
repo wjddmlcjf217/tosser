@@ -78,6 +78,7 @@ export default class CreditsScene extends Phaser.Scene {
                 ease: 'linear',
                 duration: 9000,
                 delay: 1000,
+                completeDelay: 1000,
                 onComplete: function () {
                     this.madeByTween.destroy;
                     this.scene.start('Title');
