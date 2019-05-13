@@ -531,7 +531,7 @@ export default class GameScene extends Phaser.Scene {
     addScoreText(scene) {
         let fontStyle = {
             fontFamily: 'Kalam',
-            fontSize: 80,
+            fontSize: 70,
             color: '#84BCCE',
         };
 
@@ -539,9 +539,9 @@ export default class GameScene extends Phaser.Scene {
             window.innerWidth * 0.285, window.innerHeight * 0.285, 'Game Over', fontStyle);
         scene.gameOverText.setVisible(false);
         scene.staticScoreText = scene.add.text(
-            window.innerWidth * 0.31, window.innerHeight * 0.285, 'Score:', fontStyle);
+            window.innerWidth * 0.31, window.innerHeight * 0.295, 'Score:', fontStyle);
         scene.scoreText = scene.add.text(
-            window.innerWidth * 0.59, window.innerHeight * 0.285, scene.scoreValue, fontStyle);
+            window.innerWidth * 0.58, window.innerHeight * 0.295, scene.scoreValue, fontStyle);
         scene.scoreText.setOrigin(0.5, 0);
         scene.scoreText.setAlign('center');
     }
