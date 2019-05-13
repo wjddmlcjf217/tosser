@@ -349,6 +349,7 @@ export default class GameScene extends Phaser.Scene {
      * Projectile Hit target handler
      * @param projectile
      */
+
     hitYellowBin(projectile) {
         if (projectile.body.velocity.y > 0) {
             projectile.disableBody(false, true);
@@ -369,7 +370,6 @@ export default class GameScene extends Phaser.Scene {
             this.resetProjectile(projectile);
         }
     }
-
 
     hitBlueBin(projectile) {
         if (projectile.body.velocity.y > 0) {
