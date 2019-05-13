@@ -1,4 +1,4 @@
-const LEADERBOARD_FONT = {
+var LEADERBOARD_FONT = {
     fontFamily: 'Luckiest Guy',
     fontSize: 80,
     color: '#fffdd9',
@@ -14,7 +14,7 @@ const LEADERBOARD_FONT = {
     },
 };
 
-const TITLE_FONT = {
+var TITLE_FONT = {
     fontFamily: 'Luckiest Guy',
     fontSize: 100,
     color: '#fffdd9',

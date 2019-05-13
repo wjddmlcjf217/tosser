@@ -11,8 +11,8 @@ let firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-let playerList = [];
-let leaderBoard = null;
+var playerList = [];
+var leaderBoard = null;
 
 
 async function loadLeaderBoard() {
