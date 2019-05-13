@@ -15,6 +15,15 @@ class Game extends Phaser.Game {
     }
 }
 
-Promise.all([loadLeaderBoard(), loadFont()]).then(function () {
-    window.game = new Game();
+WebFont.load({
+    google: {
+        families: ['Luckiest Guy', 'Kalam']
+    },
+    active: launchGame
 });
+
+function launchGame() {
+    loadLeaderBoard().then(function () {
+        window.game = new Game();
+    });
+}
