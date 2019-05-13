@@ -59,7 +59,6 @@ export default class GameScene extends Phaser.Scene {
 
         //Add Scoreboard
         this.scoreValue = 0;
-        this.createScoreboard(this);
         this.addScoreText(this);
         this.addObjectText(this);
 
@@ -547,11 +546,6 @@ export default class GameScene extends Phaser.Scene {
         scene.scoreText.setAlign('center');
     }
 
-    createScoreboard() {
-        let scoreboard = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'scoreboard');
-        scoreboard.setX(window.innerWidth * 0.47);
-        scoreboard.setY(window.innerHeight * 0.31);
-    }
 
     addObjectText(scene) {
         scene.objectText = scene.add.text(
