@@ -2,6 +2,7 @@
 
 // takes all database profile data to display on profile page
 let displayName = null;
+let object = null;
 
 function initApp() {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -64,7 +65,7 @@ export default class GameScene extends Phaser.Scene {
 
         // Create Hero
         this.queue = ['paper', 'banana', 'waterbottle'];
-        let object = this.queue[Math.floor(Math.random() * 3)];
+        object = this.queue[Math.floor(Math.random() * 3)];
         this.hero = this.createHeroProjectile(this, object);
         this.objectText.setText(object);
 
@@ -304,8 +305,8 @@ export default class GameScene extends Phaser.Scene {
         game.rimTwoLeftCollider = game.physics.add.collider(game.hero, rimTwoLeft, this.hitRim, null, game);
         game.rimTwoRightCollider = game.physics.add.collider(game.hero, rimTwoRight, this.hitRim, null, game);
 
-        game.physics.add.overlap(game.hero, binOne, this.hitTarget, null, game);
-        game.physics.add.overlap(game.hero, binTwo, this.hitTarget, null, game);
+        game.physics.add.overlap(game.hero, binOne, this.hitBlueBin, null, game);
+        game.physics.add.overlap(game.hero, binTwo, this.hitYellowBin, null, game);
 
 
         game.rimOneLeftCollider.active = false;
@@ -348,19 +349,47 @@ export default class GameScene extends Phaser.Scene {
      * Projectile Hit target handler
      * @param projectile
      */
-    hitTarget(projectile) {
+    hitYellowBin(projectile) {
         if (projectile.body.velocity.y > 0) {
-            this.createPlus1();
-            this.addplus1Tween(this.plus1);
             projectile.disableBody(false, true);
-            this.resetProjectile(projectile);
-            this.scoreHandler(this);
             this.floorCollider.active = false;
             this.rimOneRightCollider.active = false;
             this.rimOneLeftCollider.active = false;
             this.rimTwoRightCollider.active = false;
             this.rimTwoLeftCollider.active = false;
             this.sound.play('hit-target');
+            if (object === "paper") {
+                this.createPlus1();
+                this.addplus1Tween(this.plus1);
+                this.scoreHandler(this);
+            }
+            else {
+                this.lifeHandler(this);
+            }
+            this.resetProjectile(projectile);
+        }
+    }
+
+
+    hitBlueBin(projectile) {
+        if (projectile.body.velocity.y > 0) {
+            projectile.disableBody(false, true);
+            this.floorCollider.active = false;
+            this.rimOneRightCollider.active = false;
+            this.rimOneLeftCollider.active = false;
+            this.rimTwoRightCollider.active = false;
+            this.rimTwoLeftCollider.active = false;
+            this.sound.play('hit-target');
+            console.log(object);
+            if (object === "waterbottle") {
+                this.createPlus1();
+                this.addplus1Tween(this.plus1);
+                this.scoreHandler(this);
+            }
+            else {
+                this.lifeHandler(this);
+            }
+            this.resetProjectile(projectile)
         }
     }
 
@@ -392,7 +421,7 @@ export default class GameScene extends Phaser.Scene {
      */
     spawnProjectile(projectile) {
         let scene = projectile.scene;
-        let object = scene.queue[Math.floor(Math.random() * 3)];
+        object = scene.queue[Math.floor(Math.random() * 3)];
         scene.objectText.setText(object);
         scene.hero = this.createHeroProjectile(scene, object);
         scene.hero.visible = true;
