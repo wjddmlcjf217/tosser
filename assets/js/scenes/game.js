@@ -42,12 +42,18 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
         this.load.image('plus1', 'assets/img/plus1.jpg');
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
+        this.load.image('discoball', 'assets/img/disco-ball.png');
+        this.load.image('discomode', 'assets/img/disco.gif');
+
 
         // audio assets
         this.load.audio('hit-target', [
             'assets/audio/bin-sound.m4a',
             'assets/audio/bin-sound.mp3',
+
         ]);
+
+        this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
     /**
@@ -56,6 +62,7 @@ export default class GameScene extends Phaser.Scene {
     create() {
         this.createBackground(this);
         this.createLight(this);
+        this.discoMode(this);
 
         //Add Scoreboard
         this.scoreValue = 0;
@@ -245,7 +252,117 @@ export default class GameScene extends Phaser.Scene {
         light.on('pointerdown', function () {
             this.setTexture(this.texture.key === 'light_on' ? 'light_off' : 'light_on');
             darkenEffect.setVisible(!darkenEffect.visible);
+
         });
+    }
+
+    /**
+     * Disco mode in scene
+     * @param scene
+     */
+    discoMode(scene) {
+        let discoBall = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.11, 'discoball');
+        discoBall.displayWidth = 150;
+        discoBall.displayHeight = 150;
+        discoBall.setInteractive();
+        let discoBool = true;
+
+        let background = scene.add.rectangle(window.innerWidth / 2, window.innerHeight / 2,
+            window.innerWidth, window.innerHeight);
+        background.setDepth(1000);
+        background.setVisible(false);
+        background.setFillStyle(0x000000, 100);
+        background.setBlendMode('MULTIPLY');
+
+        let discoEffect = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect.setDepth(1000);
+        discoEffect.setVisible(false);
+        discoEffect.setFillStyle(0xFFFF00, 100);
+        discoEffect.setBlendMode('COLORDODGE');
+        discoEffect.setRotation(1);
+
+        let discoEffect2 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect2.setDepth(1000);
+        discoEffect2.setVisible(false);
+        discoEffect2.setFillStyle(0x00FF00, 100);
+        discoEffect2.setBlendMode('COLORDODGE');
+        discoEffect2.setRotation(3);
+
+
+        let discoEffect3 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect3.setDepth(1000);
+        discoEffect3.setVisible(false);
+        discoEffect3.setFillStyle(0x00FFFF, 100);
+        discoEffect3.setBlendMode('COLORDODGE');
+        discoEffect3.setRotation(4);
+
+
+        let discoEffect4 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect4.setDepth(1000);
+        discoEffect4.setVisible(false);
+        discoEffect4.setFillStyle(0xFF0000, 100);
+        discoEffect4.setBlendMode('COLORDODGE');
+        discoEffect4.setRotation(5);
+
+        let discoEffect5 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect5.setDepth(1000);
+        discoEffect5.setVisible(false);
+        discoEffect5.setFillStyle(0x8B00FF, 100);
+        discoEffect5.setBlendMode('COLORDODGE');
+        discoEffect5.setRotation(6);
+
+
+        let discoEffect6 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect6.setDepth(1000);
+        discoEffect6.setVisible(false);
+        discoEffect6.setFillStyle(0x53FF00, 100);
+        discoEffect6.setBlendMode('COLORDODGE');
+        discoEffect6.setRotation(7);
+
+
+        let discoEffect7 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect7.setDepth(1000);
+        discoEffect7.setVisible(false);
+        discoEffect7.setFillStyle(0xFF00FF, 100);
+        discoEffect7.setBlendMode('COLORDODGE');
+        discoEffect7.setRotation(8);
+
+
+
+        setInterval(function() {discoEffect.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect2.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect3.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect4.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect5.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect6.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect7.setRandomPosition();}, 500);
+
+        discoBall.on('pointerdown', function () {
+
+            if (discoBool === true) {
+                scene.sound.play('disco');
+                discoBool = false;
+            }
+            else if (discoBool === false){
+                scene.sound.stopAll('disco');
+                // clearInterval(a);
+                discoBool = true;
+            }
+
+            background.setVisible(!discoEffect.visible);
+            discoEffect.setVisible(!discoEffect.visible);
+            discoEffect2.setVisible(!discoEffect2.visible);
+            discoEffect3.setVisible(!discoEffect3.visible);
+            discoEffect4.setVisible(!discoEffect4.visible);
+            discoEffect5.setVisible(!discoEffect5.visible);
+            discoEffect6.setVisible(!discoEffect6.visible);
+            discoEffect7.setVisible(!discoEffect7.visible);
+
+
+
+        });
+
     }
 
     /**
