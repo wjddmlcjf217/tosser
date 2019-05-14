@@ -56,7 +56,7 @@ export default class GameScene extends Phaser.Scene {
             'assets/audio/bin-sound.mp3',
         ]);
 
-        // this.load.audio('disco', 'assets/audio/ymca.mp3')
+        this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
     /**
