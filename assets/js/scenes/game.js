@@ -35,7 +35,8 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('bin_top', 'assets/img/bin_top.png');
         this.load.image('paper', 'assets/img/paper_ball.png');
         this.load.image('waterbottle', 'assets/img/water_bottle.png');
-        this.load.image('banana', 'assets/img/banana-sprite.png');
+        this.load.image('apple', 'assets/img/apple.png');
+        this.load.image('banana', 'assets/img/banana.png');
         this.load.image('life', 'assets/img/life.gif');
         this.load.image('light_off', 'assets/img/light_off.png');
         this.load.image('light_on', 'assets/img/light_on.png');
@@ -70,8 +71,8 @@ export default class GameScene extends Phaser.Scene {
         this.addObjectText(this);
 
         // Create Hero
-        this.queue = ['paper', 'banana', 'waterbottle'];
-        object = this.queue[Math.floor(Math.random() * 3)];
+        this.queue = ['paper', 'banana', 'apple', 'waterbottle'];
+        object = this.queue[Math.floor(Math.random() * 4)];
         this.hero = this.createHeroProjectile(this, object);
         this.objectText.setText(object);
 
@@ -360,7 +361,7 @@ export default class GameScene extends Phaser.Scene {
         discoEffect10.setBlendMode('COLORDODGE');
         discoEffect10.setRotation(11);
 
-        let disco;
+        // let disco;
         let disco1;
         let disco2;
         let disco3;
@@ -375,9 +376,9 @@ export default class GameScene extends Phaser.Scene {
 
 
         function enableDisco () {
-            disco = setInterval(function () {
-                discoEffect.setRandomPosition();
-            }, 500);
+            // disco = setInterval(function () {
+            //     discoEffect.setRandomPosition();
+            // }, 500);
             disco1 = setInterval(function () {
                 discoEffect.setRandomPosition();
             }, 500);
@@ -413,7 +414,7 @@ export default class GameScene extends Phaser.Scene {
         }
 
         function disableDisco () {
-            clearInterval(disco);
+            // clearInterval(disco);
             clearInterval(disco1);
             clearInterval(disco2);
             clearInterval(disco3);
@@ -633,7 +634,7 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "banana") {
+            if (object === "banana" || object === 'apple') {
                 this.createGood();
                 this.addGoodTween(this.good);
                 this.scoreHandler(this);
