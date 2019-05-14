@@ -1,4 +1,4 @@
-// version 0.6.9
+// version 0.9
 
 // takes all database profile data to display on profile page
 let displayName = null;
@@ -42,12 +42,17 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
         this.load.image('plus1', 'assets/img/plus1.jpg');
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
+        this.load.image('discoball', 'assets/img/disco-ball.png');
+
 
         // audio assets
         this.load.audio('hit-target', [
             'assets/audio/bin-sound.m4a',
             'assets/audio/bin-sound.mp3',
+
         ]);
+
+        // this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
     /**
@@ -56,6 +61,7 @@ export default class GameScene extends Phaser.Scene {
     create() {
         this.createBackground(this);
         this.createLight(this);
+        this.discoMode(this);
 
         //Add Scoreboard
         this.scoreValue = 0;
@@ -94,6 +100,10 @@ export default class GameScene extends Phaser.Scene {
 
             this.rimTwoLeftCollider.active = true;
             this.rimTwoRightCollider.active = true;
+
+            this.rimThreeLeftCollider.active = true;
+            this.rimThreeRightCollider.active = true;
+
         }
 
     }
@@ -172,14 +182,15 @@ export default class GameScene extends Phaser.Scene {
         let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
         velocity.scale(1000);
 
-        console.log(velocity.angle());
-        if (velocity.angle() > 3.5 && velocity.angle() < 5.8) {
+        let angle = velocity.angle();
+        if (angle > 3.41 && angle < 6.01) {
             this.hero.state = 'flying';
             this.hero.disableInteractive();
             // this.hero.body.setVelocity(velocity.x * 0.75, velocity.y * 4);
             this.hero.body.setVelocity(velocity.x * window.innerWidth * 0.0008, velocity.y * window.innerHeight * 0.0022);
 
-            this.hero.body.setAngularVelocity(400);
+            let projectileSpin = (angle - 4.71) * 2000;
+            this.hero.body.setAngularVelocity(projectileSpin);
             this.hero.body.setAccelerationX(velocity.x * window.innerWidth * -0.00037001119); //-0.275
             this.hero.body.setAccelerationY(velocity.y * window.innerHeight * -0.00259);
             // this.hero.body.setAccelerationX(velocity.x * -0.275); //-0.275
@@ -245,7 +256,157 @@ export default class GameScene extends Phaser.Scene {
         light.on('pointerdown', function () {
             this.setTexture(this.texture.key === 'light_on' ? 'light_off' : 'light_on');
             darkenEffect.setVisible(!darkenEffect.visible);
+
         });
+    }
+
+    /**
+     * Disco mode in scene
+     * @param scene
+     */
+    discoMode(scene) {
+        let discoBall = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.11, 'discoball');
+        discoBall.displayWidth = 150;
+        discoBall.displayHeight = 150;
+        discoBall.setInteractive();
+        let discoBool = true;
+
+        let background = scene.add.rectangle(window.innerWidth / 2, window.innerHeight / 2,
+            window.innerWidth, window.innerHeight);
+        background.setDepth(1000);
+        background.setVisible(false);
+        background.setFillStyle(0x000000, 100);
+        background.setBlendMode('MULTIPLY');
+
+        let discoEffect = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect.setDepth(1000);
+        discoEffect.setVisible(false);
+        discoEffect.setFillStyle(0xFFFF00, 100);
+        discoEffect.setBlendMode('COLORDODGE');
+        discoEffect.setRotation(1);
+
+        let discoEffect2 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect2.setDepth(1000);
+        discoEffect2.setVisible(false);
+        discoEffect2.setFillStyle(0x00FF00, 100);
+        discoEffect2.setBlendMode('COLORDODGE');
+        discoEffect2.setRotation(3);
+
+
+        let discoEffect3 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect3.setDepth(1000);
+        discoEffect3.setVisible(false);
+        discoEffect3.setFillStyle(0x00FFFF, 100);
+        discoEffect3.setBlendMode('COLORDODGE');
+        discoEffect3.setRotation(4);
+
+
+        let discoEffect4 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect4.setDepth(1000);
+        discoEffect4.setVisible(false);
+        discoEffect4.setFillStyle(0xFF0000, 100);
+        discoEffect4.setBlendMode('COLORDODGE');
+        discoEffect4.setRotation(5);
+
+        let discoEffect5 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect5.setDepth(1000);
+        discoEffect5.setVisible(false);
+        discoEffect5.setFillStyle(0x8B00FF, 100);
+        discoEffect5.setBlendMode('COLORDODGE');
+        discoEffect5.setRotation(6);
+
+
+        let discoEffect6 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect6.setDepth(1000);
+        discoEffect6.setVisible(false);
+        discoEffect6.setFillStyle(0x53FF00, 100);
+        discoEffect6.setBlendMode('COLORDODGE');
+        discoEffect6.setRotation(7);
+
+
+        let discoEffect7 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect7.setDepth(1000);
+        discoEffect7.setVisible(false);
+        discoEffect7.setFillStyle(0xFF00FF, 100);
+        discoEffect7.setBlendMode('COLORDODGE');
+        discoEffect7.setRotation(8);
+
+
+        let disco;
+        let disco1;
+        let disco2;
+        let disco3;
+        let disco4;
+        let disco5;
+        let disco6;
+        let disco7;
+
+
+        function enableDisco () {
+            disco = setInterval(function () {
+                discoEffect.setRandomPosition();
+            }, 500);
+            disco1 = setInterval(function () {
+                discoEffect.setRandomPosition();
+            }, 500);
+            disco2 = setInterval(function () {
+                discoEffect2.setRandomPosition();
+            }, 500);
+            disco3 = setInterval(function () {
+                discoEffect3.setRandomPosition();
+            }, 500);
+            disco4 = setInterval(function () {
+                discoEffect4.setRandomPosition();
+            }, 500);
+            disco5 = setInterval(function () {
+                discoEffect5.setRandomPosition();
+            }, 500);
+            disco6 = setInterval(function () {
+                discoEffect6.setRandomPosition();
+            }, 500);
+            disco7 = setInterval(function () {
+                discoEffect7.setRandomPosition();
+            }, 500);
+        }
+
+        function disableDisco () {
+            clearInterval(disco);
+            clearInterval(disco1);
+            clearInterval(disco2);
+            clearInterval(disco3);
+            clearInterval(disco4);
+            clearInterval(disco5);
+            clearInterval(disco6);
+            clearInterval(disco7);
+        }
+
+        discoBall.on('pointerdown', function () {
+
+            if (discoBool === true) {
+                scene.sound.play('disco');
+                enableDisco();
+                discoBool = false;
+            }
+            else if (discoBool === false){
+                scene.sound.stopAll('disco');
+                disableDisco();
+                // clearInterval(a);
+                discoBool = true;
+            }
+
+            background.setVisible(!discoEffect.visible);
+            discoEffect.setVisible(!discoEffect.visible);
+            discoEffect2.setVisible(!discoEffect2.visible);
+            discoEffect3.setVisible(!discoEffect3.visible);
+            discoEffect4.setVisible(!discoEffect4.visible);
+            discoEffect5.setVisible(!discoEffect5.visible);
+            discoEffect6.setVisible(!discoEffect6.visible);
+            discoEffect7.setVisible(!discoEffect7.visible);
+
+
+
+        });
+
     }
 
     /**
@@ -260,7 +421,7 @@ export default class GameScene extends Phaser.Scene {
         hero.state = 'resting';
         hero.displayHeight = 150;
         hero.displayWidth = 150;
-        hero.setBounce(.45);
+        hero.setBounce(.4);
         // hero.body.onWorldBounds = true;
         // hero.body.setCollideWorldBounds(true);
         hero.visible = false;
@@ -272,28 +433,35 @@ export default class GameScene extends Phaser.Scene {
      * @param game Phaser Game
      */
     createPhysicsObjects(game) {
-        let binOne = game.add.rectangle(window.innerWidth * 0.301, window.innerHeight * 0.430, window.innerWidth * 0.163, 10);
-        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.215, window.innerHeight * 0.425, window.innerWidth * 0.001, 5);//0.015
-        let rimOneRight = game.add.rectangle(window.innerWidth * 0.390, window.innerHeight * 0.425, window.innerWidth * 0.001, 5); //0.015
+        let binOne = game.add.rectangle(window.innerWidth * 0.185, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
+        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.11, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);//0.015
+        let rimOneRight = game.add.rectangle(window.innerWidth * 0.260, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25); //0.015
 
+        let binTwo = game.add.rectangle(window.innerWidth * 0.51775, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
+        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.44275, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);//0.015
+        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.59275, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25); //0.015
 
-        let binTwo = game.add.rectangle(window.innerWidth * 0.645, window.innerHeight * 0.430, window.innerWidth * 0.163, 10);
-        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.559, window.innerHeight * 0.425, window.innerWidth * 0.001, 5);//0.015
-        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.731, window.innerHeight * 0.425, window.innerWidth * 0.001, 5); //0.015
+        let binThree = game.add.rectangle(window.innerWidth * 0.84725, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
+        let rimThreeLeft = game.add.rectangle(window.innerWidth * 0.77225, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);
+        let rimThreeRight = game.add.rectangle(window.innerWidth * 0.92225, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);
 
         let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.57, window.innerWidth * 10, 50);
 
         game.physics.add.existing(binOne, true);
+        game.physics.add.existing(binTwo, true);
+        game.physics.add.existing(binThree, true);
+
         game.physics.add.existing(rimOneLeft, true);
         game.physics.add.existing(rimOneRight, true);
         game.physics.add.existing(rimTwoLeft, true);
         game.physics.add.existing(rimTwoRight, true);
-        game.physics.add.existing(binTwo, true);
+        game.physics.add.existing(rimThreeLeft, true);
+        game.physics.add.existing(rimThreeRight, true);
+
         game.physics.add.existing(floor, true);
 
 
         // Add physical interactions
-
 
         game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
 
@@ -304,14 +472,21 @@ export default class GameScene extends Phaser.Scene {
         game.rimTwoLeftCollider = game.physics.add.collider(game.hero, rimTwoLeft, this.hitRim, null, game);
         game.rimTwoRightCollider = game.physics.add.collider(game.hero, rimTwoRight, this.hitRim, null, game);
 
+        game.rimThreeLeftCollider = game.physics.add.collider(game.hero, rimThreeLeft, this.hitRim, null, game);
+        game.rimThreeRightCollider = game.physics.add.collider(game.hero, rimThreeRight, this.hitRim, null, game);
+
         game.physics.add.overlap(game.hero, binOne, this.hitBlueBin, null, game);
-        game.physics.add.overlap(game.hero, binTwo, this.hitYellowBin, null, game);
+        game.physics.add.overlap(game.hero, binTwo, this.hitGreenBin, null, game);
+        game.physics.add.overlap(game.hero, binThree, this.hitYellowBin, null, game);
+
 
 
         game.rimOneLeftCollider.active = false;
         game.rimOneRightCollider.active = false;
         game.rimTwoLeftCollider.active = false;
         game.rimTwoRightCollider.active = false;
+        game.rimThreeLeftCollider.active = false;
+        game.rimThreeRightCollider.active = false;
         game.floorCollider.active = false;
     }
 
@@ -339,8 +514,8 @@ export default class GameScene extends Phaser.Scene {
             this.rimOneLeftCollider.active = false;
             this.rimTwoRightCollider.active = false;
             this.rimTwoLeftCollider.active = false;
-
-
+            this.rimThreeRightCollider.active = false;
+            this.rimThreeLeftCollider.active = false;
         }
     }
 
@@ -357,6 +532,8 @@ export default class GameScene extends Phaser.Scene {
             this.rimOneLeftCollider.active = false;
             this.rimTwoRightCollider.active = false;
             this.rimTwoLeftCollider.active = false;
+            this.rimThreeRightCollider.active = false;
+            this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
             if (object === "paper") {
                 this.createPlus1();
@@ -378,8 +555,9 @@ export default class GameScene extends Phaser.Scene {
             this.rimOneLeftCollider.active = false;
             this.rimTwoRightCollider.active = false;
             this.rimTwoLeftCollider.active = false;
+            this.rimThreeRightCollider.active = false;
+            this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            console.log(object);
             if (object === "waterbottle") {
                 this.createPlus1();
                 this.addplus1Tween(this.plus1);
@@ -388,7 +566,30 @@ export default class GameScene extends Phaser.Scene {
             else {
                 this.lifeHandler(this);
             }
-            this.resetProjectile(projectile)
+            this.resetProjectile(projectile);
+        }
+    }
+
+    hitGreenBin(projectile) {
+        if (projectile.body.velocity.y > 0) {
+            projectile.disableBody(false, true);
+            this.floorCollider.active = false;
+            this.rimOneRightCollider.active = false;
+            this.rimOneLeftCollider.active = false;
+            this.rimTwoRightCollider.active = false;
+            this.rimTwoLeftCollider.active = false;
+            this.rimThreeRightCollider.active = false;
+            this.rimThreeLeftCollider.active = false;
+            this.sound.play('hit-target');
+            if (object === "banana") {
+                this.createPlus1();
+                this.addplus1Tween(this.plus1);
+                this.scoreHandler(this);
+            }
+            else {
+                this.lifeHandler(this);
+            }
+            this.resetProjectile(projectile);
         }
     }
 
@@ -398,6 +599,8 @@ export default class GameScene extends Phaser.Scene {
      */
     missedTarget(projectile) {
         this.setProjectileDrag(projectile);
+        let angularVelocity = projectile.body.angularVelocity;
+        projectile.body.setAngularVelocity(angularVelocity * 0.5);
         projectile.setAccelerationX(0);
 
         if (projectile.body.angularVelocity === 0) {
@@ -409,7 +612,8 @@ export default class GameScene extends Phaser.Scene {
             this.rimOneLeftCollider.active = false;
             this.rimTwoRightCollider.active = false;
             this.rimTwoLeftCollider.active = false;
-
+            this.rimThreeRightCollider.active = false;
+            this.rimThreeLeftCollider.active = false;
 
         }
     }
@@ -459,8 +663,8 @@ export default class GameScene extends Phaser.Scene {
     addProjectileScalingTween(game, projectile) {
         game.tweens.add({
             targets: projectile,
-            displayWidth: 40,
-            displayHeight: 40,
+            displayWidth: 25,
+            displayHeight: 25,
             ease: 'Linear',
             duration: 1500,
             repeat: 0,
