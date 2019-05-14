@@ -4,19 +4,6 @@
 let displayName = null;
 let object = null;
 
-let disco;
-let disco1;
-let disco2;
-let disco3;
-let disco4;
-let disco5;
-let disco6;
-let disco7;
-let disco8;
-let disco9;
-let disco10;
-
-
 
 function initApp() {
     firebase.auth().onAuthStateChanged(function (user) {
