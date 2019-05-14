@@ -6,30 +6,30 @@ export default class CreditsScene extends Phaser.Scene {
     }
 
     preload () {
-        this.load.image('paper1', 'assets/img/paper_ball.png');
-        this.load.image('paper2', 'assets/img/paper_ball.png');
-        this.load.image('paper3', 'assets/img/paper_ball.png');
-        this.load.image('paper4', 'assets/img/paper_ball.png');
-        this.load.image('paper5', 'assets/img/paper_ball.png');
+        this.load.image('bryden', 'assets/img/paper_ball.png');
+        this.load.image('dillon', 'assets/img/paper_ball.png');
+        this.load.image('kevin', 'assets/img/paper_ball.png');
+        this.load.image('jacky', 'assets/img/paper_ball.png');
+        this.load.image('jared', 'assets/img/paper_ball.png');
     }
 
     create () {
         this.createBackground(this);
         this.creditsText = this.add.text(0, 0, 'Credits', LEADERBOARD_FONT);
         this.madeByText = this.add.text(0, 0, 'Created By: ', LEADERBOARD_FONT);
-        this.brydenPic = this.physics.add.image(window.innerWidth/2, 0, 'paper1');
+        this.brydenPic = this.physics.add.image(window.innerWidth/2, 0, 'bryden');
         this.brydenText = this.add.text(0, 0, 'Bryden Mitchell', LEADERBOARD_FONT);
         this.brydenBio = this.add.text(0, 0, "'Fueled by Nat\'s Pizzeria'", LEADERBOARD_FONT);
-        this.dillonPic = this.physics.add.image(window.innerWidth/2, 0, 'paper2');
+        this.dillonPic = this.physics.add.image(window.innerWidth/2, 0, 'dillon');
         this.dillonText = this.add.text(0, 0, 'Dillon Yeh', LEADERBOARD_FONT);
         this.dillonBio = this.add.text(0, 0, "'I have access to kids'", LEADERBOARD_FONT);
-        this.kevinPic = this.physics.add.image(window.innerWidth/2, 0, 'paper3');
+        this.kevinPic = this.physics.add.image(window.innerWidth/2, 0, 'kevin');
         this.kevinText = this.add.text(0, 0, 'Kevin Jeong', LEADERBOARD_FONT);
         this.kevinBio = this.add.text(0, 0, "'DEEZ NUTS'", LEADERBOARD_FONT);
-        this.jackyPic = this.physics.add.image(window.innerWidth/2, 0, 'paper4');
+        this.jackyPic = this.physics.add.image(window.innerWidth/2, 0, 'jacky');
         this.jackyText = this.add.text(0, 0, 'Jacky Zheng', LEADERBOARD_FONT);
         this.jackyBio = this.add.text(0, 0, "'All is fixed with var'", LEADERBOARD_FONT);
-        this.jaredPic = this.physics.add.image(window.innerWidth/2, 0, 'paper5');
+        this.jaredPic = this.physics.add.image(window.innerWidth/2, 0, 'jared');
         this.jaredText = this.add.text(0, 0, 'Jared Hall', LEADERBOARD_FONT);
         this.jaredBio = this.add.text(0, 0, "'We should add rimming'", LEADERBOARD_FONT);
         this.thankYou = this.add.text(0, 0, 'Thanks for playing!', LEADERBOARD_FONT);
