@@ -80,6 +80,8 @@ export default class GameScene extends Phaser.Scene {
             life.displayWidth = window.innerWidth * 0.070;
             life.displayHeight = window.innerHeight * 0.039;
         }
+
+        this.windSetup(this);
     }
 
     /**
@@ -621,7 +623,8 @@ export default class GameScene extends Phaser.Scene {
         scene.hero.setInteractive();
         scene.hero.on('pointerdown', this.pointerDownHandler, scene);
 
-        this.createPhysicsObjects(scene)
+        this.createPhysicsObjects(scene);
+        this.windUpdate(scene);
     }
 
     /**
@@ -633,6 +636,40 @@ export default class GameScene extends Phaser.Scene {
         console.log(projectile);
         projectile.scene.tweens.killTweensOf(projectile);
         this.spawnProjectile(projectile);
+    }
+
+    windUpdate() {
+        // calculate wind
+        let min = -5;
+        let max = 5;
+        let wind = Math.floor(Math.random() * (max - min + 1)) + min;
+        this.windValue = wind;
+
+        // rotate arrow and position text
+        if (wind < 0) {
+            this.windArrow.rotation = 3.14;
+            this.windValueDisplay.x += 15;
+        } else {
+            this.windValueDisplay.x -= 50;
+        }
+    }
+
+    windSetup() {
+        // add arrow image
+        this.windArrow = this.add.image(window.innerWidth / 2, window.innerHeight * 0.75, 'wind_arrow')
+        this.windArrow.displayHeight = 100;
+        this.windArrow.displayWidth = 150;
+
+        // create font
+        let fontStyle = {
+            fontFamily: 'Kalam',
+            fontSize: 40,
+            color: '#FFFFFF'
+        };
+
+        // add text to scene
+        this.windValueDisplay = this.add.text(window.innerWidth / 2, window.innerHeight * 0.75 - 24, 'Placeholder', fontStyle);
+
     }
 
     /**
