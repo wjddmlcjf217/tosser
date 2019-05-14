@@ -193,6 +193,7 @@ export default class GameScene extends Phaser.Scene {
         let velocityX = pointer.upX - pointer.downX;
         let velocityY = pointer.upY - pointer.downY;
         let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
+        // velocity.set(velocity.x * 500, velocity.y * 1000);
         velocity.scale(1000);
 
         let angle = velocity.angle();
@@ -212,7 +213,7 @@ export default class GameScene extends Phaser.Scene {
             }
         }
 
-        this.hero.setAccelerationX(this.windValue * 200);
+        this.hero.setAccelerationX(this.windValue * 100);
     }
 
     /**
