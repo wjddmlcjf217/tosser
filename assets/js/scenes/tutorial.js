@@ -286,7 +286,11 @@ export default class TutorialScene extends Phaser.Scene {
             }
             this.resetProjectile(projectile);
             if (organic && paper && recycle) {
-                this.tutorialText.setText("CONGRATULATIONS! TUTORIAL COMPLETED!");
+                this.tutorialText.setText("CONGRATULATIONS!");
+                this.tutorialText.setColor('#24CC18');
+                organic = false;
+                paper = false;
+                recycle = false;
                 setTimeout(function() {projectile.scene.scene.start('Title')}, 1500);
             }
         }
@@ -310,7 +314,11 @@ export default class TutorialScene extends Phaser.Scene {
             }
             this.resetProjectile(projectile);
             if (organic && paper && recycle) {
-                this.tutorialText.setText("CONGRATULATIONS! TUTORIAL COMPLETED!");
+                this.tutorialText.setText("CONGRATULATIONS!");
+                this.tutorialText.setColor('#24CC18');
+                organic = false;
+                paper = false;
+                recycle = false;
                 setTimeout(function() {projectile.scene.scene.start('Title')}, 1500);
             }
         }
@@ -334,7 +342,11 @@ export default class TutorialScene extends Phaser.Scene {
             }
             this.resetProjectile(projectile);
             if (organic && paper && recycle) {
-                this.tutorialText.setText("CONGRATULATIONS! TUTORIAL COMPLETED!");
+                this.tutorialText.setText("CONGRATULATIONS!");
+                this.tutorialText.setColor('#24CC18');
+                organic = false;
+                paper = false;
+                recycle = false;
                 setTimeout(function() {projectile.scene.scene.start('Title')}, 1500);
             }
         }
@@ -437,27 +449,33 @@ export default class TutorialScene extends Phaser.Scene {
 
     addTutorialText(scene) {
         scene.tutorialText = scene.add.text(
-            window.innerWidth * 0.5, window.innerHeight * 0.32, null, LEADERBOARD_FONT);
+            window.innerWidth * 0.5, window.innerHeight * 0.65, null, TUTORIAL_FONT);
         scene.tutorialText.setOrigin(0.5);
-        scene.tutorialText.setFontSize(50);
+        scene.tutorialText.setFontSize(70);
     }
 
     addSwipeText(scene) {
         scene.swipeText = scene.add.text(
-            window.innerWidth * 0.5, window.innerHeight * 0.17, null, LEADERBOARD_FONT);
+            window.innerWidth * 0.5, window.innerHeight * 0.17, null, TUTORIAL_FONT);
         scene.swipeText.setOrigin(0.5);
-        scene.swipeText.setFontSize(60);
+        scene.swipeText.setFontSize(70);
     }
 
     tutorial(scene, object) {
         if (object === "paper") {
-            scene.tutorialText.setText("Paper goes into the YELLOW BIN!")
+            scene.tutorialText.setText("Paper goes into the YELLOW BIN!");
+            scene.tutorialText.setColor('yellow');
+            scene.tutorialText.setStroke('#4d377d');
         }
         if (object === "banana") {
-            scene.tutorialText.setText("Banana goes into the GREEN BIN!")
+            scene.tutorialText.setText("Banana goes into the GREEN BIN!");
+            scene.tutorialText.setColor('lightgreen');
+            scene.tutorialText.setStroke('#4d377d');
         }
         if (object === "waterbottle") {
-            scene.tutorialText.setText("Water Bottle goes into the BLUE BIN!")
+            scene.tutorialText.setText("Bottle goes into the BLUE BIN!");
+            scene.tutorialText.setColor('#1263F5');
+            scene.tutorialText.setStroke('white');
         }
     }
 }
