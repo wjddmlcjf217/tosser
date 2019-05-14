@@ -4,6 +4,20 @@
 let displayName = null;
 let object = null;
 
+let disco;
+let disco1;
+let disco2;
+let disco3;
+let disco4;
+let disco5;
+let disco6;
+let disco7;
+let disco8;
+let disco9;
+let disco10;
+
+
+
 function initApp() {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -272,11 +286,13 @@ export default class GameScene extends Phaser.Scene {
      * Disco mode in scene
      * @param scene
      */
+
+
     discoMode(scene) {
-        let discoBall = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.11, 'discoball');
-        discoBall.displayWidth = 150;
-        discoBall.displayHeight = 150;
-        discoBall.setInteractive();
+        scene.discoBall = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.11, 'discoball');
+        scene.discoBall.displayWidth = 150;
+        scene.discoBall.displayHeight = 150;
+        scene.discoBall.setInteractive();
         let discoBool = true;
 
         let background = scene.add.rectangle(window.innerWidth / 2, window.innerHeight / 2,
@@ -360,19 +376,6 @@ export default class GameScene extends Phaser.Scene {
         discoEffect10.setBlendMode('COLORDODGE');
         discoEffect10.setRotation(11);
 
-        let disco;
-        let disco1;
-        let disco2;
-        let disco3;
-        let disco4;
-        let disco5;
-        let disco6;
-        let disco7;
-        let disco8;
-        let disco9;
-        let disco10;
-
-
 
         function enableDisco () {
             disco = setInterval(function () {
@@ -408,8 +411,6 @@ export default class GameScene extends Phaser.Scene {
             disco10 = setInterval(function () {
                 discoEffect10.setRandomPosition();
             },500);
-
-
         }
 
         function disableDisco () {
@@ -426,7 +427,7 @@ export default class GameScene extends Phaser.Scene {
             clearInterval(disco10);
         }
 
-        discoBall.on('pointerdown', function () {
+        scene.discoBall.on('pointerdown', function () {
 
             if (discoBool === true) {
                 scene.sound.play('disco');
@@ -455,6 +456,20 @@ export default class GameScene extends Phaser.Scene {
 
         });
 
+    }
+
+    disableDisco () {
+        clearInterval(disco);
+        clearInterval(disco1);
+        clearInterval(disco2);
+        clearInterval(disco3);
+        clearInterval(disco4);
+        clearInterval(disco5);
+        clearInterval(disco6);
+        clearInterval(disco7);
+        clearInterval(disco8);
+        clearInterval(disco9);
+        clearInterval(disco10);
     }
 
     /**
@@ -768,6 +783,8 @@ export default class GameScene extends Phaser.Scene {
             scene.staticScoreText.setVisible(false);
             scene.scoreText.setVisible(false);
             scene.gameOverText.setVisible(true);
+            this.discoBall.removeInteractive();
+            this.disableDisco();
             // Write score to leaderboard
             this.writeLeaderBoard();
             setTimeout(function () {
