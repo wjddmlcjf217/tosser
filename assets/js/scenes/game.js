@@ -281,6 +281,9 @@ export default class GameScene extends Phaser.Scene {
         let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.559, window.innerHeight * 0.425, window.innerWidth * 0.001, 5);//0.015
         let rimTwoRight = game.add.rectangle(window.innerWidth * 0.731, window.innerHeight * 0.425, window.innerWidth * 0.001, 5); //0.015
 
+        // let binThree;
+        // let rimThreeLeft;
+        // let rimThreeRight;
         let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.57, window.innerWidth * 10, 50);
 
         game.physics.add.existing(binOne, true);
@@ -294,7 +297,6 @@ export default class GameScene extends Phaser.Scene {
 
         // Add physical interactions
 
-
         game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
 
 
@@ -304,14 +306,19 @@ export default class GameScene extends Phaser.Scene {
         game.rimTwoLeftCollider = game.physics.add.collider(game.hero, rimTwoLeft, this.hitRim, null, game);
         game.rimTwoRightCollider = game.physics.add.collider(game.hero, rimTwoRight, this.hitRim, null, game);
 
+        // game.rimThreeLeftCollider = game.physics.add.collider(game.hero, rimThreeLeft, this.hitRim, null, game);
+        // game.rimThreeRightCollider = game.physics.add.collider(game.hero, rimThreeRight, this.hitRim, null, game);
+
         game.physics.add.overlap(game.hero, binOne, this.hitBlueBin, null, game);
         game.physics.add.overlap(game.hero, binTwo, this.hitYellowBin, null, game);
-
+        // game.physics.add.overlap(game.hero, binThree, this.hitGreenBin, null, game);
 
         game.rimOneLeftCollider.active = false;
         game.rimOneRightCollider.active = false;
         game.rimTwoLeftCollider.active = false;
         game.rimTwoRightCollider.active = false;
+        // game.rimThreeLeftCollider.active = false;
+        // game.rimThreeRightCollider.active = false;
         game.floorCollider.active = false;
     }
 
@@ -339,8 +346,8 @@ export default class GameScene extends Phaser.Scene {
             this.rimOneLeftCollider.active = false;
             this.rimTwoRightCollider.active = false;
             this.rimTwoLeftCollider.active = false;
-
-
+            // this.rimThreeRightCollider.active = false;
+            // this.rimThreeLeftCollider.active = false;
         }
     }
 
@@ -357,6 +364,8 @@ export default class GameScene extends Phaser.Scene {
             this.rimOneLeftCollider.active = false;
             this.rimTwoRightCollider.active = false;
             this.rimTwoLeftCollider.active = false;
+            // this.rimThreeRightCollider.active = false;
+            // this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
             if (object === "paper") {
                 this.createPlus1();
@@ -378,8 +387,9 @@ export default class GameScene extends Phaser.Scene {
             this.rimOneLeftCollider.active = false;
             this.rimTwoRightCollider.active = false;
             this.rimTwoLeftCollider.active = false;
+            // this.rimThreeRightCollider.active = false;
+            // this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            console.log(object);
             if (object === "waterbottle") {
                 this.createPlus1();
                 this.addplus1Tween(this.plus1);
@@ -388,7 +398,30 @@ export default class GameScene extends Phaser.Scene {
             else {
                 this.lifeHandler(this);
             }
-            this.resetProjectile(projectile)
+            this.resetProjectile(projectile);
+        }
+    }
+
+    hitGreenBin(projectile) {
+        if (projectile.body.velocity.y > 0) {
+            projectile.disableBody(false, true);
+            this.floorCollider.active = false;
+            this.rimOneRightCollider.active = false;
+            this.rimOneLeftCollider.active = false;
+            this.rimTwoRightCollider.active = false;
+            this.rimTwoLeftCollider.active = false;
+            // this.rimThreeRightCollider.active = false;
+            // this.rimThreeLeftCollider.active = false;
+            this.sound.play('hit-target');
+            if (object === "banana") {
+                this.createPlus1();
+                this.addplus1Tween(this.plus1);
+                this.scoreHandler(this);
+            }
+            else {
+                this.lifeHander(this);
+            }
+            this.resetProjectile(projectile);
         }
     }
 
