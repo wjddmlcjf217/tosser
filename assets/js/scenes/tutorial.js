@@ -294,7 +294,10 @@ export default class TutorialScene extends Phaser.Scene {
                 this.addGoodTween(this.good);
                 paper = true;
             }
-
+            else {
+                this.createBad();
+                this.addBadTween(this.bad);
+            }
             this.resetProjectile(projectile);
             if (organic && paper && recycle) {
                 this.tutorialText.setText("CONGRATULATIONS!");
@@ -323,6 +326,10 @@ export default class TutorialScene extends Phaser.Scene {
                 this.addGoodTween(this.good);
                 recycle = true;
             }
+            else {
+                this.createBad();
+                this.addBadTween(this.bad);
+            }
             this.resetProjectile(projectile);
             if (organic && paper && recycle) {
                 this.tutorialText.setText("CONGRATULATIONS!");
@@ -350,6 +357,10 @@ export default class TutorialScene extends Phaser.Scene {
                 this.createGood();
                 this.addGoodTween(this.good);
                 organic = true;
+            }
+            else {
+                this.createBad();
+                this.addBadTween(this.bad);
             }
             this.resetProjectile(projectile);
             if (organic && paper && recycle) {
