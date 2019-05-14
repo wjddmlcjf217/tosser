@@ -24,17 +24,23 @@ export default class TitleScene extends Phaser.Scene {
         this.gameButton.setInteractive();
         this.gameButton.on('pointerdown', () => {this.scene.start('Game')});
 
-        // Options
-        this.optionsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.65, 'LeaderBoard', TITLE_FONT);
+        // LeaderBoard
+        this.optionsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.75, 'LeaderBoard', TITLE_FONT);
         this.optionsButton.setOrigin(0.5);
         this.optionsButton.setInteractive();
         this.optionsButton.on('pointerdown', () => {this.scene.start('LeaderBoard')});
 
         // Credits
-        this.creditsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.75, 'Credits', TITLE_FONT);
+        this.creditsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.85, 'Credits', TITLE_FONT);
         this.creditsButton.setOrigin(0.5);
         this.creditsButton.setInteractive();
         this.creditsButton.on('pointerdown', () => {this.scene.start('Credits')});
+
+        // Tutorial
+        this.tutorialButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.65, 'Tutorial', TITLE_FONT);
+        this.tutorialButton.setOrigin(0.5);
+        this.tutorialButton.setInteractive();
+        this.tutorialButton.on('pointerdown', () => {this.scene.start('Tutorial')});
 
         //Sign-out
         this.signOutButton = this.add.text(window.innerWidth * 0.98, window.innerHeight * 0.99, 'Sign Out', TITLE_FONT);

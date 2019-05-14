@@ -442,7 +442,7 @@ export default class TutorialScene extends Phaser.Scene {
 
     tutorial(scene, object) {
         if (object === "paper") {
-            scene.tutorialText.setText("Paper Ball goes into the YELLOW BIN!")
+            scene.tutorialText.setText("Paper goes into the YELLOW BIN!")
         }
         if (object === "banana") {
             scene.tutorialText.setText("Banana goes into the GREEN BIN!")
