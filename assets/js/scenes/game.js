@@ -85,8 +85,8 @@ export default class GameScene extends Phaser.Scene {
         this.addObjectText(this);
 
         // Create Hero
-        this.queue = ['paper', 'banana', 'waterbottle'];
-        object = this.queue[Math.floor(Math.random() * 3)];
+        this.queue = ['paper', 'banana', 'apple', 'waterbottle'];
+        object = this.queue[Math.floor(Math.random() * 4)];
         this.hero = this.createHeroProjectile(this, object);
         this.objectText.setText(object);
 
