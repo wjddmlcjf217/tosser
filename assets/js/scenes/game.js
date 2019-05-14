@@ -649,7 +649,7 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "banana") {
+            if (object === "banana" || object === 'apple') {
                 this.createGood();
                 this.addGoodTween(this.good);
                 this.scoreHandler(this);
