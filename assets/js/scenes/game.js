@@ -85,8 +85,8 @@ export default class GameScene extends Phaser.Scene {
         this.addObjectText(this);
 
         // Create Hero
-        this.queue = ['paper', 'banana', 'apple', 'waterbottle'];
-        object = this.queue[Math.floor(Math.random() * 4)];
+        this.queue = ['paper', 'banana', 'waterbottle'];
+        object = this.queue[Math.floor(Math.random() * 3)];
         this.hero = this.createHeroProjectile(this, object);
         this.objectText.setText(object);
 
@@ -649,7 +649,7 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "banana" || object === 'apple') {
+            if (object === "banana") {
                 this.createGood();
                 this.addGoodTween(this.good);
                 this.scoreHandler(this);
@@ -698,7 +698,7 @@ export default class GameScene extends Phaser.Scene {
      */
     spawnProjectile(projectile) {
         let scene = projectile.scene;
-        object = scene.queue[Math.floor(Math.random() * 3)];
+        object = scene.queue[Math.floor(Math.random() * 4)];
         scene.objectText.setText(object);
         scene.hero = this.createHeroProjectile(scene, object);
         scene.hero.visible = true;
