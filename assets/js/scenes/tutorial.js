@@ -17,8 +17,9 @@ export default class TutorialScene extends Phaser.Scene {
         this.load.image('background', 'assets/img/study_area.png');
         this.load.image('paper', 'assets/img/paper_ball.png');
         this.load.image('waterbottle', 'assets/img/water_bottle.png');
-        this.load.image('banana', 'assets/img/banana-sprite.png');
-        this.load.image('plus1', 'assets/img/plus1.jpg');
+        this.load.image('banana', 'assets/img/banana.png');
+        this.load.image('good', 'assets/img/good.png');
+        this.load.image('bad', 'assets/img/bad.png');
 
         // audio assets
         this.load.audio('hit-target', [
@@ -37,6 +38,8 @@ export default class TutorialScene extends Phaser.Scene {
         this.createBackground(this);
         this.addObjectText(this);
         this.addTutorialText(this);
+        this.addSwipeText(this);
+        this.swipeText.setText("Swipe to throw!");
         // Create Hero
         this.queue = ['paper', 'banana', 'waterbottle'];
         object = this.queue[j];
@@ -111,14 +114,23 @@ export default class TutorialScene extends Phaser.Scene {
     }
 
     /**
-     * casts a plus 1 animation upon scoring correctly
+     * casts a check mark animation upon scoring correctly
      * @param N/A
      */
-    //in progress shadow effect
-    createPlus1() {
-        this.plus1 = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'plus1');
-        this.plus1.displayHeight = 420;
-        this.plus1.displayWidth = 420;
+    createGood() {
+        this.good = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'good');
+        this.good.displayHeight = 420;
+        this.good.displayWidth = 420;
+    }
+
+    /**
+     * casts a check mark animation upon scoring correctly
+     * @param N/A
+     */
+    createBad() {
+        this.bad = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'bad');
+        this.bad.displayHeight = 420;
+        this.bad.displayWidth = 420;
     }
 
     /**
@@ -178,17 +190,17 @@ export default class TutorialScene extends Phaser.Scene {
      * @param game Phaser Game
      */
     createPhysicsObjects(game) {
-        let binOne = game.add.rectangle(window.innerWidth * 0.185, window.innerHeight * 0.450, window.innerWidth * 0.13, 10);
-        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.11, window.innerHeight * 0.44, window.innerWidth * 0.001, 5);//0.015
-        let rimOneRight = game.add.rectangle(window.innerWidth * 0.260, window.innerHeight * 0.44, window.innerWidth * 0.001, 5); //0.015
+        let binOne = game.add.rectangle(window.innerWidth * 0.185, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
+        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.11, window.innerHeight * 0.44, window.innerWidth * 0.001, 25);//0.015
+        let rimOneRight = game.add.rectangle(window.innerWidth * 0.260, window.innerHeight * 0.44, window.innerWidth * 0.001, 25); //0.015
 
-        let binTwo = game.add.rectangle(window.innerWidth * 0.51775, window.innerHeight * 0.450, window.innerWidth * 0.13, 10);
-        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.44275, window.innerHeight * 0.44, window.innerWidth * 0.001, 5);//0.015
-        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.59275, window.innerHeight * 0.44, window.innerWidth * 0.001, 5); //0.015
+        let binTwo = game.add.rectangle(window.innerWidth * 0.51775, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
+        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.44275, window.innerHeight * 0.44, window.innerWidth * 0.001, 25);//0.015
+        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.59275, window.innerHeight * 0.44, window.innerWidth * 0.001, 25); //0.015
 
-        let binThree = game.add.rectangle(window.innerWidth * 0.84725, window.innerHeight * 0.450, window.innerWidth * 0.13, 10);
-        let rimThreeLeft = game.add.rectangle(window.innerWidth * 0.77225, window.innerHeight * 0.44, window.innerWidth * 0.001, 5);
-        let rimThreeRight = game.add.rectangle(window.innerWidth * 0.92225, window.innerHeight * 0.44, window.innerWidth * 0.001, 5);
+        let binThree = game.add.rectangle(window.innerWidth * 0.84725, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
+        let rimThreeLeft = game.add.rectangle(window.innerWidth * 0.77225, window.innerHeight * 0.44, window.innerWidth * 0.001, 25);
+        let rimThreeRight = game.add.rectangle(window.innerWidth * 0.92225, window.innerHeight * 0.44, window.innerWidth * 0.001, 25);
 
         let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.57, window.innerWidth * 10, 50);
 
@@ -278,13 +290,21 @@ export default class TutorialScene extends Phaser.Scene {
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
             if (object === "paper") {
-                this.createPlus1();
-                this.addplus1Tween(this.plus1);
+                this.createGood();
+                this.addGoodTween(this.good);
                 paper = true;
+            }
+            else {
+                this.createBad();
+                this.addBadTween(this.bad);
             }
             this.resetProjectile(projectile);
             if (organic && paper && recycle) {
-                this.tutorialText.setText("CONGRATULATIONS! TUTORIAL COMPLETED!");
+                this.tutorialText.setText("CONGRATULATIONS!");
+                this.tutorialText.setColor('#24CC18');
+                organic = false;
+                paper = false;
+                recycle = false;
                 setTimeout(function() {projectile.scene.scene.start('Title')}, 1500);
             }
         }
@@ -302,13 +322,21 @@ export default class TutorialScene extends Phaser.Scene {
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
             if (object === "waterbottle") {
-                this.createPlus1();
-                this.addplus1Tween(this.plus1);
+                this.createGood();
+                this.addGoodTween(this.good);
                 recycle = true;
+            }
+            else {
+                this.createBad();
+                this.addBadTween(this.bad);
             }
             this.resetProjectile(projectile);
             if (organic && paper && recycle) {
-                this.tutorialText.setText("CONGRATULATIONS! TUTORIAL COMPLETED!");
+                this.tutorialText.setText("CONGRATULATIONS!");
+                this.tutorialText.setColor('#24CC18');
+                organic = false;
+                paper = false;
+                recycle = false;
                 setTimeout(function() {projectile.scene.scene.start('Title')}, 1500);
             }
         }
@@ -326,13 +354,21 @@ export default class TutorialScene extends Phaser.Scene {
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
             if (object === "banana") {
-                this.createPlus1();
-                this.addplus1Tween(this.plus1);
+                this.createGood();
+                this.addGoodTween(this.good);
                 organic = true;
+            }
+            else {
+                this.createBad();
+                this.addBadTween(this.bad);
             }
             this.resetProjectile(projectile);
             if (organic && paper && recycle) {
-                this.tutorialText.setText("CONGRATULATIONS! TUTORIAL COMPLETED!");
+                this.tutorialText.setText("CONGRATULATIONS!");
+                this.tutorialText.setColor('#24CC18');
+                organic = false;
+                paper = false;
+                recycle = false;
                 setTimeout(function() {projectile.scene.scene.start('Title')}, 1500);
             }
         }
@@ -343,10 +379,15 @@ export default class TutorialScene extends Phaser.Scene {
      * @param projectile
      */
     missedTarget(projectile) {
+        projectile.body.setAccelerationX(0);
         this.setProjectileDrag(projectile);
-        projectile.setAccelerationX(0);
+        let angularVelocity = projectile.body.angularVelocity;
+        projectile.body.setAngularVelocity(angularVelocity * 0.5);
+        projectile.body.velocityX -= 200;
 
         if (projectile.body.angularVelocity === 0) {
+            this.createBad();
+            this.addBadTween(this.bad);
             projectile.disableBody(false, false);
             this.resetProjectile(projectile);
             this.floorCollider.active = false;
@@ -414,7 +455,47 @@ export default class TutorialScene extends Phaser.Scene {
         });
     }
 
-    addplus1Tween(image) {
+
+    addObjectText(scene) {
+        scene.objectText = scene.add.text(
+            window.innerWidth * 0.5, window.innerHeight * 0.97, null, LEADERBOARD_FONT);
+        scene.objectText.setOrigin(0.5);
+        scene.objectText.setFontSize(60);
+    }
+
+    addTutorialText(scene) {
+        scene.tutorialText = scene.add.text(
+            window.innerWidth * 0.5, window.innerHeight * 0.65, null, TUTORIAL_FONT);
+        scene.tutorialText.setOrigin(0.5);
+        scene.tutorialText.setFontSize(70);
+    }
+
+    addSwipeText(scene) {
+        scene.swipeText = scene.add.text(
+            window.innerWidth * 0.5, window.innerHeight * 0.17, null, TUTORIAL_FONT);
+        scene.swipeText.setOrigin(0.5);
+        scene.swipeText.setFontSize(70);
+    }
+
+    tutorial(scene, object) {
+        if (object === "paper") {
+            scene.tutorialText.setText("Paper goes into the YELLOW BIN!");
+            scene.tutorialText.setColor('yellow');
+            scene.tutorialText.setStroke('#4d377d');
+        }
+        if (object === "banana") {
+            scene.tutorialText.setText("Banana goes into the GREEN BIN!");
+            scene.tutorialText.setColor('lightgreen');
+            scene.tutorialText.setStroke('#4d377d');
+        }
+        if (object === "waterbottle") {
+            scene.tutorialText.setText("Bottle goes into the BLUE BIN!");
+            scene.tutorialText.setColor('#1263F5');
+            scene.tutorialText.setStroke('white');
+        }
+    }
+
+    addGoodTween(image) {
         this.tweens.add({
             targets: image,
             alpha: 0,
@@ -426,29 +507,15 @@ export default class TutorialScene extends Phaser.Scene {
         });
     }
 
-    addObjectText(scene) {
-        scene.objectText = scene.add.text(
-            window.innerWidth * 0.5, window.innerHeight * 0.97, null, LEADERBOARD_FONT);
-        scene.objectText.setOrigin(0.5);
-        scene.objectText.setFontSize(60);
-    }
-
-    addTutorialText(scene) {
-        scene.tutorialText = scene.add.text(
-            window.innerWidth * 0.5, window.innerHeight * 0.32, null, LEADERBOARD_FONT);
-        scene.tutorialText.setOrigin(0.5);
-        scene.tutorialText.setFontSize(50);
-    }
-
-    tutorial(scene, object) {
-        if (object === "paper") {
-            scene.tutorialText.setText("Paper goes into the YELLOW BIN!")
-        }
-        if (object === "banana") {
-            scene.tutorialText.setText("Banana goes into the GREEN BIN!")
-        }
-        if (object === "waterbottle") {
-            scene.tutorialText.setText("Water Bottle goes into the BLUE BIN!")
-        }
+    addBadTween(image) {
+        this.tweens.add({
+            targets: image,
+            alpha: 0,
+            displayWidth: 50,
+            displayHeight: 50,
+            ease: 'Linear',
+            duration: 1500,
+            repeat: 0,
+        });
     }
 }

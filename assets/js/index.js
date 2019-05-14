@@ -19,7 +19,7 @@ class Game extends Phaser.Game {
 
 WebFont.load({
     google: {
-        families: ['Luckiest Guy', 'Kalam']
+        families: ['Luckiest Guy', 'Kalam', 'Acme']
     },
     active: launchGame
 });

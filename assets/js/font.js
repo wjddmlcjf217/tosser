@@ -30,11 +30,26 @@ var TITLE_FONT = {
     },
 };
 
+var TUTORIAL_FONT = {
+    fontFamily: 'Acme',
+    color: '#fffdd9',
+    stroke: '#4d377d',
+    strokeThickness: 10,
+    shadow: {
+        offsetX: 2,
+        offsetY: 2,
+        color: '#3e5288',
+        blur: 2,
+        stroke: false,
+        fill: true
+    }
+};
+
 
 async function loadFont () {
     await   WebFont.load({
             google: {
-            families: ['Luckiest Guy', 'Kalam']
+            families: ['Luckiest Guy', 'Kalam', 'Acme']
         }
     });
 }
