@@ -58,6 +58,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('plus1', 'assets/img/plus1.jpg');
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
         this.load.image('discoball', 'assets/img/disco-ball.png');
+        this.load.image('wind_arrow', 'assets/img/arrow.png');
         this.load.image('good', 'assets/img/good.png');
         this.load.image('bad', 'assets/img/bad.png');
 
@@ -84,16 +85,13 @@ export default class GameScene extends Phaser.Scene {
         this.addScoreText(this);
         this.addObjectText(this);
 
+        // wind setup
+        this.windSetup(this);
+
         // Create Hero
         this.queue = ['paper', 'banana', 'apple', 'waterbottle'];
         object = this.queue[Math.floor(Math.random() * 4)];
-        this.hero = this.createHeroProjectile(this, object);
-        this.objectText.setText(object);
-
-        this.hero.visible = true;
-        this.hero.setInteractive();
-        this.hero.on('pointerdown', this.pointerDownHandler, this);
-        this.createPhysicsObjects(this);
+        this.spawnProjectile(this.createHeroProjectile(this, object));
 
         // Create Lives
         this.lives = this.add.group();
@@ -121,7 +119,6 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = true;
 
         }
-
     }
 
     // game_objects = {
@@ -196,29 +193,27 @@ export default class GameScene extends Phaser.Scene {
         let velocityX = pointer.upX - pointer.downX;
         let velocityY = pointer.upY - pointer.downY;
         let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
-        velocity.scale(1000);
+
+        velocity.set(velocity.x * (1000), velocity.y * 1000);
 
         let angle = velocity.angle();
         if (angle > 3.41 && angle < 6.01) {
             this.hero.state = 'flying';
             this.hero.disableInteractive();
-            // this.hero.body.setVelocity(velocity.x * 0.75, velocity.y * 4);
             this.hero.body.setVelocity(velocity.x * window.innerWidth * 0.0008, velocity.y * window.innerHeight * 0.0022);
 
             let projectileSpin = (angle - 4.71) * 2000;
             this.hero.body.setAngularVelocity(projectileSpin);
-            this.hero.body.setAccelerationX(velocity.x * window.innerWidth * -0.00037001119); //-0.275
             this.hero.body.setAccelerationY(velocity.y * window.innerHeight * -0.00259);
-            // this.hero.body.setAccelerationX(velocity.x * -0.275); //-0.275
-            // this.hero.body.setAccelerationY(velocity.y * -4.4);
             this.addProjectileScalingTween(this, this.hero);
-            // gfx.clear().strokeLineShape(line);
             this.input.off('pointerup');
 
             if (this.hero.body.velocity.y > 0) {
                 this.createShadow(this);
             }
         }
+
+        this.hero.setAccelerationX(this.windValue * 75);
     }
 
     /**
@@ -287,8 +282,6 @@ export default class GameScene extends Phaser.Scene {
      * Disco mode in scene
      * @param scene
      */
-
-
     discoMode(scene) {
         scene.discoBall = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.11, 'discoball');
         scene.discoBall.displayWidth = 150;
@@ -587,7 +580,6 @@ export default class GameScene extends Phaser.Scene {
      * Projectile Hit target handler
      * @param projectile
      */
-
     hitYellowBin(projectile) {
         if (projectile.body.velocity.y > 0) {
             projectile.disableBody(false, true);
@@ -705,7 +697,8 @@ export default class GameScene extends Phaser.Scene {
         scene.hero.setInteractive();
         scene.hero.on('pointerdown', this.pointerDownHandler, scene);
 
-        this.createPhysicsObjects(scene)
+        this.createPhysicsObjects(scene);
+        this.windUpdate();
     }
 
     /**
@@ -717,6 +710,44 @@ export default class GameScene extends Phaser.Scene {
         console.log(projectile);
         projectile.scene.tweens.killTweensOf(projectile);
         this.spawnProjectile(projectile);
+    }
+
+    windUpdate() {
+        // calculate wind
+        let min = -5;
+        let max = 5;
+        let wind = Math.floor(Math.random() * (max - min + 1)) + min;
+        this.windValue = wind;
+
+        // set wind display text
+        this.windValueDisplay.text = wind;
+
+        // rotate arrow and position text
+        if (wind < 0) {
+            this.windArrow.rotation = 3.14;
+        } else {
+            this.windArrow.rotation = 0;
+        }
+    }
+
+    windSetup() {
+        // add arrow image
+        this.windArrow = this.add.image(window.innerWidth / 2, window.innerHeight * 0.75, 'wind_arrow');
+        this.windArrow.displayHeight = 100;
+        this.windArrow.displayWidth = 150;
+
+        // create font
+        let fontStyle = {
+            fontFamily: 'Kalam',
+            fontSize: 40,
+            color: '#FFFFFF'
+        };
+
+        // set initial wind
+        this.windValue = 0;
+
+        // add text to scene
+        this.windValueDisplay = this.add.text(window.innerWidth / 2, window.innerHeight * 0.75 - 24, this.windValue, fontStyle);
     }
 
     /**
@@ -814,8 +845,7 @@ export default class GameScene extends Phaser.Scene {
                 [first_name]: this.scoreValue
             });
         }
-        }
-    // }
+    }
 
     /**
      * Add score related text to the canvas
@@ -837,7 +867,6 @@ export default class GameScene extends Phaser.Scene {
         scene.scoreText.setOrigin(0.5, 0);
         scene.scoreText.setAlign('center');
     }
-
 
     addObjectText(scene) {
         scene.objectText = scene.add.text(
