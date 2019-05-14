@@ -68,6 +68,9 @@ export default class GameScene extends Phaser.Scene {
         this.addScoreText(this);
         this.addObjectText(this);
 
+        // wind setup
+        this.windSetup(this);
+
         // Create Hero
         this.queue = ['paper', 'banana', 'waterbottle'];
         object = this.queue[Math.floor(Math.random() * 3)];
@@ -81,7 +84,6 @@ export default class GameScene extends Phaser.Scene {
             life.displayHeight = window.innerHeight * 0.039;
         }
 
-        this.windSetup(this);
     }
 
     /**
@@ -181,23 +183,20 @@ export default class GameScene extends Phaser.Scene {
         if (angle > 3.41 && angle < 6.01) {
             this.hero.state = 'flying';
             this.hero.disableInteractive();
-            // this.hero.body.setVelocity(velocity.x * 0.75, velocity.y * 4);
             this.hero.body.setVelocity(velocity.x * window.innerWidth * 0.0008, velocity.y * window.innerHeight * 0.0022);
 
             let projectileSpin = (angle - 4.71) * 2000;
             this.hero.body.setAngularVelocity(projectileSpin);
-            this.hero.body.setAccelerationX(velocity.x * window.innerWidth * -0.00037001119); //-0.275
             this.hero.body.setAccelerationY(velocity.y * window.innerHeight * -0.00259);
-            // this.hero.body.setAccelerationX(velocity.x * -0.275); //-0.275
-            // this.hero.body.setAccelerationY(velocity.y * -4.4);
             this.addProjectileScalingTween(this, this.hero);
-            // gfx.clear().strokeLineShape(line);
             this.input.off('pointerup');
 
             if (this.hero.body.velocity.y > 0) {
                 this.createShadow(this);
             }
         }
+
+        this.hero.setAccelerationX(this.windValue * 200);
     }
 
     /**
@@ -624,7 +623,7 @@ export default class GameScene extends Phaser.Scene {
         scene.hero.on('pointerdown', this.pointerDownHandler, scene);
 
         this.createPhysicsObjects(scene);
-        this.windUpdate(scene);
+        this.windUpdate();
     }
 
     /**
@@ -645,18 +644,20 @@ export default class GameScene extends Phaser.Scene {
         let wind = Math.floor(Math.random() * (max - min + 1)) + min;
         this.windValue = wind;
 
+        // set wind display text
+        this.windValueDisplay.text = wind;
+
         // rotate arrow and position text
         if (wind < 0) {
             this.windArrow.rotation = 3.14;
-            this.windValueDisplay.x += 15;
         } else {
-            this.windValueDisplay.x -= 50;
+            this.windArrow.rotation = 0;
         }
     }
 
     windSetup() {
         // add arrow image
-        this.windArrow = this.add.image(window.innerWidth / 2, window.innerHeight * 0.75, 'wind_arrow')
+        this.windArrow = this.add.image(window.innerWidth / 2, window.innerHeight * 0.75, 'wind_arrow');
         this.windArrow.displayHeight = 100;
         this.windArrow.displayWidth = 150;
 
@@ -667,9 +668,11 @@ export default class GameScene extends Phaser.Scene {
             color: '#FFFFFF'
         };
 
-        // add text to scene
-        this.windValueDisplay = this.add.text(window.innerWidth / 2, window.innerHeight * 0.75 - 24, 'Placeholder', fontStyle);
+        // set initial wind
+        this.windValue = 0;
 
+        // add text to scene
+        this.windValueDisplay = this.add.text(window.innerWidth / 2, window.innerHeight * 0.75 - 24, this.windValue, fontStyle);
     }
 
     /**
