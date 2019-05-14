@@ -182,14 +182,15 @@ export default class GameScene extends Phaser.Scene {
         let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
         velocity.scale(1000);
 
-        console.log(velocity.angle());
-        if (velocity.angle() > 3.5 && velocity.angle() < 5.8) {
+        let angle = velocity.angle();
+        if (angle > 3.41 && angle < 6.01) {
             this.hero.state = 'flying';
             this.hero.disableInteractive();
             // this.hero.body.setVelocity(velocity.x * 0.75, velocity.y * 4);
             this.hero.body.setVelocity(velocity.x * window.innerWidth * 0.0008, velocity.y * window.innerHeight * 0.0022);
 
-            this.hero.body.setAngularVelocity(400);
+            let projectileSpin = (angle - 4.71) * 2000;
+            this.hero.body.setAngularVelocity(projectileSpin);
             this.hero.body.setAccelerationX(velocity.x * window.innerWidth * -0.00037001119); //-0.275
             this.hero.body.setAccelerationY(velocity.y * window.innerHeight * -0.00259);
             // this.hero.body.setAccelerationX(velocity.x * -0.275); //-0.275
@@ -433,16 +434,16 @@ export default class GameScene extends Phaser.Scene {
      */
     createPhysicsObjects(game) {
         let binOne = game.add.rectangle(window.innerWidth * 0.185, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
-        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.11, window.innerHeight * 0.44, window.innerWidth * 0.001, 5);//0.015
-        let rimOneRight = game.add.rectangle(window.innerWidth * 0.260, window.innerHeight * 0.44, window.innerWidth * 0.001, 5); //0.015
+        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.11, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);//0.015
+        let rimOneRight = game.add.rectangle(window.innerWidth * 0.260, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25); //0.015
 
         let binTwo = game.add.rectangle(window.innerWidth * 0.51775, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
-        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.44275, window.innerHeight * 0.44, window.innerWidth * 0.001, 5);//0.015
-        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.59275, window.innerHeight * 0.44, window.innerWidth * 0.001, 5); //0.015
+        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.44275, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);//0.015
+        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.59275, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25); //0.015
 
         let binThree = game.add.rectangle(window.innerWidth * 0.84725, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
-        let rimThreeLeft = game.add.rectangle(window.innerWidth * 0.77225, window.innerHeight * 0.44, window.innerWidth * 0.001, 5);
-        let rimThreeRight = game.add.rectangle(window.innerWidth * 0.92225, window.innerHeight * 0.44, window.innerWidth * 0.001, 5);
+        let rimThreeLeft = game.add.rectangle(window.innerWidth * 0.77225, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);
+        let rimThreeRight = game.add.rectangle(window.innerWidth * 0.92225, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);
 
         let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.57, window.innerWidth * 10, 50);
 
@@ -598,6 +599,8 @@ export default class GameScene extends Phaser.Scene {
      */
     missedTarget(projectile) {
         this.setProjectileDrag(projectile);
+        let angularVelocity = projectile.body.angularVelocity;
+        projectile.body.setAngularVelocity(angularVelocity * 0.5);
         projectile.setAccelerationX(0);
 
         if (projectile.body.angularVelocity === 0) {
