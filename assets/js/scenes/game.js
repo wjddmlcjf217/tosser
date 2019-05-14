@@ -179,14 +179,15 @@ export default class GameScene extends Phaser.Scene {
         let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
         velocity.scale(1000);
 
-        console.log(velocity.angle());
-        if (velocity.angle() > 3.5 && velocity.angle() < 5.8) {
+        let angle = velocity.angle();
+        if (angle > 3.41 && angle < 6.01) {
             this.hero.state = 'flying';
             this.hero.disableInteractive();
             // this.hero.body.setVelocity(velocity.x * 0.75, velocity.y * 4);
             this.hero.body.setVelocity(velocity.x * window.innerWidth * 0.0008, velocity.y * window.innerHeight * 0.0022);
 
-            this.hero.body.setAngularVelocity(400);
+            let projectileSpin = (angle - 4.71) * 2000;
+            this.hero.body.setAngularVelocity(projectileSpin);
             this.hero.body.setAccelerationX(velocity.x * window.innerWidth * -0.00037001119); //-0.275
             this.hero.body.setAccelerationY(velocity.y * window.innerHeight * -0.00259);
             // this.hero.body.setAccelerationX(velocity.x * -0.275); //-0.275
@@ -548,6 +549,8 @@ export default class GameScene extends Phaser.Scene {
      */
     missedTarget(projectile) {
         this.setProjectileDrag(projectile);
+        let angularVelocity = projectile.body.angularVelocity;
+        projectile.body.setAngularVelocity(angularVelocity * 0.5);
         projectile.setAccelerationX(0);
 
         if (projectile.body.angularVelocity === 0) {
