@@ -193,7 +193,8 @@ export default class GameScene extends Phaser.Scene {
         let velocityX = pointer.upX - pointer.downX;
         let velocityY = pointer.upY - pointer.downY;
         let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
-        velocity.set(velocity.x * window.innerWidth / 1.5, velocity.y * 1000);
+
+        velocity.set(velocity.x * (1000), velocity.y * 1000);
 
         let angle = velocity.angle();
         if (angle > 3.41 && angle < 6.01) {
@@ -212,7 +213,7 @@ export default class GameScene extends Phaser.Scene {
             }
         }
 
-        this.hero.setAccelerationX(this.windValue * 100);
+        this.hero.setAccelerationX(this.windValue * 75);
     }
 
     /**
