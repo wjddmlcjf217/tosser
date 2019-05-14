@@ -331,24 +331,64 @@ export default class GameScene extends Phaser.Scene {
         discoEffect7.setRotation(8);
 
 
+        let disco;
+        let disco1;
+        let disco2;
+        let disco3;
+        let disco4;
+        let disco5;
+        let disco6;
+        let disco7;
 
-        setInterval(function() {discoEffect.setRandomPosition();}, 500);
-        setInterval(function() {discoEffect.setRandomPosition();}, 500);
-        setInterval(function() {discoEffect2.setRandomPosition();}, 500);
-        setInterval(function() {discoEffect3.setRandomPosition();}, 500);
-        setInterval(function() {discoEffect4.setRandomPosition();}, 500);
-        setInterval(function() {discoEffect5.setRandomPosition();}, 500);
-        setInterval(function() {discoEffect6.setRandomPosition();}, 500);
-        setInterval(function() {discoEffect7.setRandomPosition();}, 500);
+
+        function enableDisco () {
+            disco = setInterval(function () {
+                discoEffect.setRandomPosition();
+            }, 500);
+            disco1 = setInterval(function () {
+                discoEffect.setRandomPosition();
+            }, 500);
+            disco2 = setInterval(function () {
+                discoEffect2.setRandomPosition();
+            }, 500);
+            disco3 = setInterval(function () {
+                discoEffect3.setRandomPosition();
+            }, 500);
+            disco4 = setInterval(function () {
+                discoEffect4.setRandomPosition();
+            }, 500);
+            disco5 = setInterval(function () {
+                discoEffect5.setRandomPosition();
+            }, 500);
+            disco6 = setInterval(function () {
+                discoEffect6.setRandomPosition();
+            }, 500);
+            disco7 = setInterval(function () {
+                discoEffect7.setRandomPosition();
+            }, 500);
+        }
+
+        function disableDisco () {
+            clearInterval(disco);
+            clearInterval(disco1);
+            clearInterval(disco2);
+            clearInterval(disco3);
+            clearInterval(disco4);
+            clearInterval(disco5);
+            clearInterval(disco6);
+            clearInterval(disco7);
+        }
 
         discoBall.on('pointerdown', function () {
 
             if (discoBool === true) {
                 scene.sound.play('disco');
+                enableDisco();
                 discoBool = false;
             }
             else if (discoBool === false){
                 scene.sound.stopAll('disco');
+                disableDisco();
                 // clearInterval(a);
                 discoBool = true;
             }
