@@ -37,6 +37,8 @@ export default class TutorialScene extends Phaser.Scene {
         this.createBackground(this);
         this.addObjectText(this);
         this.addTutorialText(this);
+        this.addSwipeText(this);
+        this.swipeText.setText("Swipe to throw!");
         // Create Hero
         this.queue = ['paper', 'banana', 'waterbottle'];
         object = this.queue[j];
@@ -438,6 +440,13 @@ export default class TutorialScene extends Phaser.Scene {
             window.innerWidth * 0.5, window.innerHeight * 0.32, null, LEADERBOARD_FONT);
         scene.tutorialText.setOrigin(0.5);
         scene.tutorialText.setFontSize(50);
+    }
+
+    addSwipeText(scene) {
+        scene.swipeText = scene.add.text(
+            window.innerWidth * 0.5, window.innerHeight * 0.17, null, LEADERBOARD_FONT);
+        scene.swipeText.setOrigin(0.5);
+        scene.swipeText.setFontSize(60);
     }
 
     tutorial(scene, object) {
