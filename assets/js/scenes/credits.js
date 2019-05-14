@@ -58,7 +58,7 @@ export default class CreditsScene extends Phaser.Scene {
         this.jaredPic.setY(4100);
         this.jaredText.setY(4200);
         this.jaredBio.setY(4300);
-        this.thankYou.setY(6000);
+        this.thankYou.setY(5800);
 
         this.creditsTween = this.tweens.add({
             targets: this.creditsText,
@@ -76,7 +76,7 @@ export default class CreditsScene extends Phaser.Scene {
                 targets: this.tweenArray[i],
                 y: this.tweenArray[i].y + offset,
                 ease: 'linear',
-                duration: 9000,
+                duration: 9500,
                 delay: 1000,
                 completeDelay: 1000,
                 onComplete: function () {
