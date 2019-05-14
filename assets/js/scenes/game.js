@@ -43,6 +43,8 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('plus1', 'assets/img/plus1.jpg');
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
         this.load.image('discoball', 'assets/img/disco-ball.png');
+        this.load.image('good', 'assets/img/good.png');
+        this.load.image('bad', 'assets/img/bad.png');
 
 
         // audio assets
@@ -51,7 +53,7 @@ export default class GameScene extends Phaser.Scene {
             'assets/audio/bin-sound.mp3',
         ]);
 
-        // this.load.audio('disco', 'assets/audio/ymca.mp3')
+        this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
     /**
@@ -205,14 +207,23 @@ export default class GameScene extends Phaser.Scene {
     }
 
     /**
-     * casts a plus 1 animation upon scoring correctly
+     * casts a check mark animation upon scoring correctly
      * @param N/A
      */
-    //in progress shadow effect
-    createPlus1() {
-        this.plus1 = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'plus1');
-        this.plus1.displayHeight = 420;
-        this.plus1.displayWidth = 420;
+    createGood() {
+        this.good = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'good');
+        this.good.displayHeight = 420;
+        this.good.displayWidth = 420;
+    }
+
+    /**
+     * casts a check mark animation upon scoring correctly
+     * @param N/A
+     */
+    createBad() {
+        this.bad = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'bad');
+        this.bad.displayHeight = 420;
+        this.bad.displayWidth = 420;
     }
 
     /**
@@ -278,14 +289,14 @@ export default class GameScene extends Phaser.Scene {
         let discoEffect = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
         discoEffect.setDepth(1000);
         discoEffect.setVisible(false);
-        discoEffect.setFillStyle(0xFFFF00, 100);
+        discoEffect.setFillStyle(0xFF00CB, 100);
         discoEffect.setBlendMode('COLORDODGE');
         discoEffect.setRotation(1);
 
         let discoEffect2 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
         discoEffect2.setDepth(1000);
         discoEffect2.setVisible(false);
-        discoEffect2.setFillStyle(0x00FF00, 100);
+        discoEffect2.setFillStyle(0xFFFF00, 100);
         discoEffect2.setBlendMode('COLORDODGE');
         discoEffect2.setRotation(3);
 
@@ -308,7 +319,7 @@ export default class GameScene extends Phaser.Scene {
         let discoEffect5 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
         discoEffect5.setDepth(1000);
         discoEffect5.setVisible(false);
-        discoEffect5.setFillStyle(0x8B00FF, 100);
+        discoEffect5.setFillStyle(0xFFFF00, 100);
         discoEffect5.setBlendMode('COLORDODGE');
         discoEffect5.setRotation(6);
 
@@ -328,6 +339,26 @@ export default class GameScene extends Phaser.Scene {
         discoEffect7.setBlendMode('COLORDODGE');
         discoEffect7.setRotation(8);
 
+        let discoEffect8 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect8.setDepth(1000);
+        discoEffect8.setVisible(false);
+        discoEffect8.setFillStyle(0xFF00CB, 100);
+        discoEffect8.setBlendMode('COLORDODGE');
+        discoEffect8.setRotation(9);
+
+        let discoEffect9 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect9.setDepth(1000);
+        discoEffect9.setVisible(false);
+        discoEffect9.setFillStyle(0x00FFFF, 100);
+        discoEffect9.setBlendMode('COLORDODGE');
+        discoEffect9.setRotation(10);
+
+        let discoEffect10 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect10.setDepth(1000);
+        discoEffect10.setVisible(false);
+        discoEffect10.setFillStyle(0xFF8700, 100);
+        discoEffect10.setBlendMode('COLORDODGE');
+        discoEffect10.setRotation(11);
 
         let disco;
         let disco1;
@@ -337,6 +368,10 @@ export default class GameScene extends Phaser.Scene {
         let disco5;
         let disco6;
         let disco7;
+        let disco8;
+        let disco9;
+        let disco10;
+
 
 
         function enableDisco () {
@@ -364,6 +399,17 @@ export default class GameScene extends Phaser.Scene {
             disco7 = setInterval(function () {
                 discoEffect7.setRandomPosition();
             }, 500);
+            disco8 = setInterval(function () {
+                discoEffect8.setRandomPosition();
+            }, 500);
+            disco9 = setInterval(function () {
+                discoEffect9.setRandomPosition();
+            },500);
+            disco10 = setInterval(function () {
+                discoEffect10.setRandomPosition();
+            },500);
+
+
         }
 
         function disableDisco () {
@@ -375,6 +421,9 @@ export default class GameScene extends Phaser.Scene {
             clearInterval(disco5);
             clearInterval(disco6);
             clearInterval(disco7);
+            clearInterval(disco8);
+            clearInterval(disco9);
+            clearInterval(disco10);
         }
 
         discoBall.on('pointerdown', function () {
@@ -387,7 +436,6 @@ export default class GameScene extends Phaser.Scene {
             else if (discoBool === false){
                 scene.sound.stopAll('disco');
                 disableDisco();
-                // clearInterval(a);
                 discoBool = true;
             }
 
@@ -399,6 +447,9 @@ export default class GameScene extends Phaser.Scene {
             discoEffect5.setVisible(!discoEffect5.visible);
             discoEffect6.setVisible(!discoEffect6.visible);
             discoEffect7.setVisible(!discoEffect7.visible);
+            discoEffect8.setVisible(!discoEffect8.visible);
+            discoEffect9.setVisible(!discoEffect9.visible);
+            discoEffect10.setVisible(!discoEffect10.visible);
 
 
 
@@ -533,11 +584,13 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
             if (object === "paper") {
-                this.createPlus1();
-                this.addplus1Tween(this.plus1);
+                this.createGood();
+                this.addGoodTween(this.good);
                 this.scoreHandler(this);
             }
             else {
+                this.createBad();
+                this.addBadTween(this.bad);
                 this.lifeHandler(this);
             }
             this.resetProjectile(projectile);
@@ -556,11 +609,13 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
             if (object === "waterbottle") {
-                this.createPlus1();
-                this.addplus1Tween(this.plus1);
+                this.createGood();
+                this.addGoodTween(this.good);
                 this.scoreHandler(this);
             }
             else {
+                this.createBad();
+                this.addBadTween(this.bad);
                 this.lifeHandler(this);
             }
             this.resetProjectile(projectile);
@@ -579,11 +634,13 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
             if (object === "banana") {
-                this.createPlus1();
-                this.addplus1Tween(this.plus1);
+                this.createGood();
+                this.addGoodTween(this.good);
                 this.scoreHandler(this);
             }
             else {
+                this.createBad();
+                this.addBadTween(this.bad);
                 this.lifeHandler(this);
             }
             this.resetProjectile(projectile);
@@ -601,7 +658,10 @@ export default class GameScene extends Phaser.Scene {
         projectile.body.setAngularVelocity(angularVelocity * 0.5);
         projectile.body.velocityX -= 200;
 
+
         if (projectile.body.angularVelocity === 0) {
+            this.createBad();
+            this.addBadTween(this.bad);
             this.lifeHandler(this);
             projectile.disableBody(false, false);
             this.resetProjectile(projectile);
@@ -670,7 +730,19 @@ export default class GameScene extends Phaser.Scene {
         });
     }
 
-    addplus1Tween(image) {
+    addGoodTween(image) {
+        this.tweens.add({
+            targets: image,
+            alpha: 0,
+            displayWidth: 50,
+            displayHeight: 50,
+            ease: 'Linear',
+            duration: 1500,
+            repeat: 0,
+        });
+    }
+
+    addBadTween(image) {
         this.tweens.add({
             targets: image,
             alpha: 0,
