@@ -488,8 +488,8 @@ export default class GameScene extends Phaser.Scene {
     }
 
     hitRim(projectile, rim) {
+        projectile.setAccelerationX(0);
         this.setProjectileDrag(projectile);
-        // projectile.setAccelerationX(0);
         projectile.body.bounce.set(0.45);
 
         if (projectile.x > rim.x) {
@@ -595,10 +595,11 @@ export default class GameScene extends Phaser.Scene {
      * @param projectile
      */
     missedTarget(projectile) {
+        projectile.body.setAccelerationX(0);
         this.setProjectileDrag(projectile);
         let angularVelocity = projectile.body.angularVelocity;
         projectile.body.setAngularVelocity(angularVelocity * 0.5);
-        projectile.setAccelerationX(0);
+        projectile.body.velocityX -= 200;
 
         if (projectile.body.angularVelocity === 0) {
             this.lifeHandler(this);
@@ -648,7 +649,7 @@ export default class GameScene extends Phaser.Scene {
      */
     setProjectileDrag(projectile) {
         projectile.body.setAllowDrag(true);
-        projectile.body.setDrag(175, 0);
+        projectile.body.setDrag(100, 0);
         projectile.body.setAngularDrag(200);
     }
 
