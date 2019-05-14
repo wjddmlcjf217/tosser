@@ -43,6 +43,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('plus1', 'assets/img/plus1.jpg');
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
         this.load.image('discoball', 'assets/img/disco-ball.png');
+        this.load.image('wind_arrow', 'assets/img/arrow.png');
 
 
         // audio assets
@@ -104,7 +105,6 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = true;
 
         }
-
     }
 
     // game_objects = {
@@ -724,8 +724,7 @@ export default class GameScene extends Phaser.Scene {
                 [first_name]: this.scoreValue
             });
         }
-        }
-    // }
+    }
 
     /**
      * Add score related text to the canvas
@@ -747,7 +746,6 @@ export default class GameScene extends Phaser.Scene {
         scene.scoreText.setOrigin(0.5, 0);
         scene.scoreText.setAlign('center');
     }
-
 
     addObjectText(scene) {
         scene.objectText = scene.add.text(
