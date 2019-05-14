@@ -475,8 +475,10 @@ export default class GameScene extends Phaser.Scene {
         game.rimThreeRightCollider = game.physics.add.collider(game.hero, rimThreeRight, this.hitRim, null, game);
 
         game.physics.add.overlap(game.hero, binOne, this.hitBlueBin, null, game);
-        game.physics.add.overlap(game.hero, binTwo, this.hitYellowBin, null, game);
-        game.physics.add.overlap(game.hero, binThree, this.hitGreenBin, null, game);
+        game.physics.add.overlap(game.hero, binTwo, this.hitGreenBin, null, game);
+        game.physics.add.overlap(game.hero, binThree, this.hitYellowBin, null, game);
+
+
 
         game.rimOneLeftCollider.active = false;
         game.rimOneRightCollider.active = false;
