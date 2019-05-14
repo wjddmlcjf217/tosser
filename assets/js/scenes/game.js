@@ -71,13 +71,7 @@ export default class GameScene extends Phaser.Scene {
         // Create Hero
         this.queue = ['paper', 'banana', 'waterbottle'];
         object = this.queue[Math.floor(Math.random() * 3)];
-        this.hero = this.createHeroProjectile(this, object);
-        this.objectText.setText(object);
-
-        this.hero.visible = true;
-        this.hero.setInteractive();
-        this.hero.on('pointerdown', this.pointerDownHandler, this);
-        this.createPhysicsObjects(this);
+        this.spawnProjectile(this.createHeroProjectile(this, object));
 
         // Create Lives
         this.lives = this.add.group();
@@ -208,7 +202,6 @@ export default class GameScene extends Phaser.Scene {
      * casts a plus 1 animation upon scoring correctly
      * @param N/A
      */
-    //in progress shadow effect
     createPlus1() {
         this.plus1 = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'plus1');
         this.plus1.displayHeight = 420;
@@ -520,7 +513,6 @@ export default class GameScene extends Phaser.Scene {
      * Projectile Hit target handler
      * @param projectile
      */
-
     hitYellowBin(projectile) {
         if (projectile.body.velocity.y > 0) {
             projectile.disableBody(false, true);
