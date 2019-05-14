@@ -49,7 +49,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.audio('hit-target', [
             'assets/audio/bin-sound.m4a',
             'assets/audio/bin-sound.mp3',
-
         ]);
 
         // this.load.audio('disco', 'assets/audio/ymca.mp3')
@@ -198,8 +197,6 @@ export default class GameScene extends Phaser.Scene {
                 this.createShadow(this);
             }
         }
-
-
     }
 
     /**
