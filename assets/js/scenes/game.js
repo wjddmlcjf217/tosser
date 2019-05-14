@@ -2,6 +2,7 @@
 
 // takes all database profile data to display on profile page
 let displayName = null;
+let object = null;
 
 function initApp() {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -41,12 +42,18 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
         this.load.image('plus1', 'assets/img/plus1.jpg');
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
+        this.load.image('discoball', 'assets/img/disco-ball.png');
+        this.load.image('discomode', 'assets/img/disco.gif');
+
 
         // audio assets
         this.load.audio('hit-target', [
             'assets/audio/bin-sound.m4a',
             'assets/audio/bin-sound.mp3',
+
         ]);
+
+        this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
     /**
@@ -55,16 +62,16 @@ export default class GameScene extends Phaser.Scene {
     create() {
         this.createBackground(this);
         this.createLight(this);
+        this.discoMode(this);
 
         //Add Scoreboard
         this.scoreValue = 0;
-        this.createScoreboard(this);
         this.addScoreText(this);
         this.addObjectText(this);
 
         // Create Hero
         this.queue = ['paper', 'banana', 'waterbottle'];
-        let object = this.queue[Math.floor(Math.random() * 3)];
+        object = this.queue[Math.floor(Math.random() * 3)];
         this.hero = this.createHeroProjectile(this, object);
         this.objectText.setText(object);
 
@@ -245,7 +252,117 @@ export default class GameScene extends Phaser.Scene {
         light.on('pointerdown', function () {
             this.setTexture(this.texture.key === 'light_on' ? 'light_off' : 'light_on');
             darkenEffect.setVisible(!darkenEffect.visible);
+
         });
+    }
+
+    /**
+     * Disco mode in scene
+     * @param scene
+     */
+    discoMode(scene) {
+        let discoBall = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.11, 'discoball');
+        discoBall.displayWidth = 150;
+        discoBall.displayHeight = 150;
+        discoBall.setInteractive();
+        let discoBool = true;
+
+        let background = scene.add.rectangle(window.innerWidth / 2, window.innerHeight / 2,
+            window.innerWidth, window.innerHeight);
+        background.setDepth(1000);
+        background.setVisible(false);
+        background.setFillStyle(0x000000, 100);
+        background.setBlendMode('MULTIPLY');
+
+        let discoEffect = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect.setDepth(1000);
+        discoEffect.setVisible(false);
+        discoEffect.setFillStyle(0xFFFF00, 100);
+        discoEffect.setBlendMode('COLORDODGE');
+        discoEffect.setRotation(1);
+
+        let discoEffect2 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect2.setDepth(1000);
+        discoEffect2.setVisible(false);
+        discoEffect2.setFillStyle(0x00FF00, 100);
+        discoEffect2.setBlendMode('COLORDODGE');
+        discoEffect2.setRotation(3);
+
+
+        let discoEffect3 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect3.setDepth(1000);
+        discoEffect3.setVisible(false);
+        discoEffect3.setFillStyle(0x00FFFF, 100);
+        discoEffect3.setBlendMode('COLORDODGE');
+        discoEffect3.setRotation(4);
+
+
+        let discoEffect4 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect4.setDepth(1000);
+        discoEffect4.setVisible(false);
+        discoEffect4.setFillStyle(0xFF0000, 100);
+        discoEffect4.setBlendMode('COLORDODGE');
+        discoEffect4.setRotation(5);
+
+        let discoEffect5 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect5.setDepth(1000);
+        discoEffect5.setVisible(false);
+        discoEffect5.setFillStyle(0x8B00FF, 100);
+        discoEffect5.setBlendMode('COLORDODGE');
+        discoEffect5.setRotation(6);
+
+
+        let discoEffect6 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect6.setDepth(1000);
+        discoEffect6.setVisible(false);
+        discoEffect6.setFillStyle(0x53FF00, 100);
+        discoEffect6.setBlendMode('COLORDODGE');
+        discoEffect6.setRotation(7);
+
+
+        let discoEffect7 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
+        discoEffect7.setDepth(1000);
+        discoEffect7.setVisible(false);
+        discoEffect7.setFillStyle(0xFF00FF, 100);
+        discoEffect7.setBlendMode('COLORDODGE');
+        discoEffect7.setRotation(8);
+
+
+
+        setInterval(function() {discoEffect.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect2.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect3.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect4.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect5.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect6.setRandomPosition();}, 500);
+        setInterval(function() {discoEffect7.setRandomPosition();}, 500);
+
+        discoBall.on('pointerdown', function () {
+
+            if (discoBool === true) {
+                scene.sound.play('disco');
+                discoBool = false;
+            }
+            else if (discoBool === false){
+                scene.sound.stopAll('disco');
+                // clearInterval(a);
+                discoBool = true;
+            }
+
+            background.setVisible(!discoEffect.visible);
+            discoEffect.setVisible(!discoEffect.visible);
+            discoEffect2.setVisible(!discoEffect2.visible);
+            discoEffect3.setVisible(!discoEffect3.visible);
+            discoEffect4.setVisible(!discoEffect4.visible);
+            discoEffect5.setVisible(!discoEffect5.visible);
+            discoEffect6.setVisible(!discoEffect6.visible);
+            discoEffect7.setVisible(!discoEffect7.visible);
+
+
+
+        });
+
     }
 
     /**
@@ -281,6 +398,9 @@ export default class GameScene extends Phaser.Scene {
         let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.559, window.innerHeight * 0.425, window.innerWidth * 0.001, 5);//0.015
         let rimTwoRight = game.add.rectangle(window.innerWidth * 0.731, window.innerHeight * 0.425, window.innerWidth * 0.001, 5); //0.015
 
+        // let binThree;
+        // let rimThreeLeft;
+        // let rimThreeRight;
         let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.57, window.innerWidth * 10, 50);
 
         game.physics.add.existing(binOne, true);
@@ -294,7 +414,6 @@ export default class GameScene extends Phaser.Scene {
 
         // Add physical interactions
 
-
         game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
 
 
@@ -304,14 +423,19 @@ export default class GameScene extends Phaser.Scene {
         game.rimTwoLeftCollider = game.physics.add.collider(game.hero, rimTwoLeft, this.hitRim, null, game);
         game.rimTwoRightCollider = game.physics.add.collider(game.hero, rimTwoRight, this.hitRim, null, game);
 
-        game.physics.add.overlap(game.hero, binOne, this.hitTarget, null, game);
-        game.physics.add.overlap(game.hero, binTwo, this.hitTarget, null, game);
+        // game.rimThreeLeftCollider = game.physics.add.collider(game.hero, rimThreeLeft, this.hitRim, null, game);
+        // game.rimThreeRightCollider = game.physics.add.collider(game.hero, rimThreeRight, this.hitRim, null, game);
 
+        game.physics.add.overlap(game.hero, binOne, this.hitBlueBin, null, game);
+        game.physics.add.overlap(game.hero, binTwo, this.hitYellowBin, null, game);
+        // game.physics.add.overlap(game.hero, binThree, this.hitGreenBin, null, game);
 
         game.rimOneLeftCollider.active = false;
         game.rimOneRightCollider.active = false;
         game.rimTwoLeftCollider.active = false;
         game.rimTwoRightCollider.active = false;
+        // game.rimThreeLeftCollider.active = false;
+        // game.rimThreeRightCollider.active = false;
         game.floorCollider.active = false;
     }
 
@@ -339,8 +463,8 @@ export default class GameScene extends Phaser.Scene {
             this.rimOneLeftCollider.active = false;
             this.rimTwoRightCollider.active = false;
             this.rimTwoLeftCollider.active = false;
-
-
+            // this.rimThreeRightCollider.active = false;
+            // this.rimThreeLeftCollider.active = false;
         }
     }
 
@@ -348,19 +472,73 @@ export default class GameScene extends Phaser.Scene {
      * Projectile Hit target handler
      * @param projectile
      */
-    hitTarget(projectile) {
+
+    hitYellowBin(projectile) {
         if (projectile.body.velocity.y > 0) {
-            this.createPlus1();
-            this.addplus1Tween(this.plus1);
             projectile.disableBody(false, true);
-            this.resetProjectile(projectile);
-            this.scoreHandler(this);
             this.floorCollider.active = false;
             this.rimOneRightCollider.active = false;
             this.rimOneLeftCollider.active = false;
             this.rimTwoRightCollider.active = false;
             this.rimTwoLeftCollider.active = false;
+            // this.rimThreeRightCollider.active = false;
+            // this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
+            if (object === "paper") {
+                this.createPlus1();
+                this.addplus1Tween(this.plus1);
+                this.scoreHandler(this);
+            }
+            else {
+                this.lifeHandler(this);
+            }
+            this.resetProjectile(projectile);
+        }
+    }
+
+    hitBlueBin(projectile) {
+        if (projectile.body.velocity.y > 0) {
+            projectile.disableBody(false, true);
+            this.floorCollider.active = false;
+            this.rimOneRightCollider.active = false;
+            this.rimOneLeftCollider.active = false;
+            this.rimTwoRightCollider.active = false;
+            this.rimTwoLeftCollider.active = false;
+            // this.rimThreeRightCollider.active = false;
+            // this.rimThreeLeftCollider.active = false;
+            this.sound.play('hit-target');
+            if (object === "waterbottle") {
+                this.createPlus1();
+                this.addplus1Tween(this.plus1);
+                this.scoreHandler(this);
+            }
+            else {
+                this.lifeHandler(this);
+            }
+            this.resetProjectile(projectile);
+        }
+    }
+
+    hitGreenBin(projectile) {
+        if (projectile.body.velocity.y > 0) {
+            projectile.disableBody(false, true);
+            this.floorCollider.active = false;
+            this.rimOneRightCollider.active = false;
+            this.rimOneLeftCollider.active = false;
+            this.rimTwoRightCollider.active = false;
+            this.rimTwoLeftCollider.active = false;
+            // this.rimThreeRightCollider.active = false;
+            // this.rimThreeLeftCollider.active = false;
+            this.sound.play('hit-target');
+            if (object === "banana") {
+                this.createPlus1();
+                this.addplus1Tween(this.plus1);
+                this.scoreHandler(this);
+            }
+            else {
+                this.lifeHander(this);
+            }
+            this.resetProjectile(projectile);
         }
     }
 
@@ -392,7 +570,7 @@ export default class GameScene extends Phaser.Scene {
      */
     spawnProjectile(projectile) {
         let scene = projectile.scene;
-        let object = scene.queue[Math.floor(Math.random() * 3)];
+        object = scene.queue[Math.floor(Math.random() * 3)];
         scene.objectText.setText(object);
         scene.hero = this.createHeroProjectile(scene, object);
         scene.hero.visible = true;
@@ -503,7 +681,7 @@ export default class GameScene extends Phaser.Scene {
     addScoreText(scene) {
         let fontStyle = {
             fontFamily: 'Kalam',
-            fontSize: 80,
+            fontSize: 70,
             color: '#84BCCE',
         };
 
@@ -511,18 +689,13 @@ export default class GameScene extends Phaser.Scene {
             window.innerWidth * 0.285, window.innerHeight * 0.285, 'Game Over', fontStyle);
         scene.gameOverText.setVisible(false);
         scene.staticScoreText = scene.add.text(
-            window.innerWidth * 0.31, window.innerHeight * 0.285, 'Score:', fontStyle);
+            window.innerWidth * 0.31, window.innerHeight * 0.295, 'Score:', fontStyle);
         scene.scoreText = scene.add.text(
-            window.innerWidth * 0.59, window.innerHeight * 0.285, scene.scoreValue, fontStyle);
+            window.innerWidth * 0.58, window.innerHeight * 0.295, scene.scoreValue, fontStyle);
         scene.scoreText.setOrigin(0.5, 0);
         scene.scoreText.setAlign('center');
     }
 
-    createScoreboard() {
-        let scoreboard = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'scoreboard');
-        scoreboard.setX(window.innerWidth * 0.47);
-        scoreboard.setY(window.innerHeight * 0.31);
-    }
 
     addObjectText(scene) {
         scene.objectText = scene.add.text(
