@@ -68,7 +68,7 @@ export default class GameScene extends Phaser.Scene {
             'assets/audio/bin-sound.mp3',
         ]);
 
-        this.load.audio('disco', 'assets/audio/ymca.mp3')
+        // this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
     /**
@@ -290,188 +290,60 @@ export default class GameScene extends Phaser.Scene {
 
 
     discoMode(scene) {
+        scene.discoTriangles = [];
+        scene.discoInterval = undefined;
         scene.discoBall = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.11, 'discoball');
         scene.discoBall.displayWidth = 150;
         scene.discoBall.displayHeight = 150;
         scene.discoBall.setInteractive();
         let discoBool = true;
 
+        let discoColors = [0xFF00CB, 0xFFFF00, 0x00FFFF, 0xFF0000, 0xFFFF00, 0x53FF00, 0xFF00FF,
+            0xFF00CB, 0x00FFFF, 0x00FFFF, 0xFF8700];
+
+        for (let i = 0; i < discoColors.length; i++) {
+            let triangle = scene.add.triangle(
+                window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight
+            );
+            triangle.setDepth(1000);
+            triangle.setVisible(false);
+            triangle.setFillStyle(discoColors[i], 100);
+            triangle.setBlendMode('COLORDODGE');
+            triangle.setRotation(i);
+            scene.discoTriangles.push(triangle);
+        }
+
         let background = scene.add.rectangle(window.innerWidth / 2, window.innerHeight / 2,
             window.innerWidth, window.innerHeight);
-        background.setDepth(1000);
+        background.setDepth(999);
         background.setVisible(false);
         background.setFillStyle(0x000000, 100);
         background.setBlendMode('MULTIPLY');
 
-        let discoEffect = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
-        discoEffect.setDepth(1000);
-        discoEffect.setVisible(false);
-        discoEffect.setFillStyle(0xFF00CB, 100);
-        discoEffect.setBlendMode('COLORDODGE');
-        discoEffect.setRotation(1);
-
-        let discoEffect2 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
-        discoEffect2.setDepth(1000);
-        discoEffect2.setVisible(false);
-        discoEffect2.setFillStyle(0xFFFF00, 100);
-        discoEffect2.setBlendMode('COLORDODGE');
-        discoEffect2.setRotation(3);
-
-
-        let discoEffect3 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
-        discoEffect3.setDepth(1000);
-        discoEffect3.setVisible(false);
-        discoEffect3.setFillStyle(0x00FFFF, 100);
-        discoEffect3.setBlendMode('COLORDODGE');
-        discoEffect3.setRotation(4);
-
-
-        let discoEffect4 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
-        discoEffect4.setDepth(1000);
-        discoEffect4.setVisible(false);
-        discoEffect4.setFillStyle(0xFF0000, 100);
-        discoEffect4.setBlendMode('COLORDODGE');
-        discoEffect4.setRotation(5);
-
-        let discoEffect5 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
-        discoEffect5.setDepth(1000);
-        discoEffect5.setVisible(false);
-        discoEffect5.setFillStyle(0xFFFF00, 100);
-        discoEffect5.setBlendMode('COLORDODGE');
-        discoEffect5.setRotation(6);
-
-
-        let discoEffect6 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
-        discoEffect6.setDepth(1000);
-        discoEffect6.setVisible(false);
-        discoEffect6.setFillStyle(0x53FF00, 100);
-        discoEffect6.setBlendMode('COLORDODGE');
-        discoEffect6.setRotation(7);
-
-
-        let discoEffect7 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
-        discoEffect7.setDepth(1000);
-        discoEffect7.setVisible(false);
-        discoEffect7.setFillStyle(0xFF00FF, 100);
-        discoEffect7.setBlendMode('COLORDODGE');
-        discoEffect7.setRotation(8);
-
-        let discoEffect8 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
-        discoEffect8.setDepth(1000);
-        discoEffect8.setVisible(false);
-        discoEffect8.setFillStyle(0xFF00CB, 100);
-        discoEffect8.setBlendMode('COLORDODGE');
-        discoEffect8.setRotation(9);
-
-        let discoEffect9 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
-        discoEffect9.setDepth(1000);
-        discoEffect9.setVisible(false);
-        discoEffect9.setFillStyle(0x00FFFF, 100);
-        discoEffect9.setBlendMode('COLORDODGE');
-        discoEffect9.setRotation(10);
-
-        let discoEffect10 = scene.add.triangle(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight);
-        discoEffect10.setDepth(1000);
-        discoEffect10.setVisible(false);
-        discoEffect10.setFillStyle(0xFF8700, 100);
-        discoEffect10.setBlendMode('COLORDODGE');
-        discoEffect10.setRotation(11);
-
-
-        function enableDisco () {
-            disco = setInterval(function () {
-                discoEffect.setRandomPosition();
-            }, 500);
-            disco1 = setInterval(function () {
-                discoEffect.setRandomPosition();
-            }, 500);
-            disco2 = setInterval(function () {
-                discoEffect2.setRandomPosition();
-            }, 500);
-            disco3 = setInterval(function () {
-                discoEffect3.setRandomPosition();
-            }, 500);
-            disco4 = setInterval(function () {
-                discoEffect4.setRandomPosition();
-            }, 500);
-            disco5 = setInterval(function () {
-                discoEffect5.setRandomPosition();
-            }, 500);
-            disco6 = setInterval(function () {
-                discoEffect6.setRandomPosition();
-            }, 500);
-            disco7 = setInterval(function () {
-                discoEffect7.setRandomPosition();
-            }, 500);
-            disco8 = setInterval(function () {
-                discoEffect8.setRandomPosition();
-            }, 500);
-            disco9 = setInterval(function () {
-                discoEffect9.setRandomPosition();
-            },500);
-            disco10 = setInterval(function () {
-                discoEffect10.setRandomPosition();
-            },500);
-        }
-
-        function disableDisco () {
-            clearInterval(disco);
-            clearInterval(disco1);
-            clearInterval(disco2);
-            clearInterval(disco3);
-            clearInterval(disco4);
-            clearInterval(disco5);
-            clearInterval(disco6);
-            clearInterval(disco7);
-            clearInterval(disco8);
-            clearInterval(disco9);
-            clearInterval(disco10);
-        }
-
         scene.discoBall.on('pointerdown', function () {
 
             if (discoBool === true) {
-                scene.sound.play('disco');
-                enableDisco();
+                // scene.sound.play('disco');
+                scene.discoInterval = setInterval(function () {
+                    for (let triangle of scene.discoTriangles) {
+                        triangle.setRandomPosition();
+                    }
+                }, 500);
                 discoBool = false;
             }
             else if (discoBool === false){
-                scene.sound.stopAll('disco');
-                disableDisco();
+                // scene.sound.stopAll('disco');
+                clearInterval(scene.discoInterval);
                 discoBool = true;
             }
 
-            background.setVisible(!discoEffect.visible);
-            discoEffect.setVisible(!discoEffect.visible);
-            discoEffect2.setVisible(!discoEffect2.visible);
-            discoEffect3.setVisible(!discoEffect3.visible);
-            discoEffect4.setVisible(!discoEffect4.visible);
-            discoEffect5.setVisible(!discoEffect5.visible);
-            discoEffect6.setVisible(!discoEffect6.visible);
-            discoEffect7.setVisible(!discoEffect7.visible);
-            discoEffect8.setVisible(!discoEffect8.visible);
-            discoEffect9.setVisible(!discoEffect9.visible);
-            discoEffect10.setVisible(!discoEffect10.visible);
-
-
-
+            background.setVisible(!background.visible);
+            for (let triangle of scene.discoTriangles) {
+                triangle.setVisible(!triangle.visible);
+            }
         });
-
     }
 
-    disableDisco () {
-        clearInterval(disco);
-        clearInterval(disco1);
-        clearInterval(disco2);
-        clearInterval(disco3);
-        clearInterval(disco4);
-        clearInterval(disco5);
-        clearInterval(disco6);
-        clearInterval(disco7);
-        clearInterval(disco8);
-        clearInterval(disco9);
-        clearInterval(disco10);
-    }
 
     /**
      * Creates the hero projectile
@@ -785,7 +657,7 @@ export default class GameScene extends Phaser.Scene {
             scene.scoreText.setVisible(false);
             scene.gameOverText.setVisible(true);
             this.discoBall.removeInteractive();
-            this.disableDisco();
+            clearInterval(this.discoInterval);
             // Write score to leaderboard
             this.writeLeaderBoard();
             setTimeout(function () {
