@@ -43,7 +43,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('plus1', 'assets/img/plus1.jpg');
         this.load.image('scoreboard', 'assets/img/scoreboard.png');
         this.load.image('discoball', 'assets/img/disco-ball.png');
-        this.load.image('discomode', 'assets/img/disco.gif');
 
 
         // audio assets
@@ -53,7 +52,7 @@ export default class GameScene extends Phaser.Scene {
 
         ]);
 
-        this.load.audio('disco', 'assets/audio/ymca.mp3')
+        // this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
     /**
@@ -389,7 +388,7 @@ export default class GameScene extends Phaser.Scene {
      * @param game Phaser Game
      */
     createPhysicsObjects(game) {
-        let binOne = game.add.rectangle(window.innerWidth * 0.301, window.innerHeight * 0.430, window.innerWidth * 0.163, 10);
+        let binOne = game.add.rectangle(window.innerWidth * 0.19, window.innerHeight * 0.430, window.innerWidth * 0.13, 10);
         let rimOneLeft = game.add.rectangle(window.innerWidth * 0.215, window.innerHeight * 0.425, window.innerWidth * 0.001, 5);//0.015
         let rimOneRight = game.add.rectangle(window.innerWidth * 0.390, window.innerHeight * 0.425, window.innerWidth * 0.001, 5); //0.015
 
@@ -398,9 +397,10 @@ export default class GameScene extends Phaser.Scene {
         let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.559, window.innerHeight * 0.425, window.innerWidth * 0.001, 5);//0.015
         let rimTwoRight = game.add.rectangle(window.innerWidth * 0.731, window.innerHeight * 0.425, window.innerWidth * 0.001, 5); //0.015
 
-        // let binThree;
-        // let rimThreeLeft;
-        // let rimThreeRight;
+        let binThree = game.add.rectangle(window.innerWidth * 0.645, window.innerHeight * 0.430, window.innerWidth * 0.163, 10);
+        let rimThreeLeft = game.add.rectangle(window.innerWidth * 0.559, window.innerHeight * 0.425, window.innerWidth * 0.001, 5);
+        let rimThreeRight = game.add.rectangle(window.innerWidth * 0.731, window.innerHeight * 0.425, window.innerWidth * 0.001, 5);
+
         let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.57, window.innerWidth * 10, 50);
 
         game.physics.add.existing(binOne, true);
@@ -412,7 +412,7 @@ export default class GameScene extends Phaser.Scene {
         game.physics.add.existing(floor, true);
 
 
-        // Add physical interactions
+        // Add physical interactionsr
 
         game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
 
