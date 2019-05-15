@@ -260,6 +260,7 @@ export default class GameScene extends Phaser.Scene {
         hero.state = 'resting';
         hero.displayHeight = window.innerHeight * 0.092 * aspect_ratio * game_objects[object]['scaling_factor'];
         hero.displayWidth = window.innerWidth * 0.165 * game_objects[object]['scaling_factor'];
+        hero.setY(hero.y - (hero.displayHeight - (window.innerWidth * 0.165)) * 0.5);
         hero.setBounce(.4);
         // hero.body.onWorldBounds = true;
         // hero.body.setCollideWorldBounds(true);
