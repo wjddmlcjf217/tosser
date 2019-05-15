@@ -254,7 +254,7 @@ export default class GameScene extends Phaser.Scene {
      * @returns Hero image game object
      */
     createHeroProjectile(game, image) {
-        let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
+        let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.89, image);
         hero.setInteractive();
         let aspect_ratio = hero.height / hero.width;
         hero.state = 'resting';
