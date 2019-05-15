@@ -7,8 +7,9 @@ let object = null;
 // constants
 const WIND_SCALE = window.innerWidth * 0.15;
 const WIND_VARIANCE = 1.25;
-const VELOCITY_Y_SCALE = 0.5;
-const VELOCITY_X_SCALE = 0.75;
+const VELOCITY_Y_SCALE = -1.3;
+const VELOCITY_X_SCALE = 0.3;
+const GRAVITY = window.innerHeight * 1;
 
 function initApp() {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -36,33 +37,33 @@ export default class GameScene extends Phaser.Scene {
      * Preload assets for Phaser Game
      */
     preload() {
-        // image assets
-        this.load.image('background', 'assets/img/study_area.png');
-        this.load.image('bin_top', 'assets/img/bin_top.png');
-        this.load.image('paper', 'assets/img/paper_ball.png');
-        this.load.image('waterbottle', 'assets/img/water_bottle.png');
-        this.load.image('apple', 'assets/img/apple.png');
-        this.load.image('banana', 'assets/img/banana.png');
-        this.load.image('life', 'assets/img/life.gif');
-        this.load.image('light_off', 'assets/img/light_off.png');
-        this.load.image('light_on', 'assets/img/light_on.png');
-        this.load.image('scoreboard', 'assets/img/scoreboard.png');
-        this.load.image('plus1', 'assets/img/plus1.jpg');
-        this.load.image('scoreboard', 'assets/img/scoreboard.png');
-        this.load.image('discoball', 'assets/img/disco-ball.png');
-        this.load.image('wind_arrow', 'assets/img/arrow.png');
-        this.load.image('good', 'assets/img/good.png');
-        this.load.image('bad', 'assets/img/bad.png');
+    // image assets
+    this.load.image('background', 'assets/img/study_area.png');
+    this.load.image('bin_top', 'assets/img/bin_top.png');
+    this.load.image('paper', 'assets/img/paper_ball.png');
+    this.load.image('waterbottle', 'assets/img/water_bottle.png');
+    this.load.image('apple', 'assets/img/apple.png');
+    this.load.image('banana', 'assets/img/banana.png');
+    this.load.image('life', 'assets/img/life.gif');
+    this.load.image('light_off', 'assets/img/light_off.png');
+    this.load.image('light_on', 'assets/img/light_on.png');
+    this.load.image('scoreboard', 'assets/img/scoreboard.png');
+    this.load.image('plus1', 'assets/img/plus1.jpg');
+    this.load.image('scoreboard', 'assets/img/scoreboard.png');
+    this.load.image('discoball', 'assets/img/disco-ball.png');
+    this.load.image('wind_arrow', 'assets/img/arrow.png');
+    this.load.image('good', 'assets/img/good.png');
+    this.load.image('bad', 'assets/img/bad.png');
 
 
-        // audio assets
-        this.load.audio('hit-target', [
-            'assets/audio/bin-sound.m4a',
-            'assets/audio/bin-sound.mp3',
-        ]);
+    // audio assets
+    this.load.audio('hit-target', [
+        'assets/audio/bin-sound.m4a',
+    'assets/audio/bin-sound.mp3',
+]);
 
-        this.load.audio('disco', 'assets/audio/ymca.mp3')
-    }
+    this.load.audio('disco', 'assets/audio/ymca.mp3')
+}
 
     /**
      * Initial Object Creation for Phaser Game
@@ -188,8 +189,8 @@ export default class GameScene extends Phaser.Scene {
         let swipe = new Phaser.Math.Vector2(swipeX, swipeY).normalize();
 
         // calculate velocity
-        let screenRatio = window.innerHeight / window.innerWidth;
-        let velocityY = (window.innerHeight * VELOCITY_Y_SCALE) * -1;
+        let velocityY = window.innerHeight * VELOCITY_Y_SCALE;
+        let velocityX = (swipe.x * window.innerWidth) * VELOCITY_X_SCALE;
 
         // validate swipe direction
         let angle = swipe.angle();
@@ -198,10 +199,10 @@ export default class GameScene extends Phaser.Scene {
             this.hero.disableInteractive();
 
             // set projectile velocity
-            this.hero.body.setVelocity(swipe.x * window.innerWidth * 0.0008, velocityY);
+            this.hero.body.setVelocity(velocityX, velocityY);
 
             // set projectile gravity
-            this.hero.body.setAccelerationY(window.innerHeight * -0.00259);
+            this.hero.body.setAccelerationY(GRAVITY);
 
             // todo: make projectile spin logarithmic
             let projectileSpin = (angle - 4.71) * 2000;
@@ -215,7 +216,7 @@ export default class GameScene extends Phaser.Scene {
             }
 
             // set wind
-            this.hero.setAccelerationX((this.windValue / WIND_VARIANCE) * WIND_SCALE);
+            // this.hero.setAccelerationX((this.windValue / WIND_VARIANCE) * WIND_SCALE);
         }
 
     }
