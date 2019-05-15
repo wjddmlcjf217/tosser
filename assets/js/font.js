@@ -44,13 +44,3 @@ var TUTORIAL_FONT = {
         fill: true
     }
 };
-
-
-async function loadFont () {
-    await   WebFont.load({
-            google: {
-            families: ['Luckiest Guy', 'Kalam', 'Acme']
-        }
-    });
-}
-
