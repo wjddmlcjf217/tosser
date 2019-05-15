@@ -608,6 +608,7 @@ export default class GameScene extends Phaser.Scene {
         }
 
         if (scene.lives.countActive() < 1) {
+            scene.hero.disableInteractive();
             scene.staticScoreText.setVisible(false);
             scene.scoreText.setVisible(false);
             scene.gameOverText.setVisible(true);
