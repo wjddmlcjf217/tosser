@@ -1,12 +1,9 @@
 let object = null;
-let j = 0;
-let recycle = false;
-let organic = false;
-let paper = false;
+// var timeText;
 
-export default class TutorialScene extends Phaser.Scene {
+export default class ChallengeMode extends Phaser.Scene {
     constructor() {
-        super("Tutorial");
+        super("CHALLENGE-MODE");
     }
 
     /**
@@ -15,19 +12,30 @@ export default class TutorialScene extends Phaser.Scene {
     preload() {
         // image assets
         this.load.image('background', 'assets/img/study_area.png');
+        this.load.image('bin_top', 'assets/img/bin_top.png');
         this.load.image('paper', 'assets/img/paper_ball.png');
         this.load.image('waterbottle', 'assets/img/water_bottle.png');
+        this.load.image('apple', 'assets/img/apple.png');
         this.load.image('banana', 'assets/img/banana.png');
+        this.load.image('life', 'assets/img/life.gif');
+        this.load.image('light_off', 'assets/img/light_off.png');
+        this.load.image('light_on', 'assets/img/light_on.png');
+        this.load.image('scoreboard', 'assets/img/scoreboard.png');
+        this.load.image('plus1', 'assets/img/plus1.jpg');
+        this.load.image('scoreboard', 'assets/img/scoreboard.png');
+        this.load.image('discoball', 'assets/img/disco-ball.png');
+        this.load.image('wind_arrow', 'assets/img/arrow.png');
         this.load.image('good', 'assets/img/good.png');
         this.load.image('bad', 'assets/img/bad.png');
+
 
         // audio assets
         this.load.audio('hit-target', [
             'assets/audio/bin-sound.m4a',
             'assets/audio/bin-sound.mp3',
-
         ]);
 
+        // this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
     /**
@@ -35,22 +43,40 @@ export default class TutorialScene extends Phaser.Scene {
      */
     create() {
         this.createBackground(this);
+
+        // Create timer
+
+        this.t = 3;
+        this.timeText = this.add.text(400, 200, null, {
+            fontFamily: 'Kalam',
+            fontSize: 70,
+            color: '#000000',
+        });
+
+        this.createTimer();
+        this.updateTimer(this);
+
+
+        // Add Scoreboard
+        this.scoreValue = 0;
+        this.addScoreText(this);
         this.addObjectText(this);
-        this.addTutorialText(this);
-        this.addSwipeText(this);
-        this.swipeText.setText("Swipe to throw!");
+
+        // wind setup
+        this.windSetup(this);
+
         // Create Hero
-        this.queue = ['paper', 'banana', 'waterbottle'];
-        object = this.queue[j];
-        this.objectText.setText(object);
-        this.tutorial(this, object);
-        this.hero = this.createHeroProjectile(this, object);
+        this.queue = ['paper', 'banana', 'apple', 'waterbottle'];
+        object = this.queue[Math.floor(Math.random() * 4)];
+        this.spawnProjectile(this.createHeroProjectile(this, object));
 
-
-        this.hero.visible = true;
-        this.hero.setInteractive();
-        this.hero.on('pointerdown', this.pointerDownHandler, this);
-        this.createPhysicsObjects(this);
+        // Create Lives
+        this.lives = this.add.group();
+        for (let i = 0; i < 3; i++) {
+            let life = this.lives.create(window.innerWidth * 0.193 - ((window.innerWidth * 0.076) * i), window.innerHeight * 0.028, 'life');
+            life.displayWidth = window.innerWidth * 0.070;
+            life.displayHeight = window.innerHeight * 0.039;
+        }
     }
 
     /**
@@ -68,6 +94,7 @@ export default class TutorialScene extends Phaser.Scene {
 
             this.rimThreeLeftCollider.active = true;
             this.rimThreeRightCollider.active = true;
+
         }
     }
 
@@ -83,25 +110,25 @@ export default class TutorialScene extends Phaser.Scene {
      * @param pointer Phaser pointer
      */
     pointerUpHandler(pointer) {
+        // calculate swipe angle
         let velocityX = pointer.upX - pointer.downX;
         let velocityY = pointer.upY - pointer.downY;
         let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
-        velocity.scale(1000);
 
-        console.log(velocity.angle());
-        if (velocity.angle() > 3.5 && velocity.angle() < 5.8) {
+        // calculate velocity
+        velocity.set(velocity.x * (1000), velocity.y * 1000);
+
+        // validate swipe direction
+        let angle = velocity.angle();
+        if (angle > 3.41 && angle < 6.01) {
             this.hero.state = 'flying';
             this.hero.disableInteractive();
-            // this.hero.body.setVelocity(velocity.x * 0.75, velocity.y * 4);
             this.hero.body.setVelocity(velocity.x * window.innerWidth * 0.0008, velocity.y * window.innerHeight * 0.0022);
 
-            this.hero.body.setAngularVelocity(400);
-            this.hero.body.setAccelerationX(velocity.x * window.innerWidth * -0.00037001119); //-0.275
+            let projectileSpin = (angle - 4.71) * 2000;
+            this.hero.body.setAngularVelocity(projectileSpin);
             this.hero.body.setAccelerationY(velocity.y * window.innerHeight * -0.00259);
-            // this.hero.body.setAccelerationX(velocity.x * -0.275); //-0.275
-            // this.hero.body.setAccelerationY(velocity.y * -4.4);
             this.addProjectileScalingTween(this, this.hero);
-            // gfx.clear().strokeLineShape(line);
             this.input.off('pointerup');
 
             if (this.hero.body.velocity.y > 0) {
@@ -109,7 +136,7 @@ export default class TutorialScene extends Phaser.Scene {
             }
         }
 
-
+        this.hero.setAccelerationX(this.windValue * 75);
     }
 
     /**
@@ -118,22 +145,22 @@ export default class TutorialScene extends Phaser.Scene {
      */
     createGood() {
         this.good = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'good');
-        this.good.displayHeight = 420;
-        this.good.displayWidth = 420;
+        this.good.displayHeight = window.innerHeight * 0.241;
+        this.good.displayWidth = window.innerWidth * 0.429;
     }
 
     /**
-     * casts a check mark animation upon scoring correctly
+     * casts a check mark animation upon scoring cinorrectly
      * @param N/A
      */
     createBad() {
         this.bad = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'bad');
-        this.bad.displayHeight = 420;
-        this.bad.displayWidth = 420;
+        this.bad.displayHeight = window.innerHeight * 0.241;
+        this.bad.displayWidth = window.innerWidth * 0.429;
     }
 
     /**
-     * casts a shadow under the hero projectil
+     * casts a shadow under the hero projectile
      * @param game Phaser Game
      */
     //in progress shadow effect
@@ -157,6 +184,81 @@ export default class TutorialScene extends Phaser.Scene {
      * Create Light in scene
      * @param scene
      */
+    createLight(scene) {
+        let light, darkenEffect;
+        light = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.027, 'light_on');
+        light.setInteractive();
+        darkenEffect = scene.add.rectangle(window.innerWidth / 2, window.innerHeight / 2,
+            window.innerWidth, window.innerHeight);
+        darkenEffect.setDepth(1000);
+        darkenEffect.setVisible(false);
+        darkenEffect.setFillStyle(0x000000, 100);
+        darkenEffect.setBlendMode('MULTIPLY');
+        light.on('pointerdown', function () {
+            this.setTexture(this.texture.key === 'light_on' ? 'light_off' : 'light_on');
+            darkenEffect.setVisible(!darkenEffect.visible);
+
+        });
+    }
+
+    /**
+     * Disco mode in scene
+     * @param scene
+     */
+    discoMode(scene) {
+        scene.discoTriangles = [];
+        scene.discoInterval = undefined;
+        scene.discoBall = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.11, 'discoball');
+        scene.discoBall.displayWidth = 150;
+        scene.discoBall.displayHeight = 150;
+        scene.discoBall.setInteractive();
+        let discoBool = true;
+
+        let discoColors = [0xFF00CB, 0xFFFF00, 0x00FFFF, 0xFF0000, 0xFFFF00, 0x53FF00, 0xFF00FF,
+            0xFF00CB, 0x00FFFF, 0x00FFFF, 0xFF8700];
+
+        for (let i = 0; i < discoColors.length; i++) {
+            let triangle = scene.add.triangle(
+                window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight
+            );
+            triangle.setDepth(1000);
+            triangle.setVisible(false);
+            triangle.setFillStyle(discoColors[i], 100);
+            triangle.setBlendMode('COLORDODGE');
+            triangle.setRotation(i);
+            scene.discoTriangles.push(triangle);
+        }
+
+        let background = scene.add.rectangle(window.innerWidth / 2, window.innerHeight / 2,
+            window.innerWidth, window.innerHeight);
+        background.setDepth(999);
+        background.setVisible(false);
+        background.setFillStyle(0x000000, 100);
+        background.setBlendMode('MULTIPLY');
+
+        scene.discoBall.on('pointerdown', function () {
+
+            if (discoBool === true) {
+                scene.sound.play('disco');
+                scene.discoInterval = setInterval(function () {
+                    for (let triangle of scene.discoTriangles) {
+                        triangle.setRandomPosition();
+                    }
+                }, 500);
+                discoBool = false;
+            }
+            else if (discoBool === false){
+                scene.sound.stopAll('disco');
+                clearInterval(scene.discoInterval);
+                discoBool = true;
+            }
+
+            background.setVisible(!background.visible);
+            for (let triangle of scene.discoTriangles) {
+                triangle.setVisible(!triangle.visible);
+            }
+        });
+    }
 
     /**
      * Creates the hero projectile
@@ -168,19 +270,12 @@ export default class TutorialScene extends Phaser.Scene {
         let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
         hero.setInteractive();
         hero.state = 'resting';
-        hero.displayHeight = 150;
-        hero.displayWidth = 150;
+        hero.displayHeight = window.innerHeight * 0.092;
+        hero.displayWidth = window.innerWidth * 0.165;
         hero.setBounce(.4);
         // hero.body.onWorldBounds = true;
         // hero.body.setCollideWorldBounds(true);
         hero.visible = false;
-        if (j < 2) {
-            j += 1
-        }
-        else {
-            j = 0
-        }
-
         return hero;
     }
 
@@ -190,16 +285,16 @@ export default class TutorialScene extends Phaser.Scene {
      */
     createPhysicsObjects(game) {
         let binOne = game.add.rectangle(window.innerWidth * 0.185, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
-        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.11, window.innerHeight * 0.44, window.innerWidth * 0.001, 25);//0.015
-        let rimOneRight = game.add.rectangle(window.innerWidth * 0.260, window.innerHeight * 0.44, window.innerWidth * 0.001, 25); //0.015
+        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.11, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);//0.015
+        let rimOneRight = game.add.rectangle(window.innerWidth * 0.260, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25); //0.015
 
         let binTwo = game.add.rectangle(window.innerWidth * 0.51775, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
-        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.44275, window.innerHeight * 0.44, window.innerWidth * 0.001, 25);//0.015
-        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.59275, window.innerHeight * 0.44, window.innerWidth * 0.001, 25); //0.015
+        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.44275, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);//0.015
+        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.59275, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25); //0.015
 
         let binThree = game.add.rectangle(window.innerWidth * 0.84725, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
-        let rimThreeLeft = game.add.rectangle(window.innerWidth * 0.77225, window.innerHeight * 0.44, window.innerWidth * 0.001, 25);
-        let rimThreeRight = game.add.rectangle(window.innerWidth * 0.92225, window.innerHeight * 0.44, window.innerWidth * 0.001, 25);
+        let rimThreeLeft = game.add.rectangle(window.innerWidth * 0.77225, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);
+        let rimThreeRight = game.add.rectangle(window.innerWidth * 0.92225, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);
 
         let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.57, window.innerWidth * 10, 50);
 
@@ -220,7 +315,6 @@ export default class TutorialScene extends Phaser.Scene {
         // Add physical interactions
 
         game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
-
 
         game.rimOneLeftCollider = game.physics.add.collider(game.hero, rimOneLeft, this.hitRim, null, game);
         game.rimOneRightCollider = game.physics.add.collider(game.hero, rimOneRight, this.hitRim, null, game);
@@ -245,8 +339,8 @@ export default class TutorialScene extends Phaser.Scene {
     }
 
     hitRim(projectile, rim) {
+        projectile.setAccelerationX(0);
         this.setProjectileDrag(projectile);
-        // projectile.setAccelerationX(0);
         projectile.body.bounce.set(0.45);
 
         if (projectile.x > rim.x) {
@@ -260,6 +354,7 @@ export default class TutorialScene extends Phaser.Scene {
         }
 
         if (projectile.body.angularVelocity === 0) {
+            this.lifeHandler(this);
             projectile.disableBody(false, false);
             this.resetProjectile(projectile);
             this.floorCollider.active = false;
@@ -276,7 +371,6 @@ export default class TutorialScene extends Phaser.Scene {
      * Projectile Hit target handler
      * @param projectile
      */
-
     hitYellowBin(projectile) {
         if (projectile.body.velocity.y > 0) {
             projectile.disableBody(false, true);
@@ -291,21 +385,14 @@ export default class TutorialScene extends Phaser.Scene {
             if (object === "paper") {
                 this.createGood();
                 this.addGoodTween(this.good);
-                paper = true;
+                this.scoreHandler(this);
             }
             else {
                 this.createBad();
                 this.addBadTween(this.bad);
+                this.lifeHandler(this);
             }
             this.resetProjectile(projectile);
-            if (organic && paper && recycle) {
-                this.tutorialText.setText("CONGRATULATIONS!");
-                this.tutorialText.setColor('#24CC18');
-                organic = false;
-                paper = false;
-                recycle = false;
-                setTimeout(function() {projectile.scene.scene.start('Title')}, 1500);
-            }
         }
     }
 
@@ -323,21 +410,14 @@ export default class TutorialScene extends Phaser.Scene {
             if (object === "waterbottle") {
                 this.createGood();
                 this.addGoodTween(this.good);
-                recycle = true;
+                this.scoreHandler(this);
             }
             else {
                 this.createBad();
                 this.addBadTween(this.bad);
+                this.lifeHandler(this);
             }
             this.resetProjectile(projectile);
-            if (organic && paper && recycle) {
-                this.tutorialText.setText("CONGRATULATIONS!");
-                this.tutorialText.setColor('#24CC18');
-                organic = false;
-                paper = false;
-                recycle = false;
-                setTimeout(function() {projectile.scene.scene.start('Title')}, 1500);
-            }
         }
     }
 
@@ -352,24 +432,17 @@ export default class TutorialScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "banana") {
+            if (object === "banana" || object === 'apple') {
                 this.createGood();
                 this.addGoodTween(this.good);
-                organic = true;
+                this.scoreHandler(this);
             }
             else {
                 this.createBad();
                 this.addBadTween(this.bad);
+                this.lifeHandler(this);
             }
             this.resetProjectile(projectile);
-            if (organic && paper && recycle) {
-                this.tutorialText.setText("CONGRATULATIONS!");
-                this.tutorialText.setColor('#24CC18');
-                organic = false;
-                paper = false;
-                recycle = false;
-                setTimeout(function() {projectile.scene.scene.start('Title')}, 1500);
-            }
         }
     }
 
@@ -384,9 +457,11 @@ export default class TutorialScene extends Phaser.Scene {
         projectile.body.setAngularVelocity(angularVelocity * 0.5);
         projectile.body.velocityX -= 200;
 
+
         if (projectile.body.angularVelocity === 0) {
             this.createBad();
             this.addBadTween(this.bad);
+            this.lifeHandler(this);
             projectile.disableBody(false, false);
             this.resetProjectile(projectile);
             this.floorCollider.active = false;
@@ -396,6 +471,7 @@ export default class TutorialScene extends Phaser.Scene {
             this.rimTwoLeftCollider.active = false;
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
+
         }
     }
 
@@ -405,15 +481,15 @@ export default class TutorialScene extends Phaser.Scene {
      */
     spawnProjectile(projectile) {
         let scene = projectile.scene;
-        object = scene.queue[j];
+        object = scene.queue[Math.floor(Math.random() * 4)];
         scene.objectText.setText(object);
-        this.tutorial(scene, object);
         scene.hero = this.createHeroProjectile(scene, object);
         scene.hero.visible = true;
         scene.hero.setInteractive();
         scene.hero.on('pointerdown', this.pointerDownHandler, scene);
 
-        this.createPhysicsObjects(scene)
+        this.createPhysicsObjects(scene);
+        this.windUpdate();
     }
 
     /**
@@ -427,13 +503,51 @@ export default class TutorialScene extends Phaser.Scene {
         this.spawnProjectile(projectile);
     }
 
+    windUpdate() {
+        // calculate wind
+        let min = -5;
+        let max = 5;
+        let wind = Math.floor(Math.random() * (max - min + 1)) + min;
+        this.windValue = wind;
+
+        // set wind display text
+        this.windValueDisplay.text = wind;
+
+        // rotate arrow and position text
+        if (wind < 0) {
+            this.windArrow.rotation = 3.14;
+        } else {
+            this.windArrow.rotation = 0;
+        }
+    }
+
+    windSetup() {
+        // add arrow image
+        this.windArrow = this.add.image(window.innerWidth / 2, window.innerHeight * 0.75, 'wind_arrow');
+        this.windArrow.displayHeight = 100;
+        this.windArrow.displayWidth = 150;
+
+        // create font
+        let fontStyle = {
+            fontFamily: 'Kalam',
+            fontSize: 40,
+            color: '#FFFFFF'
+        };
+
+        // set initial wind
+        this.windValue = 0;
+
+        // add text to scene
+        this.windValueDisplay = this.add.text(window.innerWidth / 2, window.innerHeight * 0.75 - 24, this.windValue, fontStyle);
+    }
+
     /**
      * Applies drag to projectile
      * @param projectile
      */
     setProjectileDrag(projectile) {
         projectile.body.setAllowDrag(true);
-        projectile.body.setDrag(175, 0);
+        projectile.body.setDrag(100, 0);
         projectile.body.setAngularDrag(200);
     }
 
@@ -452,46 +566,6 @@ export default class TutorialScene extends Phaser.Scene {
             repeat: 0,
             yoyo: false
         });
-    }
-
-
-    addObjectText(scene) {
-        scene.objectText = scene.add.text(
-            window.innerWidth * 0.5, window.innerHeight * 0.97, null, LEADERBOARD_FONT);
-        scene.objectText.setOrigin(0.5);
-        scene.objectText.setFontSize(60);
-    }
-
-    addTutorialText(scene) {
-        scene.tutorialText = scene.add.text(
-            window.innerWidth * 0.5, window.innerHeight * 0.65, null, TUTORIAL_FONT);
-        scene.tutorialText.setOrigin(0.5);
-        scene.tutorialText.setFontSize(70);
-    }
-
-    addSwipeText(scene) {
-        scene.swipeText = scene.add.text(
-            window.innerWidth * 0.5, window.innerHeight * 0.17, null, TUTORIAL_FONT);
-        scene.swipeText.setOrigin(0.5);
-        scene.swipeText.setFontSize(70);
-    }
-
-    tutorial(scene, object) {
-        if (object === "paper") {
-            scene.tutorialText.setText("Paper goes into the YELLOW BIN!");
-            scene.tutorialText.setColor('yellow');
-            scene.tutorialText.setStroke('#4d377d');
-        }
-        if (object === "banana") {
-            scene.tutorialText.setText("Banana goes into the GREEN BIN!");
-            scene.tutorialText.setColor('lightgreen');
-            scene.tutorialText.setStroke('#4d377d');
-        }
-        if (object === "waterbottle") {
-            scene.tutorialText.setText("Bottle goes into the BLUE BIN!");
-            scene.tutorialText.setColor('#1263F5');
-            scene.tutorialText.setStroke('white');
-        }
     }
 
     addGoodTween(image) {
@@ -516,5 +590,121 @@ export default class TutorialScene extends Phaser.Scene {
             duration: 1500,
             repeat: 0,
         });
+    }
+
+    /**
+     * Reduce player lives
+     * @param scene
+     */
+    lifeHandler(scene) {
+        let life = scene.lives.getFirstAlive();
+        if (life) {
+            scene.lives.killAndHide(life);
+        }
+
+        if (scene.lives.countActive() < 1 || scene.t < 1) {
+            scene.staticScoreText.setVisible(false);
+            scene.scoreText.setVisible(false);
+            scene.gameOverText.setVisible(true);
+            // this.discoBall.removeInteractive();
+            // clearInterval(this.discoInterval);
+            // Write score to leaderboard
+            // this.writeLeaderBoard();
+            setTimeout(function () {
+                scene.scene.start('LeaderBoard')
+            }, 2000)
+        }
+    }
+
+    /**
+     * Increase player score
+     * @param scene
+     */
+    scoreHandler(scene) {
+        let score = scene.scoreValue += 1;
+        scene.scoreText.setText(score);
+    }
+
+    /**
+     * write to firebase with score ONLY if it's a higher score
+     */
+    // Write score
+    // writeLeaderBoard() {
+    //     let first_name = displayName.split(' ')[0];
+    //     if (this.scoreValue > leaderBoard[first_name]) {
+    //         firebase.database().ref("users/").update({
+    //             [first_name]: this.scoreValue
+    //         });
+    //     }
+    // }
+
+    /**
+     * Add score related text to the canvas
+     */
+    addScoreText(scene) {
+        let fontStyle = {
+            fontFamily: 'Kalam',
+            fontSize: 70,
+            color: '#84BCCE',
+        };
+
+        scene.gameOverText = scene.add.text(
+            window.innerWidth * 0.285, window.innerHeight * 0.285, 'Game Over', fontStyle);
+        scene.gameOverText.setVisible(false);
+        scene.staticScoreText = scene.add.text(
+            window.innerWidth * 0.31, window.innerHeight * 0.295, 'Score:', fontStyle);
+        scene.scoreText = scene.add.text(
+            window.innerWidth * 0.58, window.innerHeight * 0.295, scene.scoreValue, fontStyle);
+        scene.scoreText.setOrigin(0.5, 0);
+        scene.scoreText.setAlign('center');
+    }
+
+    addObjectText(scene) {
+        scene.objectText = scene.add.text(
+            window.innerWidth * 0.5, window.innerHeight * 0.97, null, LEADERBOARD_FONT);
+        scene.objectText.setOrigin(0.5);
+        scene.objectText.setFontSize(60);
+
+    }
+
+    createTimer() {
+
+
+        // this.scene.timeText = this.add.text(400, 200, null, fontStyle);
+        // scene.timeText.setFontsize(60);
+
+
+    }
+
+    updateTimer() {
+        let scene = window.game.scene.scenes[5];
+        scene.timeText.setText('Timer: ' + scene.t);
+        scene.t --;
+
+
+
+        let x = setInterval(function(){
+            scene.timeText.setText('Timer: ' + scene.t);
+
+            scene.t --;
+            if (scene.t === -1) {
+
+                clearInterval(x);
+                scene.staticScoreText.setVisible(false);
+                scene.scoreText.setVisible(false);
+                scene.gameOverText.setVisible(true);
+                // clearInterval(this.discoInterval);
+                // Write score to leaderboard
+                // this.writeLeaderBoard();
+                setTimeout(function () {
+                    scene.scene.start('LeaderBoard')
+                }, 2000)
+
+            }
+        }, 1000);
+
+
+
+
     }
 }

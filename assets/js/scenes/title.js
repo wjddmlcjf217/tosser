@@ -19,10 +19,16 @@ export default class TitleScene extends Phaser.Scene {
         this.logo.setOrigin(0.5);
 
         // Game
-        this.gameButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.55, 'Play', TITLE_FONT);
+        this.gameButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.45, 'Play', TITLE_FONT);
         this.gameButton.setOrigin(0.5);
         this.gameButton.setInteractive();
         this.gameButton.on('pointerdown', () => {this.scene.start('Game')});
+
+        // Challenge-Mode
+        this.tutorialButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.55, 'CHALLENGE-Mode', TITLE_FONT);
+        this.tutorialButton.setOrigin(0.5);
+        this.tutorialButton.setInteractive();
+        this.tutorialButton.on('pointerdown', () => {this.scene.start('CHALLENGE-MODE')});
 
         // LeaderBoard
         this.optionsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.75, 'LeaderBoard', TITLE_FONT);
@@ -41,6 +47,8 @@ export default class TitleScene extends Phaser.Scene {
         this.tutorialButton.setOrigin(0.5);
         this.tutorialButton.setInteractive();
         this.tutorialButton.on('pointerdown', () => {this.scene.start('Tutorial')});
+
+
 
         //Sign-out
         this.signOutButton = this.add.text(window.innerWidth * 0.98, window.innerHeight * 0.99, 'Sign Out', TITLE_FONT);

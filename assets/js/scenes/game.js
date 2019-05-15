@@ -165,6 +165,7 @@ export default class GameScene extends Phaser.Scene {
     //     }
     // };
 
+
     /**
      * Handles Pointer Down Event
      */
@@ -217,7 +218,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     /**
-     * casts a check mark animation upon scoring correctly
+     * casts a check mark animation upon scoring cinorrectly
      * @param N/A
      */
     createBad() {
@@ -306,7 +307,7 @@ export default class GameScene extends Phaser.Scene {
         scene.discoBall.on('pointerdown', function () {
 
             if (discoBool === true) {
-                // scene.sound.play('disco');
+                scene.sound.play('disco');
                 scene.discoInterval = setInterval(function () {
                     for (let triangle of scene.discoTriangles) {
                         triangle.setRandomPosition();
@@ -315,7 +316,7 @@ export default class GameScene extends Phaser.Scene {
                 discoBool = false;
             }
             else if (discoBool === false){
-                // scene.sound.stopAll('disco');
+                scene.sound.stopAll('disco');
                 clearInterval(scene.discoInterval);
                 discoBool = true;
             }
@@ -383,7 +384,6 @@ export default class GameScene extends Phaser.Scene {
 
         game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
 
-
         game.rimOneLeftCollider = game.physics.add.collider(game.hero, rimOneLeft, this.hitRim, null, game);
         game.rimOneRightCollider = game.physics.add.collider(game.hero, rimOneRight, this.hitRim, null, game);
 
@@ -396,8 +396,6 @@ export default class GameScene extends Phaser.Scene {
         game.physics.add.overlap(game.hero, binOne, this.hitBlueBin, null, game);
         game.physics.add.overlap(game.hero, binTwo, this.hitGreenBin, null, game);
         game.physics.add.overlap(game.hero, binThree, this.hitYellowBin, null, game);
-
-
 
         game.rimOneLeftCollider.active = false;
         game.rimOneRightCollider.active = false;
