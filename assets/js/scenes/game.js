@@ -374,7 +374,7 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "paper") {
+            if (game_objects[object]['paper']) {
                 this.createGood();
                 this.addGoodTween(this.good);
                 this.scoreHandler(this);
@@ -399,7 +399,7 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "waterbottle") {
+            if (game_objects[object]['container']) {
                 this.createGood();
                 this.addGoodTween(this.good);
                 this.scoreHandler(this);
@@ -424,7 +424,7 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "banana" || object === 'apple') {
+            if (game_objects[object]['organic']) {
                 this.createGood();
                 this.addGoodTween(this.good);
                 this.scoreHandler(this);
@@ -551,8 +551,8 @@ export default class GameScene extends Phaser.Scene {
     addProjectileScalingTween(game, projectile) {
         game.tweens.add({
             targets: projectile,
-            displayWidth: projectile.displayWidth / 6,
-            displayHeight: projectile.displayHeight / 6,
+            displayWidth: projectile.displayWidth / 5.5,
+            displayHeight: projectile.displayHeight / 5.5,
             ease: 'Linear',
             duration: 1500,
             repeat: 0,
