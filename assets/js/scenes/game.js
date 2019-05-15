@@ -4,6 +4,11 @@
 let displayName = null;
 let object = null;
 
+// constants
+const WIND_SCALE = window.innerWidth * 0.15;
+const WIND_VARIANCE = 1.25;
+const VELOCITY_Y_SCALE = 0.5;
+const VELOCITY_X_SCALE = 0.75;
 
 function initApp() {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -178,22 +183,30 @@ export default class GameScene extends Phaser.Scene {
      */
     pointerUpHandler(pointer) {
         // calculate swipe angle
-        let velocityX = pointer.upX - pointer.downX;
-        let velocityY = pointer.upY - pointer.downY;
-        let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
+        let swipeX = pointer.upX - pointer.downX;
+        let swipeY = pointer.upY - pointer.downY;
+        let velocity = new Phaser.Math.Vector2(swipeX, swipeY).normalize();
 
         // calculate velocity
-        velocity.set(velocity.x * (1000), velocity.y * 1000);
+        let screenRatio = window.innerHeight / window.innerWidth;
+        let velocityY = window.innerHeight * VELOCITY_Y_SCALE;
+
+        let velocityYScaling = window.innerHeight * VELOCITY_Y_SCALE;
+        let velocityXScaling = (velocityYScaling * VELOCITY_X_SCALE) * screenRatio;
+
+        velocity.set(velocity.x * velocityXScaling, velocityY);
 
         // validate swipe direction
         let angle = velocity.angle();
         if (angle > 3.41 && angle < 6.01) {
             this.hero.state = 'flying';
             this.hero.disableInteractive();
-            this.hero.body.setVelocity(velocity.x * window.innerWidth * 0.0008, velocity.y * window.innerHeight * 0.0022);
+            this.hero.body.setVelocity(velocity.x * window.innerWidth * 0.0008, velocity.y);
 
+            // todo: make projectile spin logarithmic
             let projectileSpin = (angle - 4.71) * 2000;
             this.hero.body.setAngularVelocity(projectileSpin);
+            // todo: fix Y acceleration and remove magic numbers
             this.hero.body.setAccelerationY(velocity.y * window.innerHeight * -0.00259);
             this.addProjectileScalingTween(this, this.hero);
             this.input.off('pointerup');
@@ -203,12 +216,12 @@ export default class GameScene extends Phaser.Scene {
             }
         }
 
-        this.hero.setAccelerationX(this.windValue * 75);
+        // set wind
+        this.hero.setAccelerationX((this.windValue / WIND_VARIANCE) * WIND_SCALE);
     }
 
     /**
      * casts a check mark animation upon scoring correctly
-     * @param N/A
      */
     createGood() {
         this.good = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'good');
@@ -218,7 +231,6 @@ export default class GameScene extends Phaser.Scene {
 
     /**
      * casts a check mark animation upon scoring correctly
-     * @param N/A
      */
     createBad() {
         this.bad = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'bad');
