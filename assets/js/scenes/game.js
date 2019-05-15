@@ -177,12 +177,15 @@ export default class GameScene extends Phaser.Scene {
      * @param pointer Phaser pointer
      */
     pointerUpHandler(pointer) {
+        // calculate swipe angle
         let velocityX = pointer.upX - pointer.downX;
         let velocityY = pointer.upY - pointer.downY;
         let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
 
+        // calculate velocity
         velocity.set(velocity.x * (1000), velocity.y * 1000);
 
+        // validate swipe direction
         let angle = velocity.angle();
         if (angle > 3.41 && angle < 6.01) {
             this.hero.state = 'flying';
@@ -323,7 +326,6 @@ export default class GameScene extends Phaser.Scene {
             }
         });
     }
-
 
     /**
      * Creates the hero projectile
