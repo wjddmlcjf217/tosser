@@ -32,32 +32,6 @@ export default class GameScene extends Phaser.Scene {
      * Preload assets for Phaser Game
      */
     preload() {
-        // image assets
-        this.load.image('background', 'assets/img/study_area.png');
-        this.load.image('bin_top', 'assets/img/bin_top.png');
-        this.load.image('paper', 'assets/img/paper_ball.png');
-        this.load.image('waterbottle', 'assets/img/water_bottle.png');
-        this.load.image('apple', 'assets/img/apple.png');
-        this.load.image('banana', 'assets/img/banana.png');
-        this.load.image('life', 'assets/img/life.gif');
-        this.load.image('light_off', 'assets/img/light_off.png');
-        this.load.image('light_on', 'assets/img/light_on.png');
-        this.load.image('scoreboard', 'assets/img/scoreboard.png');
-        this.load.image('plus1', 'assets/img/plus1.jpg');
-        this.load.image('scoreboard', 'assets/img/scoreboard.png');
-        this.load.image('discoball', 'assets/img/disco-ball.png');
-        this.load.image('wind_arrow', 'assets/img/arrow.png');
-        this.load.image('good', 'assets/img/good.png');
-        this.load.image('bad', 'assets/img/bad.png');
-
-
-        // audio assets
-        this.load.audio('hit-target', [
-            'assets/audio/bin-sound.m4a',
-            'assets/audio/bin-sound.mp3',
-        ]);
-
-        this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
     /**

@@ -13,22 +13,6 @@ export default class TutorialScene extends Phaser.Scene {
      * Preload assets for Phaser Game
      */
     preload() {
-        // image assets
-        this.load.image('background', 'assets/img/study_area.png');
-        this.load.image('paper', 'assets/img/paper_ball.png');
-        this.load.image('waterbottle', 'assets/img/water_bottle.png');
-        this.load.image('banana', 'assets/img/banana.png');
-        this.load.image('good', 'assets/img/good.png');
-        this.load.image('bad', 'assets/img/bad.png');
-
-        // audio assets
-        this.load.audio('hit-target', [
-            'assets/audio/bin-sound.m4a',
-            'assets/audio/bin-sound.mp3',
-
-        ]);
-
-        // this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
     /**

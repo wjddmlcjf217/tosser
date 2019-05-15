@@ -5,7 +5,6 @@ export default class TitleScene extends Phaser.Scene {
 
 
     preload() {
-        this.load.image('background_blur', 'assets/img/study_area_blur.png');
     }
 
     create() {

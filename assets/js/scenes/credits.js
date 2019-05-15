@@ -6,11 +6,6 @@ export default class CreditsScene extends Phaser.Scene {
     }
 
     preload () {
-        this.load.image('bryden', 'assets/img/paper_ball.png');
-        this.load.image('dillon', 'assets/img/paper_ball.png');
-        this.load.image('kevin', 'assets/img/paper_ball.png');
-        this.load.image('jacky', 'assets/img/paper_ball.png');
-        this.load.image('jared', 'assets/img/paper_ball.png');
     }
 
     create () {
