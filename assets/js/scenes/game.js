@@ -6,9 +6,13 @@ let displayName = null;
 let object = null;
 
 // constants
-const WIND_SCALE = window.innerWidth * 0.15;
-const WIND_VARIANCE = 1.25;
+// lower to reduce overall wind effect
+const WIND_SCALE = window.innerWidth * 0.05;
+// raise to lower wind variance
+const WIND_VARIANCE = 3;
+// lower to increase y velocity
 const VELOCITY_Y_SCALE = -1.3;
+// raise to increase x velocity
 const VELOCITY_X_SCALE = 0.3;
 const GRAVITY = window.innerHeight * 1;
 
@@ -136,7 +140,7 @@ export default class GameScene extends Phaser.Scene {
             }
 
             // set wind
-            // this.hero.setAccelerationX((this.windValue / WIND_VARIANCE) * WIND_SCALE);
+            this.hero.setAccelerationX((this.windValue / WIND_VARIANCE) * WIND_SCALE);
         }
 
     }
