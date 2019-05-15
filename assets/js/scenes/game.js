@@ -1,4 +1,5 @@
 // version 0.9
+import game_objects from '../objects/game_objects.js'
 
 // takes all database profile data to display on profile page
 let displayName = null;
@@ -76,7 +77,8 @@ export default class GameScene extends Phaser.Scene {
         this.windSetup(this);
 
         // Create Hero
-        this.queue = ['paper', 'banana', 'apple', 'waterbottle'];
+        // Uses the game_object instead
+        this.queue = Object.keys(game_objects);
         object = this.queue[Math.floor(Math.random() * 4)];
         this.spawnProjectile(this.createHeroProjectile(this, object));
 
@@ -108,62 +110,6 @@ export default class GameScene extends Phaser.Scene {
         }
     }
 
-    // game_objects = {
-    //     'banana' : {
-    //         'description': '',
-    //         'bin': '',
-    //         'path': 'assets/img/banana-sprite.png',
-    //         'scaling_factor': ''
-    //     },
-    //     'apple' : {
-    //         'description': '',
-    //         'bin': '',
-    //         'path': '',
-    //         'scaling_factor': ''
-    //     },
-    //     'bread' : {
-    //         'description': '',
-    //         'bin': '',
-    //         'path': '',
-    //         'scaling_factor': ''
-    //     },
-    //     'paper' : {
-    //         'description': '',
-    //         'bin': '',
-    //         'path': 'assets/img/paper_ball.png',
-    //         'scaling_factor': ''
-    //     },
-    //     'cardboard' : {
-    //         'description': '',
-    //         'bin': '',
-    //         'path': '',
-    //         'scaling_factor': ''
-    //     },
-    //     'magazine' : {
-    //         'description': '',
-    //         'bin': '',
-    //         'path': '',
-    //         'scaling_factor': ''
-    //     },
-    //     'waterbottle' : {
-    //         'description': '',
-    //         'bin': '',
-    //         'path': 'assets/img/paper_ball.png',
-    //         'scaling_factor': ''
-    //     },
-    //     'popcan' : {
-    //         'description': '',
-    //         'bin': '',
-    //         'path': '',
-    //         'scaling_factor': ''
-    //     },
-    //     'jug' : {
-    //         'description': '',
-    //         'bin': '',
-    //         'path': '',
-    //         'scaling_factor': ''
-    //     }
-    // };
 
     /**
      * Handles Pointer Down Event
