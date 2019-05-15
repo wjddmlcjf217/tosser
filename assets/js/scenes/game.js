@@ -5,6 +5,12 @@ import game_objects from '../objects/game_objects.js'
 let displayName = null;
 let object = null;
 
+// constants
+const WIND_SCALE = window.innerWidth * 0.15;
+const WIND_VARIANCE = 1.25;
+const VELOCITY_Y_SCALE = -1.3;
+const VELOCITY_X_SCALE = 0.3;
+const GRAVITY = window.innerHeight * 1;
 
 function initApp() {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -99,37 +105,44 @@ export default class GameScene extends Phaser.Scene {
      */
     pointerUpHandler(pointer) {
         // calculate swipe angle
-        let velocityX = pointer.upX - pointer.downX;
-        let velocityY = pointer.upY - pointer.downY;
-        let velocity = new Phaser.Math.Vector2(velocityX, velocityY).normalize();
+        let swipeX = pointer.upX - pointer.downX;
+        let swipeY = pointer.upY - pointer.downY;
+        let swipe = new Phaser.Math.Vector2(swipeX, swipeY).normalize();
 
         // calculate velocity
-        velocity.set(velocity.x * (1000), velocity.y * 1000);
+        let velocityY = window.innerHeight * VELOCITY_Y_SCALE;
+        let velocityX = (swipe.x * window.innerWidth) * VELOCITY_X_SCALE;
 
         // validate swipe direction
-        let angle = velocity.angle();
+        let angle = swipe.angle();
         if (angle > 3.41 && angle < 6.01) {
             this.hero.state = 'flying';
             this.hero.disableInteractive();
-            this.hero.body.setVelocity(velocity.x * window.innerWidth * 0.0008, velocity.y * window.innerHeight * 0.0022);
 
+            // set projectile velocity
+            this.hero.body.setVelocity(velocityX, velocityY);
+
+            // set projectile gravity
+            this.hero.body.setAccelerationY(GRAVITY);
+
+            // todo: make projectile spin logarithmic
             let projectileSpin = (angle - 4.71) * 2000;
             this.hero.body.setAngularVelocity(projectileSpin);
-            this.hero.body.setAccelerationY(velocity.y * window.innerHeight * -0.00259);
             this.addProjectileScalingTween(this, this.hero);
             this.input.off('pointerup');
 
             if (this.hero.body.velocity.y > 0) {
                 this.createShadow(this);
             }
+
+            // set wind
+            // this.hero.setAccelerationX((this.windValue / WIND_VARIANCE) * WIND_SCALE);
         }
 
-        this.hero.setAccelerationX(this.windValue * 75);
     }
 
     /**
      * casts a check mark animation upon scoring correctly
-     * @param N/A
      */
     createGood() {
         this.good = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'good');
@@ -138,8 +151,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     /**
-     * casts a check mark animation upon scoring cinorrectly
-     * @param N/A
+     * casts a check mark animation upon scoring correctly
      */
     createBad() {
         this.bad = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'bad');
