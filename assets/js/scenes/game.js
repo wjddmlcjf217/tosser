@@ -336,8 +336,9 @@ export default class GameScene extends Phaser.Scene {
     createHeroProjectile(game, image) {
         let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
         hero.setInteractive();
+        let aspect_ratio = hero.height / hero.width;
         hero.state = 'resting';
-        hero.displayHeight = window.innerHeight * 0.092;
+        hero.displayHeight = window.innerHeight * 0.092 * aspect_ratio;
         hero.displayWidth = window.innerWidth * 0.165;
         hero.setBounce(.4);
         // hero.body.onWorldBounds = true;
@@ -629,8 +630,8 @@ export default class GameScene extends Phaser.Scene {
     addProjectileScalingTween(game, projectile) {
         game.tweens.add({
             targets: projectile,
-            displayWidth: 25,
-            displayHeight: 25,
+            displayWidth: projectile.displayWidth / 6,
+            displayHeight: projectile.displayHeight / 6,
             ease: 'Linear',
             duration: 1500,
             repeat: 0,
