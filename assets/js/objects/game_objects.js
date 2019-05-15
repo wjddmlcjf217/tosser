@@ -3,13 +3,13 @@ export default {
         'description': 'd',
         'bin': 'd',
         'path': 'assets/img/banana-sprite.png',
-        'scaling_factor': 'd'
+        'scaling_factor': 1
     },
     'apple' : {
         'description': 'd',
         'bin': 'd',
         'path': 'd',
-        'scaling_factor': 'd'
+        'scaling_factor': 0.605
     },
     // 'bread' : {
     //     'description': 'd',
@@ -21,7 +21,7 @@ export default {
         'description': 'd',
         'bin': 'd',
         'path': 'assets/img/paper_ball.png',
-        'scaling_factor': 'd'
+        'scaling_factor': 1
     },
     // 'cardboard' : {
     //     'description': 'd',
@@ -39,7 +39,7 @@ export default {
         'description': 'd',
         'bin': 'd',
         'path': 'assets/img/paper_ball.png',
-        'scaling_factor': 'd'
+        'scaling_factor': 0.420
     }
     // 'popcan' : {
     //     'description': 'd',
