@@ -1,4 +1,4 @@
-import config from './config.js'
+import JournalScene from './journal.js'
 
 export default class TitleScene extends Phaser.Scene {
     constructor () {
@@ -23,6 +23,7 @@ export default class TitleScene extends Phaser.Scene {
         this.load.image('wind_arrow', 'assets/img/arrow.png');
         this.load.image('good', 'assets/img/good.png');
         this.load.image('bad', 'assets/img/bad.png');
+        this.load.image('book', 'assets/img/book.png');
 
         // profile pictures
         this.load.image('bryden', 'assets/img/paper_ball.png');
@@ -78,6 +79,16 @@ export default class TitleScene extends Phaser.Scene {
         this.signOutButton.on('pointerdown', () => {
             firebase.auth().signOut();
             window.location.href = 'index.html'});
+
+        //Journal
+        this.journalButton = this.add.image(window.innerWidth * 0.17, window.innerHeight * 0.99, 'book');
+        this.journalButton.displayWidth = window.innerWidth * 0.15;
+        this.journalButton.displayHeight = window.innerHeight * 0.075;
+        this.journalButton.setInteractive();
+        this.journalButton.setOrigin(1);
+        this.journalButton.on('pointerdown', function() {
+            this.createJournal(this);
+        }, this);
     }
 
     createBackground(game) {
@@ -86,17 +97,11 @@ export default class TitleScene extends Phaser.Scene {
         background.displayWidth = window.innerWidth;
     }
 
-    centerButton (gameObject, offset = 0) {
-        Phaser.Display.Align.In.Center(
-            gameObject,
-            this.add.zone(config.width/2, config.height/2 - offset * 100, config.width, config.height)
-        );
+    createJournal(scene) {
+        let journalContainer = this.add.container(0, 0);
+        let bg = scene.add.rectangle(window.innerWidth * 0.5, window.innerHeight * 0.5, window.innerWidth * 0.90, window.innerHeight * 0.90, 0x8b4513).setOrigin(0.5);
+        journalContainer.add(bg);
     }
 
-    centerButtonText (gameText, gameButton) {
-        Phaser.Display.Align.In.Center(
-            gameText,
-            gameButton
-        );
-    }
+
 };
