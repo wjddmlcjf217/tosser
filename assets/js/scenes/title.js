@@ -1,11 +1,25 @@
-import config from './config.js'
-
 export default class TitleScene extends Phaser.Scene {
-    constructor () {
-        super('Title');
+    constructor() {
+        super({
+            key: 'Title',
+            pack: {
+                files: [
+                    { type: 'image', key: 'loading', url: 'assets/img/loading.png' },
+                ]
+            }
+        });
     }
 
     preload() {
+        // loading screen assets
+        let background = this.add.rectangle(
+            window.innerWidth * 0.5, window.innerHeight * 0.5, window.innerWidth, window.innerHeight, 0xffffff);
+        let loadingText = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.38, 'Loading...', LOADING_FONT);
+        loadingText.setOrigin(0.5);
+        loadingText.setShadowBlur(3);
+        let loadingImage = this.physics.add.image(window.innerWidth * 0.5, window.innerHeight * 0.54, 'loading');
+        loadingImage.setAngularVelocity(150);
+
         // image assets
         this.load.image('apple', 'assets/img/apple.png');
         this.load.image('background', 'assets/img/study_area.png');
@@ -39,64 +53,71 @@ export default class TitleScene extends Phaser.Scene {
         this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
-    create () {
-        this.createBackground(this);
+    create() {
+        let whiteFade = this.add.rectangle(
+            window.innerWidth * 0.5, window.innerHeight * 0.5, window.innerWidth, window.innerHeight, 0xffffff, 1);
+        whiteFade.setDepth(1000);
+        whiteFade.setAlpha(0);
+        this.tweens.add({
+            targets: whiteFade,
+            alpha: 1.0,
+            ease: 'Linear',
+            duration: 500,
+            repeat: 0,
+            yoyo: true
+        });
 
-        //Logo
-        this.logo = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.3, 'logo');
-        this.logo.setOrigin(0.5);
+        this.time.delayedCall(500, function () {
+            // Background
+            let background = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
+            background.displayHeight = window.innerHeight;
+            background.displayWidth = window.innerWidth;
 
-        // Game
-        this.gameButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.55, 'Play', TITLE_FONT);
-        this.gameButton.setOrigin(0.5);
-        this.gameButton.setInteractive();
-        this.gameButton.on('pointerdown', () => {this.scene.start('Game')});
+            // Logo
+            this.logo = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.3, 'logo');
+            this.logo.setOrigin(0.5);
 
-        // LeaderBoard
-        this.optionsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.75, 'LeaderBoard', TITLE_FONT);
-        this.optionsButton.setOrigin(0.5);
-        this.optionsButton.setInteractive();
-        this.optionsButton.on('pointerdown', () => {this.scene.start('LeaderBoard')});
+            // Game
+            this.gameButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.55, 'Play', TITLE_FONT);
+            this.gameButton.setOrigin(0.5);
+            this.gameButton.setInteractive();
+            this.gameButton.on('pointerdown', () => {
+                this.scene.start('Game')
+            });
 
-        // Credits
-        this.creditsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.85, 'Credits', TITLE_FONT);
-        this.creditsButton.setOrigin(0.5);
-        this.creditsButton.setInteractive();
-        this.creditsButton.on('pointerdown', () => {this.scene.start('Credits')});
+            // LeaderBoard
+            this.optionsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.75, 'LeaderBoard', TITLE_FONT);
+            this.optionsButton.setOrigin(0.5);
+            this.optionsButton.setInteractive();
+            this.optionsButton.on('pointerdown', () => {
+                this.scene.start('LeaderBoard')
+            });
 
-        // Tutorial
-        this.tutorialButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.65, 'Tutorial', TITLE_FONT);
-        this.tutorialButton.setOrigin(0.5);
-        this.tutorialButton.setInteractive();
-        this.tutorialButton.on('pointerdown', () => {this.scene.start('Tutorial')});
+            // Credits
+            this.creditsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.85, 'Credits', TITLE_FONT);
+            this.creditsButton.setOrigin(0.5);
+            this.creditsButton.setInteractive();
+            this.creditsButton.on('pointerdown', () => {
+                this.scene.start('Credits')
+            });
 
-        //Sign-out
-        this.signOutButton = this.add.text(window.innerWidth * 0.98, window.innerHeight * 0.99, 'Sign Out', TITLE_FONT);
-        this.signOutButton.setFontSize(70);
-        this.signOutButton.setOrigin(1);
-        this.signOutButton.setInteractive();
-        this.signOutButton.on('pointerdown', () => {
-            firebase.auth().signOut();
-            window.location.href = 'index.html'});
+            // Tutorial
+            this.tutorialButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.65, 'Tutorial', TITLE_FONT);
+            this.tutorialButton.setOrigin(0.5);
+            this.tutorialButton.setInteractive();
+            this.tutorialButton.on('pointerdown', () => {
+                this.scene.start('Tutorial')
+            });
+
+            // Sign-out
+            this.signOutButton = this.add.text(window.innerWidth * 0.98, window.innerHeight * 0.99, 'Sign Out', TITLE_FONT);
+            this.signOutButton.setFontSize(70);
+            this.signOutButton.setOrigin(1);
+            this.signOutButton.setInteractive();
+            this.signOutButton.on('pointerdown', () => {
+                firebase.auth().signOut();
+                window.location.href = 'index.html'
+            });
+        }, null, this);
     }
-
-    createBackground(game) {
-        let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
-        background.displayHeight = window.innerHeight;
-        background.displayWidth = window.innerWidth;
-    }
-
-    centerButton (gameObject, offset = 0) {
-        Phaser.Display.Align.In.Center(
-            gameObject,
-            this.add.zone(config.width/2, config.height/2 - offset * 100, config.width, config.height)
-        );
-    }
-
-    centerButtonText (gameText, gameButton) {
-        Phaser.Display.Align.In.Center(
-            gameText,
-            gameButton
-        );
-    }
-};
+}

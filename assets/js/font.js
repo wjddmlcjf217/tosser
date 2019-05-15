@@ -44,3 +44,19 @@ var TUTORIAL_FONT = {
         fill: true
     }
 };
+
+var LOADING_FONT = {
+    fontFamily: 'Luckiest Guy',
+    fontSize: 100,
+    color: '#ffff4d',
+    stroke: '#ffbd3b',
+    strokeThickness: 4,
+    shadow: {
+        offsetX: 0,
+        offsetY: 4,
+        color: '#8888b7',
+        blur: 0,
+        stroke: false,
+        fill: true
+    },
+};
