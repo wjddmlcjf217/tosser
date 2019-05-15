@@ -68,7 +68,7 @@ export default class ChallengeMode extends Phaser.Scene {
         this.windSetup(this);
 
         // Create Hero
-        this.queue = ['paper', 'banana', 'apple', 'waterbottle'];
+        this.queue = Object.keys(game_objects);
         object = this.queue[Math.floor(Math.random() * 4)];
         this.spawnProjectile(this.createHeroProjectile(this, object));
 

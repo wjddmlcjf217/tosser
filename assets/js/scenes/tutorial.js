@@ -1,3 +1,4 @@
+import game_objects from '../objects/game_objects.js'
 let object = null;
 let j = 0;
 let recycle = false;
@@ -153,8 +154,9 @@ export default class TutorialScene extends Phaser.Scene {
         let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
         hero.setInteractive();
         hero.state = 'resting';
-        hero.displayHeight = 150;
-        hero.displayWidth = 150;
+        let aspect_ratio = hero.height / hero.width;
+        hero.displayHeight = window.innerHeight * 0.092 * aspect_ratio * game_objects[object]['scaling_factor'];
+        hero.displayWidth = window.innerWidth * 0.165 * game_objects[object]['scaling_factor'];
         hero.setBounce(.4);
         // hero.body.onWorldBounds = true;
         // hero.body.setCollideWorldBounds(true);
@@ -273,7 +275,7 @@ export default class TutorialScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "paper") {
+            if (game_objects[object]['paper']) {
                 this.createGood();
                 this.addGoodTween(this.good);
                 paper = true;
@@ -305,7 +307,7 @@ export default class TutorialScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "waterbottle") {
+            if (game_objects[object]['container']) {
                 this.createGood();
                 this.addGoodTween(this.good);
                 recycle = true;
@@ -337,7 +339,7 @@ export default class TutorialScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "banana") {
+            if (game_objects[object]['organic']) {
                 this.createGood();
                 this.addGoodTween(this.good);
                 organic = true;
