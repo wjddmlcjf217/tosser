@@ -212,8 +212,8 @@ export default class GameScene extends Phaser.Scene {
      */
     createGood() {
         this.good = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'good');
-        this.good.displayHeight = 420;
-        this.good.displayWidth = 420;
+        this.good.displayHeight = window.innerHeight * 0.241;
+        this.good.displayWidth = window.innerWidth * 0.429;
     }
 
     /**
@@ -222,12 +222,12 @@ export default class GameScene extends Phaser.Scene {
      */
     createBad() {
         this.bad = this.add.image(window.innerWidth * .5, window.innerHeight * 0.3, 'bad');
-        this.bad.displayHeight = 420;
-        this.bad.displayWidth = 420;
+        this.bad.displayHeight = window.innerHeight * 0.241;
+        this.bad.displayWidth = window.innerWidth * 0.429;
     }
 
     /**
-     * casts a shadow under the hero projectil
+     * casts a shadow under the hero projectile
      * @param game Phaser Game
      */
     //in progress shadow effect
@@ -337,8 +337,8 @@ export default class GameScene extends Phaser.Scene {
         let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
         hero.setInteractive();
         hero.state = 'resting';
-        hero.displayHeight = 150;
-        hero.displayWidth = 150;
+        hero.displayHeight = window.innerHeight * 0.092;
+        hero.displayWidth = window.innerWidth * 0.165;
         hero.setBounce(.4);
         // hero.body.onWorldBounds = true;
         // hero.body.setCollideWorldBounds(true);
