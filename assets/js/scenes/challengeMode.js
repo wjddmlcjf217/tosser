@@ -1,37 +1,41 @@
-// version 0.9
-import game_objects from '../objects/game_objects.js'
-
-// takes all database profile data to display on profile page
-let displayName = null;
 let object = null;
+// var timeText;
 
-
-function initApp() {
-    firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-            // User is signed in.
-            displayName = user.displayName;
-        } else {
-
-        }
-    }, function (error) {
-        console.log(error);
-    });
-}
-
-window.addEventListener('load', function () {
-    initApp()
-});
-
-export default class GameScene extends Phaser.Scene {
+export default class ChallengeMode extends Phaser.Scene {
     constructor() {
-        super("Game");
+        super("CHALLENGE-MODE");
     }
 
     /**
      * Preload assets for Phaser Game
      */
     preload() {
+        // image assets
+        this.load.image('background', 'assets/img/study_area.png');
+        this.load.image('bin_top', 'assets/img/bin_top.png');
+        this.load.image('paper', 'assets/img/paper_ball.png');
+        this.load.image('waterbottle', 'assets/img/water_bottle.png');
+        this.load.image('apple', 'assets/img/apple.png');
+        this.load.image('banana', 'assets/img/banana.png');
+        this.load.image('life', 'assets/img/life.gif');
+        this.load.image('light_off', 'assets/img/light_off.png');
+        this.load.image('light_on', 'assets/img/light_on.png');
+        this.load.image('scoreboard', 'assets/img/scoreboard.png');
+        this.load.image('plus1', 'assets/img/plus1.jpg');
+        this.load.image('scoreboard', 'assets/img/scoreboard.png');
+        this.load.image('discoball', 'assets/img/disco-ball.png');
+        this.load.image('wind_arrow', 'assets/img/arrow.png');
+        this.load.image('good', 'assets/img/good.png');
+        this.load.image('bad', 'assets/img/bad.png');
+
+
+        // audio assets
+        this.load.audio('hit-target', [
+            'assets/audio/bin-sound.m4a',
+            'assets/audio/bin-sound.mp3',
+        ]);
+
+        // this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
     /**
@@ -39,10 +43,21 @@ export default class GameScene extends Phaser.Scene {
      */
     create() {
         this.createBackground(this);
-        this.createLight(this);
-        this.discoMode(this);
 
-        //Add Scoreboard
+        // Create timer
+
+        this.t = 3;
+        this.timeText = this.add.text(400, 200, null, {
+            fontFamily: 'Kalam',
+            fontSize: 70,
+            color: '#000000',
+        });
+
+        this.createTimer();
+        this.updateTimer(this);
+
+
+        // Add Scoreboard
         this.scoreValue = 0;
         this.addScoreText(this);
         this.addObjectText(this);
@@ -51,8 +66,7 @@ export default class GameScene extends Phaser.Scene {
         this.windSetup(this);
 
         // Create Hero
-        // Uses the game_object instead
-        this.queue = Object.keys(game_objects);
+        this.queue = ['paper', 'banana', 'apple', 'waterbottle'];
         object = this.queue[Math.floor(Math.random() * 4)];
         this.spawnProjectile(this.createHeroProjectile(this, object));
 
@@ -83,8 +97,6 @@ export default class GameScene extends Phaser.Scene {
 
         }
     }
-
-
 
     /**
      * Handles Pointer Down Event
@@ -255,13 +267,11 @@ export default class GameScene extends Phaser.Scene {
      * @returns Hero image game object
      */
     createHeroProjectile(game, image) {
-        let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.89, image);
+        let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
         hero.setInteractive();
-        let aspect_ratio = hero.height / hero.width;
         hero.state = 'resting';
-        hero.displayHeight = window.innerHeight * 0.092 * aspect_ratio * game_objects[object]['scaling_factor'];
-        hero.displayWidth = window.innerWidth * 0.165 * game_objects[object]['scaling_factor'];
-        hero.setY(hero.y - (hero.displayHeight - (window.innerWidth * 0.165)) * 0.5);
+        hero.displayHeight = window.innerHeight * 0.092;
+        hero.displayWidth = window.innerWidth * 0.165;
         hero.setBounce(.4);
         // hero.body.onWorldBounds = true;
         // hero.body.setCollideWorldBounds(true);
@@ -372,7 +382,7 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (game_objects[object]['paper']) {
+            if (object === "paper") {
                 this.createGood();
                 this.addGoodTween(this.good);
                 this.scoreHandler(this);
@@ -397,7 +407,7 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (game_objects[object]['container']) {
+            if (object === "waterbottle") {
                 this.createGood();
                 this.addGoodTween(this.good);
                 this.scoreHandler(this);
@@ -422,7 +432,7 @@ export default class GameScene extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (game_objects[object]['organic']) {
+            if (object === "banana" || object === 'apple') {
                 this.createGood();
                 this.addGoodTween(this.good);
                 this.scoreHandler(this);
@@ -488,6 +498,7 @@ export default class GameScene extends Phaser.Scene {
      */
     resetProjectile(projectile) {
         projectile.body.stop();
+        console.log(projectile);
         projectile.scene.tweens.killTweensOf(projectile);
         this.spawnProjectile(projectile);
     }
@@ -548,8 +559,8 @@ export default class GameScene extends Phaser.Scene {
     addProjectileScalingTween(game, projectile) {
         game.tweens.add({
             targets: projectile,
-            displayWidth: projectile.displayWidth / 5.5,
-            displayHeight: projectile.displayHeight / 5.5,
+            displayWidth: 25,
+            displayHeight: 25,
             ease: 'Linear',
             duration: 1500,
             repeat: 0,
@@ -591,14 +602,14 @@ export default class GameScene extends Phaser.Scene {
             scene.lives.killAndHide(life);
         }
 
-        if (scene.lives.countActive() < 1) {
+        if (scene.lives.countActive() < 1 || scene.t < 1) {
             scene.staticScoreText.setVisible(false);
             scene.scoreText.setVisible(false);
             scene.gameOverText.setVisible(true);
-            this.discoBall.removeInteractive();
-            clearInterval(this.discoInterval);
+            // this.discoBall.removeInteractive();
+            // clearInterval(this.discoInterval);
             // Write score to leaderboard
-            this.writeLeaderBoard();
+            // this.writeLeaderBoard();
             setTimeout(function () {
                 scene.scene.start('LeaderBoard')
             }, 2000)
@@ -618,14 +629,14 @@ export default class GameScene extends Phaser.Scene {
      * write to firebase with score ONLY if it's a higher score
      */
     // Write score
-    writeLeaderBoard() {
-        let first_name = displayName.split(' ')[0];
-        if (this.scoreValue > leaderBoard[first_name]) {
-            firebase.database().ref("users/").update({
-                [first_name]: this.scoreValue
-            });
-        }
-    }
+    // writeLeaderBoard() {
+    //     let first_name = displayName.split(' ')[0];
+    //     if (this.scoreValue > leaderBoard[first_name]) {
+    //         firebase.database().ref("users/").update({
+    //             [first_name]: this.scoreValue
+    //         });
+    //     }
+    // }
 
     /**
      * Add score related text to the canvas
@@ -653,6 +664,47 @@ export default class GameScene extends Phaser.Scene {
             window.innerWidth * 0.5, window.innerHeight * 0.97, null, LEADERBOARD_FONT);
         scene.objectText.setOrigin(0.5);
         scene.objectText.setFontSize(60);
+
+    }
+
+    createTimer() {
+
+
+        // this.scene.timeText = this.add.text(400, 200, null, fontStyle);
+        // scene.timeText.setFontsize(60);
+
+
+    }
+
+    updateTimer() {
+        let scene = window.game.scene.scenes[5];
+        scene.timeText.setText('Timer: ' + scene.t);
+        scene.t --;
+
+
+
+        let x = setInterval(function(){
+            scene.timeText.setText('Timer: ' + scene.t);
+
+            scene.t --;
+            if (scene.t === -1) {
+
+                clearInterval(x);
+                scene.staticScoreText.setVisible(false);
+                scene.scoreText.setVisible(false);
+                scene.gameOverText.setVisible(true);
+                // clearInterval(this.discoInterval);
+                // Write score to leaderboard
+                // this.writeLeaderBoard();
+                setTimeout(function () {
+                    scene.scene.start('LeaderBoard')
+                }, 2000)
+
+            }
+        }, 1000);
+
+
+
 
     }
 }
