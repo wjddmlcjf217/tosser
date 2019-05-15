@@ -78,7 +78,7 @@ export default class TitleScene extends Phaser.Scene {
             this.logo.setOrigin(0.5);
 
             // Game
-            this.gameButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.55, 'Play', TITLE_FONT);
+            this.gameButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.45, 'Play', TITLE_FONT);
             this.gameButton.setOrigin(0.5);
             this.gameButton.setInteractive();
             this.gameButton.on('pointerdown', () => {this.scene.start('Game')});
