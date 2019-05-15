@@ -1,3 +1,5 @@
+import game_objects from '../objects/game_objects.js'
+
 let object = null;
 // var timeText;
 
@@ -267,11 +269,13 @@ export default class ChallengeMode extends Phaser.Scene {
      * @returns Hero image game object
      */
     createHeroProjectile(game, image) {
-        let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.9, image);
+        let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.89, image);
         hero.setInteractive();
+        let aspect_ratio = hero.height / hero.width;
         hero.state = 'resting';
-        hero.displayHeight = window.innerHeight * 0.092;
-        hero.displayWidth = window.innerWidth * 0.165;
+        hero.displayHeight = window.innerHeight * 0.092 * aspect_ratio * game_objects[object]['scaling_factor'];
+        hero.displayWidth = window.innerWidth * 0.165 * game_objects[object]['scaling_factor'];
+        hero.setY(hero.y - (hero.displayHeight - (window.innerWidth * 0.165)) * 0.5);
         hero.setBounce(.4);
         // hero.body.onWorldBounds = true;
         // hero.body.setCollideWorldBounds(true);
@@ -382,7 +386,7 @@ export default class ChallengeMode extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "paper") {
+            if (game_objects[object]['paper']) {
                 this.createGood();
                 this.addGoodTween(this.good);
                 this.scoreHandler(this);
@@ -407,7 +411,7 @@ export default class ChallengeMode extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "waterbottle") {
+            if (game_objects[object]['container']) {
                 this.createGood();
                 this.addGoodTween(this.good);
                 this.scoreHandler(this);
@@ -432,7 +436,7 @@ export default class ChallengeMode extends Phaser.Scene {
             this.rimThreeRightCollider.active = false;
             this.rimThreeLeftCollider.active = false;
             this.sound.play('hit-target');
-            if (object === "banana" || object === 'apple') {
+            if (game_objects[object]['organic']) {
                 this.createGood();
                 this.addGoodTween(this.good);
                 this.scoreHandler(this);
