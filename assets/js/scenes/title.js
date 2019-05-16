@@ -42,7 +42,7 @@ export default class TitleScene extends Phaser.Scene {
     }
 
     create () {
-        this.createBackground(this);
+        this.createBackground();
 
         //Logo
         this.logo = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.3, 'logo');
@@ -88,37 +88,37 @@ export default class TitleScene extends Phaser.Scene {
         this.journalButton.setInteractive();
         this.journalButton.setOrigin(1);
         this.journalButton.on('pointerdown', function() {
-            this.createJournal(this);
+            this.createJournal();
             this.signOutButton.visible = false;
             this.journalButton.visible = false;
         }, this);
     }
 
-    createBackground(game) {
-        let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
+    createBackground() {
+        let background = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
         background.displayHeight = window.innerHeight;
         background.displayWidth = window.innerWidth;
     }
 
-    createJournal(scene) {
-        scene.journalContainer = scene.add.container(0, 0);
-        let bg = scene.add.image(window.innerWidth * 0.5, window.innerHeight * 0.5, 'journal').setOrigin(0.5);
+    createJournal() {
+        this.journalContainer = this.add.container(0, 0);
+        let bg = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.5, 'journal').setOrigin(0.5);
         bg.displayWidth = window.innerWidth * 0.90;
         bg.displayHeight = window.innerHeight * 0.90;
-        scene.journalContainer.add(bg);
-        let heading = scene.add.text(window.innerWidth * 0.5, window.innerHeight * 0.15, "Did You Know?", JOURNAL_FONT).setOrigin(0.5);
-        scene.journalContainer.add(heading);
-        // let closeButton = this.createCloseButton(scene);
-        // scene.journalContainer.add(closeButton);
+        this.journalContainer.add(bg);
+        let heading = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.15, "Did You Know?", JOURNAL_FONT).setOrigin(0.5);
+        this.journalContainer.add(heading);
+        this.createCloseButton();
+        this.journalContainer.add(this.closeButton);
     }
 
-    createCloseButton(scene) {
-        let closeButton = scene.add.text(window.innerWidth * 0.8, window.innerHeight * 0.10, 'X', JOURNAL_FONT).setOrigin(0.5);
-        closeButton.setInteractive();
-        closeButton.on('pointerdown', () => {
-            scene.journalContainer.destroy()
+    createCloseButton() {
+        this.closeButton = this.add.text(window.innerWidth * 0.90, window.innerHeight * 0.09, 'X', JOURNAL_FONT).setOrigin(0.5);
+        this.closeButton.setInteractive();
+        this.closeButton.on('pointerdown', () => {
+            this.journalContainer.destroy();
+            this.signOutButton.visible = true;
+            this.journalButton.visible = true;
         })
     }
-
-
 };
