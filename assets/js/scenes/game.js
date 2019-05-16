@@ -481,7 +481,9 @@ export default class GameScene extends Phaser.Scene {
     resetProjectile(projectile) {
         projectile.body.stop();
         projectile.scene.tweens.killTweensOf(projectile);
-        this.spawnProjectile(projectile);
+        if (this.lives.countActive() > 0) {
+            this.spawnProjectile(projectile);
+        }
     }
 
     windUpdate() {
@@ -576,13 +578,23 @@ export default class GameScene extends Phaser.Scene {
             scene.staticScoreText.setVisible(false);
             scene.scoreText.setVisible(false);
             scene.gameOverText.setVisible(true);
-            this.discoBall.removeInteractive();
-            clearInterval(this.discoInterval);
+
+            // remove disco effect
+            // todo: fix and test
+            this.removeDisco();
+
             // Write score to leaderboard
             this.writeLeaderBoard();
             setTimeout(function () {
                 scene.scene.start('LeaderBoard')
             }, 2000)
+        }
+    }
+
+    removeDisco() {
+        if (!this.discoBall === undefined) {
+            clearInterval(this.discoInterval);
+            this.discoBall.removeInteractive();
         }
     }
 
