@@ -85,6 +85,18 @@ export default class GameScene extends Phaser.Scene {
             this.journalButton.visible = false;
             this.hero.visible = false;
         }, this);
+
+        //Option
+        this.optionButton = this.add.image(window.innerWidth * 0.945, window.innerHeight * 0.035, 'option');
+        this.optionButton.displayWidth = window.innerWidth * 0.10;
+        this.optionButton.displayHeight = window.innerHeight * 0.056;
+        this.optionButton.setInteractive();
+        this.optionButton.on('pointerdown', function() {
+            this.createOptions();
+            this.optionButton.visible = false;
+            this.hero.visible = false;
+            this.journalButton.visible = false;
+        }, this);
     }
 
     /**
@@ -673,6 +685,31 @@ export default class GameScene extends Phaser.Scene {
             this.journalButton.visible = true;
             this.hero.visible = true;
         })
+    }
+
+    createOptions() {
+        this.optionContainer = this.add.container(0,0);
+        let bg = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.5, 'options_background').setOrigin(0.5);
+        bg.displayWidth = window.innerWidth * 0.90;
+        bg.displayHeight = window.innerHeight * 0.60;
+        this.optionContainer.add(bg);
+        this.resumeGame = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.4, 'Resume', TITLE_FONT).setOrigin(0.5);
+        this.resumeGame.setFontSize(150);
+        this.resumeGame.setInteractive();
+        this.resumeGame.on('pointerdown', () => {
+            this.optionContainer.destroy();
+            this.journalButton.visible = true;
+            this.hero.visible = true;
+            this.optionButton.visible = true;
+            }, this);
+        this.optionContainer.add(this.resumeGame);
+        this.mainMenu = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.55, 'Main Menu', TITLE_FONT).setOrigin(0.5);
+        this.mainMenu.setFontSize(150);
+        this.mainMenu.setInteractive();
+        this.mainMenu.on('pointerdown', function() {
+            this.scene.start('Title');
+        }, this);
+        this.optionContainer.add(this.mainMenu);
     }
 
     deactivateAll (array) {
