@@ -82,14 +82,16 @@ export default class TitleScene extends Phaser.Scene {
         this.journalContainer.add(bg);
         let heading = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.15, "About the Game", JOURNAL_FONT).setOrigin(0.5);
         this.journalContainer.add(heading);
-        // "It was a dark and stormy night... The goons were enjoying their long walk along the coast of Kitsilano beach. When
-        // suddenly, a single plastic bottle washed up on the shore. Kevin picked up the bottle, furious at its presence
-        // along the coastline of his beautiful city. Just as he was about to toss the bottle into the recycling bin,
-        // reinforcements arrived in waves. Plastics, pop cans, cardboards! The battlefield was now littered with their presence.
-        // Jacky was being overwhelmed by the enemy as Dillon rushed to his side to help. Even Bryden's large stature could not
-        // hold back all this human trash. As everyone falls around him, Jared, barely standing, screams into the
-        // night, only to be drowned out by the screams of his squad around him . And thus, we began our journey to
-        // change the world. One toss at a time.
+        let about = ["It was a dark and stormy night... The goons were enjoying their long walk along the coast of Kitsilano beach. When",
+        "suddenly, a single plastic bottle washed up on the shore. Kevin picked up the bottle, furious at its presence",
+        "along the coastline of his beautiful city. Just as he was about to toss the bottle into the recycling bin,",
+        "reinforcements arrived in waves. Plastics, pop cans, cardboards! The battlefield was now littered with their presence.",
+        "Jacky was being overwhelmed by the enemy as Dillon rushed to his side to help. Even Bryden's large stature could not",
+        "hold back all this human trash. As everyone falls around him, Jared, barely standing, screams into the",
+        "night, only to be drowned out by the screams of his squad around him . And thus, we began our journey to",
+        "change the world. One toss at a time."];
+        let content = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.6, about, JOURNAL_FONT).setOrigin(0.5);
+        this.journalContainer.add(content)
         this.createCloseButton();
         this.journalContainer.add(this.closeButton);
     }
