@@ -165,21 +165,21 @@ export default class GameScene extends Phaser.Scene {
 
     /**
      * casts a shadow under the hero projectile
-     * @param game Phaser Game
+     * @param scene Phaser Game
      */
     //in progress shadow effect
-    createShadow(game) {
-        let shadow = game.add.image(window.innerWidth * .3, window.innerHeight * 0.559, 'shadow');
+    createShadow(scene) {
+        let shadow = scene.add.image(window.innerWidth * .3, window.innerHeight * 0.559, 'shadow');
         // shadow.tint = ;
         shadow.visible = true;
     }
 
     /**
      * Creates Background in scene
-     * @param game Phaser Game
+     * @param scene Phaser Game
      */
-    createBackground(game) {
-        let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background');
+    createBackground(scene) {
+        let background = scene.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background');
         background.displayHeight = window.innerHeight;
         background.displayWidth = window.innerWidth;
     }
@@ -266,12 +266,12 @@ export default class GameScene extends Phaser.Scene {
 
     /**
      * Creates the hero projectile
-     * @param game Phaser game
+     * @param scene Phaser scene
      * @param image Phaser image key
      * @returns Hero image game object
      */
-    createHeroProjectile(game, image) {
-        let hero = game.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.89, image);
+    createHeroProjectile(scene, image) {
+        let hero = scene.physics.add.image(window.innerWidth / 2, window.innerHeight * 0.89, image);
         hero.setInteractive();
         let aspect_ratio = hero.height / hero.width;
         hero.state = 'resting';
@@ -287,61 +287,58 @@ export default class GameScene extends Phaser.Scene {
 
     /**
      * Creates physics objects
-     * @param game Phaser Game
+     * @param scene Phaser Game
      */
-    createPhysicsObjects(game) {
-        let binOne = game.add.rectangle(window.innerWidth * 0.185, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
-        let rimOneLeft = game.add.rectangle(window.innerWidth * 0.11, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);//0.015
-        let rimOneRight = game.add.rectangle(window.innerWidth * 0.260, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25); //0.015
+    createPhysicsObjects(scene) {
+        let binOne = scene.add.rectangle(window.innerWidth * 0.185, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
+        let rimOneLeft = scene.add.rectangle(window.innerWidth * 0.11, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);//0.015
+        let rimOneRight = scene.add.rectangle(window.innerWidth * 0.260, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25); //0.015
 
-        let binTwo = game.add.rectangle(window.innerWidth * 0.51775, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
-        let rimTwoLeft = game.add.rectangle(window.innerWidth * 0.44275, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);//0.015
-        let rimTwoRight = game.add.rectangle(window.innerWidth * 0.59275, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25); //0.015
+        let binTwo = scene.add.rectangle(window.innerWidth * 0.51775, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
+        let rimTwoLeft = scene.add.rectangle(window.innerWidth * 0.44275, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);//0.015
+        let rimTwoRight = scene.add.rectangle(window.innerWidth * 0.59275, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25); //0.015
 
-        let binThree = game.add.rectangle(window.innerWidth * 0.84725, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
-        let rimThreeLeft = game.add.rectangle(window.innerWidth * 0.77225, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);
-        let rimThreeRight = game.add.rectangle(window.innerWidth * 0.92225, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);
+        let binThree = scene.add.rectangle(window.innerWidth * 0.84725, window.innerHeight * 0.450, window.innerWidth * 0.13, 15);
+        let rimThreeLeft = scene.add.rectangle(window.innerWidth * 0.77225, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);
+        let rimThreeRight = scene.add.rectangle(window.innerWidth * 0.92225, (window.innerHeight * 0.44) + 10, window.innerWidth * 0.001, 25);
 
-        let floor = game.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.57, window.innerWidth * 10, 50);
+        let floor = scene.add.rectangle(window.innerWidth / 2, window.innerHeight * 0.57, window.innerWidth * 10, 50);
 
-        game.physics.add.existing(binOne, true);
-        game.physics.add.existing(binTwo, true);
-        game.physics.add.existing(binThree, true);
+        scene.physics.add.existing(binOne, true);
+        scene.physics.add.existing(binTwo, true);
+        scene.physics.add.existing(binThree, true);
 
-        game.physics.add.existing(rimOneLeft, true);
-        game.physics.add.existing(rimOneRight, true);
-        game.physics.add.existing(rimTwoLeft, true);
-        game.physics.add.existing(rimTwoRight, true);
-        game.physics.add.existing(rimThreeLeft, true);
-        game.physics.add.existing(rimThreeRight, true);
+        scene.physics.add.existing(rimOneLeft, true);
+        scene.physics.add.existing(rimOneRight, true);
+        scene.physics.add.existing(rimTwoLeft, true);
+        scene.physics.add.existing(rimTwoRight, true);
+        scene.physics.add.existing(rimThreeLeft, true);
+        scene.physics.add.existing(rimThreeRight, true);
 
-        game.physics.add.existing(floor, true);
+        scene.physics.add.existing(floor, true);
 
 
         // Add physical interactions
 
-        game.floorCollider = game.physics.add.collider(game.hero, floor, this.missedTarget, null, game);
+        scene.floorCollider = scene.physics.add.collider(scene.hero, floor, this.missedTarget, null, scene);
 
-        game.rimOneLeftCollider = game.physics.add.collider(game.hero, rimOneLeft, this.hitRim, null, game);
-        game.rimOneRightCollider = game.physics.add.collider(game.hero, rimOneRight, this.hitRim, null, game);
+        scene.rimOneLeftCollider = scene.physics.add.collider(scene.hero, rimOneLeft, this.hitRim, null, scene);
+        scene.rimOneRightCollider = scene.physics.add.collider(scene.hero, rimOneRight, this.hitRim, null, scene);
 
-        game.rimTwoLeftCollider = game.physics.add.collider(game.hero, rimTwoLeft, this.hitRim, null, game);
-        game.rimTwoRightCollider = game.physics.add.collider(game.hero, rimTwoRight, this.hitRim, null, game);
+        scene.rimTwoLeftCollider = scene.physics.add.collider(scene.hero, rimTwoLeft, this.hitRim, null, scene);
+        scene.rimTwoRightCollider = scene.physics.add.collider(scene.hero, rimTwoRight, this.hitRim, null, scene);
 
-        game.rimThreeLeftCollider = game.physics.add.collider(game.hero, rimThreeLeft, this.hitRim, null, game);
-        game.rimThreeRightCollider = game.physics.add.collider(game.hero, rimThreeRight, this.hitRim, null, game);
+        scene.rimThreeLeftCollider = scene.physics.add.collider(scene.hero, rimThreeLeft, this.hitRim, null, scene);
+        scene.rimThreeRightCollider = scene.physics.add.collider(scene.hero, rimThreeRight, this.hitRim, null, scene);
 
-        game.physics.add.overlap(game.hero, binOne, this.hitBlueBin, null, game);
-        game.physics.add.overlap(game.hero, binTwo, this.hitGreenBin, null, game);
-        game.physics.add.overlap(game.hero, binThree, this.hitYellowBin, null, game);
+        scene.physics.add.overlap(scene.hero, binOne, this.hitBlueBin, null, scene);
+        scene.physics.add.overlap(scene.hero, binTwo, this.hitGreenBin, null, scene);
+        scene.physics.add.overlap(scene.hero, binThree, this.hitYellowBin, null, scene);
 
-        game.rimOneLeftCollider.active = false;
-        game.rimOneRightCollider.active = false;
-        game.rimTwoLeftCollider.active = false;
-        game.rimTwoRightCollider.active = false;
-        game.rimThreeLeftCollider.active = false;
-        game.rimThreeRightCollider.active = false;
-        game.floorCollider.active = false;
+        scene.physicsColliders = [scene.rimOneLeftCollider, scene.rimOneRightCollider, scene.rimTwoLeftCollider,
+            scene.rimTwoRightCollider, scene.rimThreeLeftCollider, scene.rimThreeRightCollider, scene.floorCollider];
+
+        scene.deactivateAll(scene.physicsColliders);
     }
 
     hitRim(projectile, rim) {
@@ -361,15 +358,9 @@ export default class GameScene extends Phaser.Scene {
 
         if (projectile.body.angularVelocity === 0) {
             this.lifeHandler(this);
-            projectile.disableBody(false, false);
+            // projectile.disableBody(false, false);
             this.resetProjectile(projectile);
-            this.floorCollider.active = false;
-            this.rimOneRightCollider.active = false;
-            this.rimOneLeftCollider.active = false;
-            this.rimTwoRightCollider.active = false;
-            this.rimTwoLeftCollider.active = false;
-            this.rimThreeRightCollider.active = false;
-            this.rimThreeLeftCollider.active = false;
+            this.deactivateAll(this.physicsColliders);
         }
     }
 
@@ -380,13 +371,7 @@ export default class GameScene extends Phaser.Scene {
     hitYellowBin(projectile) {
         if (projectile.body.velocity.y > 0) {
             projectile.disableBody(false, true);
-            this.floorCollider.active = false;
-            this.rimOneRightCollider.active = false;
-            this.rimOneLeftCollider.active = false;
-            this.rimTwoRightCollider.active = false;
-            this.rimTwoLeftCollider.active = false;
-            this.rimThreeRightCollider.active = false;
-            this.rimThreeLeftCollider.active = false;
+            this.deactivateAll(this.physicsColliders);
             this.sound.play('hit-target');
             if (game_objects[object]['paper']) {
                 this.createGood();
@@ -405,13 +390,7 @@ export default class GameScene extends Phaser.Scene {
     hitBlueBin(projectile) {
         if (projectile.body.velocity.y > 0) {
             projectile.disableBody(false, true);
-            this.floorCollider.active = false;
-            this.rimOneRightCollider.active = false;
-            this.rimOneLeftCollider.active = false;
-            this.rimTwoRightCollider.active = false;
-            this.rimTwoLeftCollider.active = false;
-            this.rimThreeRightCollider.active = false;
-            this.rimThreeLeftCollider.active = false;
+            this.deactivateAll(this.physicsColliders);
             this.sound.play('hit-target');
             if (game_objects[object]['container']) {
                 this.createGood();
@@ -430,13 +409,7 @@ export default class GameScene extends Phaser.Scene {
     hitGreenBin(projectile) {
         if (projectile.body.velocity.y > 0) {
             projectile.disableBody(false, true);
-            this.floorCollider.active = false;
-            this.rimOneRightCollider.active = false;
-            this.rimOneLeftCollider.active = false;
-            this.rimTwoRightCollider.active = false;
-            this.rimTwoLeftCollider.active = false;
-            this.rimThreeRightCollider.active = false;
-            this.rimThreeLeftCollider.active = false;
+            this.deactivateAll(this.physicsColliders);
             this.sound.play('hit-target');
             if (game_objects[object]['organic']) {
                 this.createGood();
@@ -470,13 +443,7 @@ export default class GameScene extends Phaser.Scene {
             this.lifeHandler(this);
             projectile.disableBody(false, false);
             this.resetProjectile(projectile);
-            this.floorCollider.active = false;
-            this.rimOneRightCollider.active = false;
-            this.rimOneLeftCollider.active = false;
-            this.rimTwoRightCollider.active = false;
-            this.rimTwoLeftCollider.active = false;
-            this.rimThreeRightCollider.active = false;
-            this.rimThreeLeftCollider.active = false;
+            this.deactivateAll(this.physicsColliders);
 
         }
     }
@@ -558,11 +525,11 @@ export default class GameScene extends Phaser.Scene {
 
     /**
      * Scales the projectile over time
-     * @param game
+     * @param scene
      * @param projectile
      */
-    addProjectileScalingTween(game, projectile) {
-        game.tweens.add({
+    addProjectileScalingTween(scene, projectile) {
+        scene.tweens.add({
             targets: projectile,
             displayWidth: projectile.displayWidth / 5.5,
             displayHeight: projectile.displayHeight / 5.5,
@@ -671,5 +638,11 @@ export default class GameScene extends Phaser.Scene {
         scene.objectText.setOrigin(0.5);
         scene.objectText.setFontSize(60);
 
+    }
+
+    deactivateAll (array) {
+        for (let i = 0; i < array.length; i++) {
+            array[i].active = false;
+        }
     }
 }
