@@ -24,6 +24,7 @@ export default class TitleScene extends Phaser.Scene {
         this.load.image('good', 'assets/img/good.png');
         this.load.image('bad', 'assets/img/bad.png');
         this.load.image('book', 'assets/img/book.png');
+        this.load.image('journal', 'assets/img/journal.jpg');
 
         // profile pictures
         this.load.image('bryden', 'assets/img/paper_ball.png');
@@ -88,6 +89,8 @@ export default class TitleScene extends Phaser.Scene {
         this.journalButton.setOrigin(1);
         this.journalButton.on('pointerdown', function() {
             this.createJournal(this);
+            this.signOutButton.visible = false;
+            this.journalButton.visible = false;
         }, this);
     }
 
@@ -98,9 +101,23 @@ export default class TitleScene extends Phaser.Scene {
     }
 
     createJournal(scene) {
-        let journalContainer = this.add.container(0, 0);
-        let bg = scene.add.rectangle(window.innerWidth * 0.5, window.innerHeight * 0.5, window.innerWidth * 0.90, window.innerHeight * 0.90, 0x8b4513).setOrigin(0.5);
-        journalContainer.add(bg);
+        scene.journalContainer = scene.add.container(0, 0);
+        let bg = scene.add.image(window.innerWidth * 0.5, window.innerHeight * 0.5, 'journal').setOrigin(0.5);
+        bg.displayWidth = window.innerWidth * 0.90;
+        bg.displayHeight = window.innerHeight * 0.90;
+        scene.journalContainer.add(bg);
+        let heading = scene.add.text(window.innerWidth * 0.5, window.innerHeight * 0.15, "Did You Know?", JOURNAL_FONT).setOrigin(0.5);
+        scene.journalContainer.add(heading);
+        // let closeButton = this.createCloseButton(scene);
+        // scene.journalContainer.add(closeButton);
+    }
+
+    createCloseButton(scene) {
+        let closeButton = scene.add.text(window.innerWidth * 0.8, window.innerHeight * 0.10, 'X', JOURNAL_FONT).setOrigin(0.5);
+        closeButton.setInteractive();
+        closeButton.on('pointerdown', () => {
+            scene.journalContainer.destroy()
+        })
     }
 
 
