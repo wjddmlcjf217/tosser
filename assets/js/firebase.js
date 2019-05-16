@@ -24,7 +24,6 @@ function getLeaderBoard() {
     let dbRef = firebase.database().ref("users/");
     dbRef.on("value", function (snapshot) {
         leaderBoard = snapshot.val();
-        console.log(leaderBoard);
         this.sortLeaderBoard(leaderBoard);
         // this.add.text(0, 0, parseInt(leaderBoard[0]), { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
     });

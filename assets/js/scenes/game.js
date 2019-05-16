@@ -50,7 +50,7 @@ export default class GameScene extends Phaser.Scene {
     create() {
         this.createBackground(this);
         this.createLight(this);
-        this.discoMode(this);
+        this.discoMode();
 
         //Add Scoreboard
         this.scoreValue = 0;
@@ -73,6 +73,18 @@ export default class GameScene extends Phaser.Scene {
             life.displayWidth = window.innerWidth * 0.070;
             life.displayHeight = window.innerHeight * 0.039;
         }
+
+        //Journal
+        this.journalButton = this.add.image(window.innerWidth * 0.17, window.innerHeight * 0.99, 'book');
+        this.journalButton.displayWidth = window.innerWidth * 0.15;
+        this.journalButton.displayHeight = window.innerHeight * 0.075;
+        this.journalButton.setInteractive();
+        this.journalButton.setOrigin(1);
+        this.journalButton.on('pointerdown', function() {
+            this.createJournal();
+            this.journalButton.visible = false;
+            this.hero.visible = false;
+        }, this);
     }
 
     /**
@@ -93,8 +105,6 @@ export default class GameScene extends Phaser.Scene {
 
         }
     }
-
-
 
     /**
      * Handles Pointer Down Event
@@ -201,28 +211,28 @@ export default class GameScene extends Phaser.Scene {
         light.on('pointerdown', function () {
             this.setTexture(this.texture.key === 'light_on' ? 'light_off' : 'light_on');
             darkenEffect.setVisible(!darkenEffect.visible);
-
+            this.scene.discoBall.visible = true;
         });
     }
 
     /**
      * Disco mode in scene
-     * @param scene
      */
-    discoMode(scene) {
-        scene.discoTriangles = [];
-        scene.discoInterval = undefined;
-        scene.discoBall = scene.add.image(window.innerWidth / 2, window.innerHeight * 0.11, 'discoball');
-        scene.discoBall.displayWidth = 150;
-        scene.discoBall.displayHeight = 150;
-        scene.discoBall.setInteractive();
+    discoMode() {
+        this.discoTriangles = [];
+        this.discoInterval = undefined;
+        this.discoBall = this.add.image(window.innerWidth / 2, window.innerHeight * 0.11, 'discoball');
+        this.discoBall.displayWidth = 150;
+        this.discoBall.displayHeight = 150;
+        this.discoBall.setInteractive();
+        this.discoBall.visible = false;
         let discoBool = true;
 
         let discoColors = [0xFF00CB, 0xFFFF00, 0x00FFFF, 0xFF0000, 0xFFFF00, 0x53FF00, 0xFF00FF,
             0xFF00CB, 0x00FFFF, 0x00FFFF, 0xFF8700];
 
         for (let i = 0; i < discoColors.length; i++) {
-            let triangle = scene.add.triangle(
+            let triangle = this.add.triangle(
                 window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight
             );
             triangle.setDepth(1000);
@@ -230,35 +240,35 @@ export default class GameScene extends Phaser.Scene {
             triangle.setFillStyle(discoColors[i], 100);
             triangle.setBlendMode('COLORDODGE');
             triangle.setRotation(i);
-            scene.discoTriangles.push(triangle);
+            this.discoTriangles.push(triangle);
         }
 
-        let background = scene.add.rectangle(window.innerWidth / 2, window.innerHeight / 2,
+        let background = this.add.rectangle(window.innerWidth / 2, window.innerHeight / 2,
             window.innerWidth, window.innerHeight);
         background.setDepth(999);
         background.setVisible(false);
         background.setFillStyle(0x000000, 100);
         background.setBlendMode('MULTIPLY');
 
-        scene.discoBall.on('pointerdown', function () {
-
+        this.discoBall.on('pointerdown', function () {
+            let gameScene = window.game.scene.scenes[2];
             if (discoBool === true) {
-                scene.sound.play('disco');
-                scene.discoInterval = setInterval(function () {
-                    for (let triangle of scene.discoTriangles) {
+                gameScene.discoMusic = gameScene.sound.play('disco');
+                gameScene.discoInterval = setInterval(function () {
+                    for (let triangle of gameScene.discoTriangles) {
                         triangle.setRandomPosition();
                     }
                 }, 500);
                 discoBool = false;
             }
             else if (discoBool === false){
-                scene.sound.stopAll('disco');
-                clearInterval(scene.discoInterval);
+                gameScene.sound.stopAll('disco');
+                clearInterval(gameScene.discoInterval);
                 discoBool = true;
             }
 
             background.setVisible(!background.visible);
-            for (let triangle of scene.discoTriangles) {
+            for (let triangle of gameScene.discoTriangles) {
                 triangle.setVisible(!triangle.visible);
             }
         });
@@ -472,7 +482,9 @@ export default class GameScene extends Phaser.Scene {
     resetProjectile(projectile) {
         projectile.body.stop();
         projectile.scene.tweens.killTweensOf(projectile);
-        this.spawnProjectile(projectile);
+        if (this.lives.countActive() > 0) {
+            this.spawnProjectile(projectile);
+        }
     }
 
     windUpdate() {
@@ -567,8 +579,12 @@ export default class GameScene extends Phaser.Scene {
             scene.staticScoreText.setVisible(false);
             scene.scoreText.setVisible(false);
             scene.gameOverText.setVisible(true);
+
+            // remove disco effect
+            // todo: mute music after exiting game
             this.discoBall.removeInteractive();
             clearInterval(this.discoInterval);
+
             // Write score to leaderboard
             this.writeLeaderBoard();
             setTimeout(function () {
@@ -592,7 +608,7 @@ export default class GameScene extends Phaser.Scene {
     // Write score
     writeLeaderBoard() {
         let first_name = displayName.split(' ')[0];
-        if (this.scoreValue > leaderBoard[first_name]) {
+        if (this.scoreValue > leaderBoard[first_name] || leaderBoard[first_name] === undefined) {
             firebase.database().ref("users/").update({
                 [first_name]: this.scoreValue
             });
@@ -625,7 +641,38 @@ export default class GameScene extends Phaser.Scene {
             window.innerWidth * 0.5, window.innerHeight * 0.97, null, LEADERBOARD_FONT);
         scene.objectText.setOrigin(0.5);
         scene.objectText.setFontSize(60);
+    }
 
+    createJournal() {
+        this.journalContainer = this.add.container(0, 0);
+        let bg = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.5, 'journal').setOrigin(0.5);
+        bg.displayWidth = window.innerWidth * 0.90;
+        bg.displayHeight = window.innerHeight * 0.90;
+        this.journalContainer.add(bg);
+        let heading = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.15, "Did You Know?", JOURNAL_FONT).setOrigin(0.5);
+        this.journalContainer.add(heading);
+        this.createCloseButton();
+        this.journalContainer.add(this.closeButton);
+        let image = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.25, object).setOrigin(0.5);
+        let aspect_ratio = image.height / image.width;
+        image.displayHeight = window.innerHeight * 0.092 * aspect_ratio * game_objects[object]['scaling_factor'];
+        image.displayWidth = window.innerWidth * 0.165 * game_objects[object]['scaling_factor'];
+        this.journalContainer.add(image);
+        for (let i = 1; i <= 3; i++) {
+            let fact = this.add.text(window.innerWidth * 0.5, window.innerHeight * (0.25 + i * (0.15)), game_objects[object]['fact_'+i], JOURNAL_FONT).setOrigin(0.5);
+            fact.setFontSize(45);
+            this.journalContainer.add(fact);
+        }
+    }
+
+    createCloseButton() {
+        this.closeButton = this.add.text(window.innerWidth * 0.90, window.innerHeight * 0.09, 'X', JOURNAL_FONT).setOrigin(0.5);
+        this.closeButton.setInteractive();
+        this.closeButton.on('pointerdown', () => {
+            this.journalContainer.destroy();
+            this.journalButton.visible = true;
+            this.hero.visible = true;
+        })
     }
 
     deactivateAll (array) {

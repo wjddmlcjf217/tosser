@@ -60,5 +60,39 @@ export default class TitleScene extends Phaser.Scene {
             firebase.auth().signOut();
             window.location.href = 'index.html'
         });
+
+        //Journal
+        this.journalButton = this.add.image(window.innerWidth * 0.17, window.innerHeight * 0.99, 'book');
+        this.journalButton.displayWidth = window.innerWidth * 0.15;
+        this.journalButton.displayHeight = window.innerHeight * 0.075;
+        this.journalButton.setInteractive();
+        this.journalButton.setOrigin(1);
+        this.journalButton.on('pointerdown', function() {
+            this.createJournal();
+            this.signOutButton.visible = false;
+            this.journalButton.visible = false;
+        }, this);
+    }
+
+    createJournal() {
+        this.journalContainer = this.add.container(0, 0);
+        let bg = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.5, 'journal').setOrigin(0.5);
+        bg.displayWidth = window.innerWidth * 0.90;
+        bg.displayHeight = window.innerHeight * 0.90;
+        this.journalContainer.add(bg);
+        let heading = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.15, "About the Game", JOURNAL_FONT).setOrigin(0.5);
+        this.journalContainer.add(heading);
+        this.createCloseButton();
+        this.journalContainer.add(this.closeButton);
+    }
+
+    createCloseButton() {
+        this.closeButton = this.add.text(window.innerWidth * 0.90, window.innerHeight * 0.09, 'X', JOURNAL_FONT).setOrigin(0.5);
+        this.closeButton.setInteractive();
+        this.closeButton.on('pointerdown', () => {
+            this.journalContainer.destroy();
+            this.signOutButton.visible = true;
+            this.journalButton.visible = true;
+        })
     }
 }
