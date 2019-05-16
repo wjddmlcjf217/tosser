@@ -65,5 +65,6 @@ var JOURNAL_FONT = {
     fontFamily: 'Indie Flower',
     fontSize: 90,
     color: 'black',
-    fontWeight: 800
+    fontWeight: 800,
+    align: 'center'
 };
