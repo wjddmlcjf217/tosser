@@ -649,7 +649,15 @@ export default class GameScene extends Phaser.Scene {
         this.createCloseButton();
         this.journalContainer.add(this.closeButton);
         let image = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.25, object).setOrigin(0.5);
+        let aspect_ratio = image.height / image.width;
+        image.displayHeight = window.innerHeight * 0.092 * aspect_ratio * game_objects[object]['scaling_factor'];
+        image.displayWidth = window.innerWidth * 0.165 * game_objects[object]['scaling_factor'];
         this.journalContainer.add(image);
+        for (let i = 1; i <= 3; i++) {
+            let fact = this.add.text(window.innerWidth * 0.5, window.innerHeight * (0.25 + i * (0.15)), game_objects[object]['fact_'+i], JOURNAL_FONT).setOrigin(0.5);
+            fact.setFontSize(45);
+            this.journalContainer.add(fact);
+        }
     }
 
     createCloseButton() {
