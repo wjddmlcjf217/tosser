@@ -118,27 +118,20 @@ export default class TitleScene extends Phaser.Scene {
                 firebase.auth().signOut();
                 window.location.href = 'index.html'
             });
+
+            //Journal
+            this.journalButton = this.add.image(window.innerWidth * 0.17, window.innerHeight * 0.99, 'book');
+            this.journalButton.displayWidth = window.innerWidth * 0.15;
+            this.journalButton.displayHeight = window.innerHeight * 0.075;
+            this.journalButton.setInteractive();
+            this.journalButton.setOrigin(1);
+            this.journalButton.on('pointerdown', function() {
+                this.createJournal();
+                this.signOutButton.visible = false;
+                this.journalButton.visible = false;
+            }, this);
         }, null, this);
-
-        //Journal
-        this.journalButton = this.add.image(window.innerWidth * 0.17, window.innerHeight * 0.99, 'book');
-        this.journalButton.displayWidth = window.innerWidth * 0.15;
-        this.journalButton.displayHeight = window.innerHeight * 0.075;
-        this.journalButton.setInteractive();
-        this.journalButton.setOrigin(1);
-        this.journalButton.on('pointerdown', function() {
-            this.createJournal();
-            this.signOutButton.visible = false;
-            this.journalButton.visible = false;
-        }, this);
     }
-
-    createBackground() {
-        let background = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
-        background.displayHeight = window.innerHeight;
-        background.displayWidth = window.innerWidth;
-    }
-}
 
     createJournal() {
         this.journalContainer = this.add.container(0, 0);
@@ -146,7 +139,7 @@ export default class TitleScene extends Phaser.Scene {
         bg.displayWidth = window.innerWidth * 0.90;
         bg.displayHeight = window.innerHeight * 0.90;
         this.journalContainer.add(bg);
-        let heading = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.15, "Did You Know?", JOURNAL_FONT).setOrigin(0.5);
+        let heading = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.15, "About the Game", JOURNAL_FONT).setOrigin(0.5);
         this.journalContainer.add(heading);
         this.createCloseButton();
         this.journalContainer.add(this.closeButton);
@@ -161,4 +154,4 @@ export default class TitleScene extends Phaser.Scene {
             this.journalButton.visible = true;
         })
     }
-};
+}
