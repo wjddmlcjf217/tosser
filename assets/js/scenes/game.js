@@ -51,6 +51,7 @@ export default class GameScene extends Phaser.Scene {
     create() {
         this.createBackground(this);
         this.createLight(this);
+        this.discoMode();
 
         //Add Scoreboard
         this.scoreValue = 0;
@@ -211,7 +212,7 @@ export default class GameScene extends Phaser.Scene {
         light.on('pointerdown', function () {
             this.setTexture(this.texture.key === 'light_on' ? 'light_off' : 'light_on');
             darkenEffect.setVisible(!darkenEffect.visible);
-            this.scene.discoMode(this);
+            this.scene.discoBall.visible = true;
         });
     }
 
@@ -225,6 +226,7 @@ export default class GameScene extends Phaser.Scene {
         this.discoBall.displayWidth = 150;
         this.discoBall.displayHeight = 150;
         this.discoBall.setInteractive();
+        this.discoBall.visible = false;
         let discoBool = true;
 
         let discoColors = [0xFF00CB, 0xFFFF00, 0x00FFFF, 0xFF0000, 0xFFFF00, 0x53FF00, 0xFF00FF,
@@ -252,7 +254,7 @@ export default class GameScene extends Phaser.Scene {
         this.discoBall.on('pointerdown', function () {
             let gameScene = window.game.scene.scenes[2];
             if (discoBool === true) {
-                gameScene.sound.play('disco');
+                gameScene.discoMusic = gameScene.sound.play('disco');
                 gameScene.discoInterval = setInterval(function () {
                     for (let triangle of gameScene.discoTriangles) {
                         triangle.setRandomPosition();
@@ -580,21 +582,15 @@ export default class GameScene extends Phaser.Scene {
             scene.gameOverText.setVisible(true);
 
             // remove disco effect
-            // todo: fix and test
-            this.removeDisco();
+            // todo: mute music after exiting game
+            this.discoBall.removeInteractive();
+            clearInterval(this.discoInterval);
 
             // Write score to leaderboard
             this.writeLeaderBoard();
             setTimeout(function () {
                 scene.scene.start('LeaderBoard')
             }, 2000)
-        }
-    }
-
-    removeDisco() {
-        if (!this.discoBall === undefined) {
-            clearInterval(this.discoInterval);
-            this.discoBall.removeInteractive();
         }
     }
 
