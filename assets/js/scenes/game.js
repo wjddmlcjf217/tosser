@@ -21,6 +21,7 @@ function initApp() {
         if (user) {
             // User is signed in.
             displayName = user.displayName;
+            console.log(displayName)
         } else {
 
         }
