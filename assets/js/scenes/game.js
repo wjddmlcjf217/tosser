@@ -73,6 +73,18 @@ export default class GameScene extends Phaser.Scene {
             life.displayWidth = window.innerWidth * 0.070;
             life.displayHeight = window.innerHeight * 0.039;
         }
+
+        //Journal
+        this.journalButton = this.add.image(window.innerWidth * 0.17, window.innerHeight * 0.99, 'book');
+        this.journalButton.displayWidth = window.innerWidth * 0.15;
+        this.journalButton.displayHeight = window.innerHeight * 0.075;
+        this.journalButton.setInteractive();
+        this.journalButton.setOrigin(1);
+        this.journalButton.on('pointerdown', function() {
+            this.createJournal();
+            this.journalButton.visible = false;
+            this.hero.visible = false;
+        }, this);
     }
 
     /**
@@ -625,7 +637,30 @@ export default class GameScene extends Phaser.Scene {
             window.innerWidth * 0.5, window.innerHeight * 0.97, null, LEADERBOARD_FONT);
         scene.objectText.setOrigin(0.5);
         scene.objectText.setFontSize(60);
+    }
 
+    createJournal() {
+        this.journalContainer = this.add.container(0, 0);
+        let bg = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.5, 'journal').setOrigin(0.5);
+        bg.displayWidth = window.innerWidth * 0.90;
+        bg.displayHeight = window.innerHeight * 0.90;
+        this.journalContainer.add(bg);
+        let heading = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.15, "Did You Know?", JOURNAL_FONT).setOrigin(0.5);
+        this.journalContainer.add(heading);
+        this.createCloseButton();
+        this.journalContainer.add(this.closeButton);
+        let image = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.25, object).setOrigin(0.5);
+        this.journalContainer.add(image);
+    }
+
+    createCloseButton() {
+        this.closeButton = this.add.text(window.innerWidth * 0.90, window.innerHeight * 0.09, 'X', JOURNAL_FONT).setOrigin(0.5);
+        this.closeButton.setInteractive();
+        this.closeButton.on('pointerdown', () => {
+            this.journalContainer.destroy();
+            this.journalButton.visible = true;
+            this.hero.visible = true;
+        })
     }
 
     deactivateAll (array) {

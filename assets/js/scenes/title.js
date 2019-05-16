@@ -37,6 +37,8 @@ export default class TitleScene extends Phaser.Scene {
         this.load.image('wind_arrow', 'assets/img/arrow.png');
         this.load.image('good', 'assets/img/good.png');
         this.load.image('bad', 'assets/img/bad.png');
+        this.load.image('book', 'assets/img/book.png');
+        this.load.image('journal', 'assets/img/journal.jpg');
 
         // profile pictures
         this.load.image('bryden', 'assets/img/paper_ball.png');
@@ -117,5 +119,46 @@ export default class TitleScene extends Phaser.Scene {
                 window.location.href = 'index.html'
             });
         }, null, this);
+
+        //Journal
+        this.journalButton = this.add.image(window.innerWidth * 0.17, window.innerHeight * 0.99, 'book');
+        this.journalButton.displayWidth = window.innerWidth * 0.15;
+        this.journalButton.displayHeight = window.innerHeight * 0.075;
+        this.journalButton.setInteractive();
+        this.journalButton.setOrigin(1);
+        this.journalButton.on('pointerdown', function() {
+            this.createJournal();
+            this.signOutButton.visible = false;
+            this.journalButton.visible = false;
+        }, this);
+    }
+
+    createBackground() {
+        let background = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
+        background.displayHeight = window.innerHeight;
+        background.displayWidth = window.innerWidth;
     }
 }
+
+    createJournal() {
+        this.journalContainer = this.add.container(0, 0);
+        let bg = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.5, 'journal').setOrigin(0.5);
+        bg.displayWidth = window.innerWidth * 0.90;
+        bg.displayHeight = window.innerHeight * 0.90;
+        this.journalContainer.add(bg);
+        let heading = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.15, "Did You Know?", JOURNAL_FONT).setOrigin(0.5);
+        this.journalContainer.add(heading);
+        this.createCloseButton();
+        this.journalContainer.add(this.closeButton);
+    }
+
+    createCloseButton() {
+        this.closeButton = this.add.text(window.innerWidth * 0.90, window.innerHeight * 0.09, 'X', JOURNAL_FONT).setOrigin(0.5);
+        this.closeButton.setInteractive();
+        this.closeButton.on('pointerdown', () => {
+            this.journalContainer.destroy();
+            this.signOutButton.visible = true;
+            this.journalButton.visible = true;
+        })
+    }
+};

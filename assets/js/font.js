@@ -60,3 +60,10 @@ var LOADING_FONT = {
         fill: true
     },
 };
+
+var JOURNAL_FONT = {
+    fontFamily: 'Indie Flower',
+    fontSize: 90,
+    color: 'black',
+    fontWeight: 800
+};
