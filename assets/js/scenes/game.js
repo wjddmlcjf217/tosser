@@ -107,8 +107,6 @@ export default class GameScene extends Phaser.Scene {
         }
     }
 
-
-
     /**
      * Handles Pointer Down Event
      */
