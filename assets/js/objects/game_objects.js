@@ -1,6 +1,8 @@
 export default {
     'banana' : {
-        'description': 'd',
+        'fact_1': 'The banana is actually classified as a berry!',
+        'fact_2': 'Watch out for banana peels on the ground!',
+        'fact_3': 'Banana peels can be used to filter water!',
         'container': false,
         'organic': true,
         'paper': false,
@@ -8,7 +10,9 @@ export default {
         'scaling_factor': 1
     },
     'apple' : {
-        'description': 'd',
+        'fact_1': 'An apple a day keeps the doctor away!',
+        'fact_2': 'The skin of an apple is very nutritious!',
+        'fact_3': 'Apples and other fruits can be used as compost!',
         'container': false,
         'organic': true,
         'paper': false,
@@ -22,7 +26,9 @@ export default {
     //     'scaling_factor': 'd'
     // },
     'paper' : {
-        'description': 'd',
+        'fact_1': 'It takes 5 litres of water to make one piece of paper!',
+        'fact_2': '93% of paper comes from trees!',
+        'fact_3': 'Paper accounts for 25% of landfill waste!',
         'container': false,
         'organic': false,
         'paper': true,
@@ -42,7 +48,9 @@ export default {
     //     'scaling_factor': 'd'
     // },
     'waterbottle' : {
-        'description': 'd',
+        'fact_1': 'Only 1 in 5 water bottles are recycled!',
+        'fact_2': 'It takes 500 years to decompose plastic bottles!',
+        'fact_3': 'Plastics in the ocean are harming marine wildlife!',
         'container': true,
         'organic': false,
         'paper': false,
