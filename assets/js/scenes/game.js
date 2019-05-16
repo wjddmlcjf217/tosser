@@ -21,7 +21,6 @@ function initApp() {
         if (user) {
             // User is signed in.
             displayName = user.displayName;
-            console.log(displayName)
         } else {
 
         }
@@ -601,7 +600,7 @@ export default class GameScene extends Phaser.Scene {
     // Write score
     writeLeaderBoard() {
         let first_name = displayName.split(' ')[0];
-        if (this.scoreValue > leaderBoard[first_name]) {
+        if (this.scoreValue > leaderBoard[first_name] || leaderBoard[first_name] === undefined) {
             firebase.database().ref("users/").update({
                 [first_name]: this.scoreValue
             });
