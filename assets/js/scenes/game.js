@@ -14,22 +14,6 @@ const VELOCITY_Y_SCALE = -1.3;
 const VELOCITY_X_SCALE = 0.3;
 const GRAVITY = window.innerHeight * 1;
 
-function initApp() {
-    firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-            // User is signed in.
-            this.displayName = user.displayName;
-        } else {
-
-        }
-    }, function (error) {
-        console.log(error);
-    });
-}
-
-window.addEventListener('load', function () {
-    initApp()
-});
 
 export default class GameScene extends Phaser.Scene {
     displayName = null;
@@ -37,12 +21,24 @@ export default class GameScene extends Phaser.Scene {
 
     constructor(key) {
         super(key);
+        let thisScene = this;
+        window.addEventListener('load', function () {
+            thisScene.initApp()
+        })
     }
 
-    /**
-     * Preload assets for Phaser Game
-     */
-    preload() {
+    initApp() {
+        let thisScene = this;
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in.
+                thisScene.displayName = user.displayName;
+            } else {
+
+            }
+        }, function (error) {
+            console.log(error);
+        });
     }
 
     /**
@@ -607,6 +603,7 @@ export default class GameScene extends Phaser.Scene {
      */
     // Write score
     writeLeaderBoard() {
+        console.log(this);
         let first_name = this.displayName.split(' ')[0];
         if (this.scoreValue > leaderBoard[first_name] || leaderBoard[first_name] === undefined) {
             firebase.database().ref("users/").update({
