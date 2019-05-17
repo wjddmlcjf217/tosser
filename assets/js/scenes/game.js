@@ -2,8 +2,6 @@
 import game_objects from '../objects/game_objects.js'
 
 // takes all database profile data to display on profile page
-let displayName = null;
-let object = null;
 
 // constants
 // lower to reduce overall wind effect
@@ -20,7 +18,7 @@ function initApp() {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             // User is signed in.
-            displayName = user.displayName;
+            this.displayName = user.displayName;
         } else {
 
         }
@@ -34,8 +32,11 @@ window.addEventListener('load', function () {
 });
 
 export default class GameScene extends Phaser.Scene {
-    constructor() {
-        super("Game");
+    displayName = null;
+    object = null;
+
+    constructor(key) {
+        super(key);
     }
 
     /**
@@ -48,6 +49,7 @@ export default class GameScene extends Phaser.Scene {
      * Initial Object Creation for Phaser Game
      */
     create() {
+
         this.createBackground(this);
         this.createLight(this);
         this.discoMode();
@@ -63,8 +65,8 @@ export default class GameScene extends Phaser.Scene {
         // Create Hero
         // Uses the game_object instead
         this.queue = Object.keys(game_objects);
-        object = this.queue[Math.floor(Math.random() * 4)];
-        this.spawnProjectile(this.createHeroProjectile(this, object));
+        this.object = this.queue[Math.floor(Math.random() * 4)];
+        this.spawnProjectile(this.createHeroProjectile(this, this.object));
 
         // Create Lives
         this.lives = this.add.group();
@@ -297,8 +299,8 @@ export default class GameScene extends Phaser.Scene {
         hero.setInteractive();
         let aspect_ratio = hero.height / hero.width;
         hero.state = 'resting';
-        hero.displayHeight = window.innerHeight * 0.092 * aspect_ratio * game_objects[object]['scaling_factor'];
-        hero.displayWidth = window.innerWidth * 0.165 * game_objects[object]['scaling_factor'];
+        hero.displayHeight = window.innerHeight * 0.092 * aspect_ratio * game_objects[this.object]['scaling_factor'];
+        hero.displayWidth = window.innerWidth * 0.165 * game_objects[this.object]['scaling_factor'];
         hero.setY(window.innerHeight * (1 - 0.07) - (hero.displayHeight * 0.5));
         hero.setBounce(.4);
         // hero.body.onWorldBounds = true;
@@ -395,7 +397,7 @@ export default class GameScene extends Phaser.Scene {
             projectile.disableBody(false, true);
             this.deactivateAll(this.physicsColliders);
             this.sound.play('hit-target');
-            if (game_objects[object]['paper']) {
+            if (game_objects[this.object]['paper']) {
                 this.createGood();
                 this.fadeAndRecedeTween(this.good);
                 this.scoreHandler(this);
@@ -414,7 +416,7 @@ export default class GameScene extends Phaser.Scene {
             projectile.disableBody(false, true);
             this.deactivateAll(this.physicsColliders);
             this.sound.play('hit-target');
-            if (game_objects[object]['container']) {
+            if (game_objects[this.object]['container']) {
                 this.createGood();
                 this.fadeAndRecedeTween(this.good);
                 this.scoreHandler(this);
@@ -433,7 +435,7 @@ export default class GameScene extends Phaser.Scene {
             projectile.disableBody(false, true);
             this.deactivateAll(this.physicsColliders);
             this.sound.play('hit-target');
-            if (game_objects[object]['organic']) {
+            if (game_objects[this.object]['organic']) {
                 this.createGood();
                 this.fadeAndRecedeTween(this.good);
                 this.scoreHandler(this);
@@ -476,9 +478,9 @@ export default class GameScene extends Phaser.Scene {
      */
     spawnProjectile(projectile) {
         let scene = projectile.scene;
-        object = scene.queue[Math.floor(Math.random() * 4)];
-        scene.objectText.setText(object);
-        scene.hero = this.createHeroProjectile(scene, object);
+        this.object = scene.queue[Math.floor(Math.random() * 4)];
+        scene.objectText.setText(this.object);
+        scene.hero = this.createHeroProjectile(scene, this.object);
         scene.hero.visible = true;
         scene.hero.setInteractive();
         scene.hero.on('pointerdown', this.pointerDownHandler, scene);
@@ -619,7 +621,7 @@ export default class GameScene extends Phaser.Scene {
      */
     // Write score
     writeLeaderBoard() {
-        let first_name = displayName.split(' ')[0];
+        let first_name = this.displayName.split(' ')[0];
         if (this.scoreValue > leaderBoard[first_name] || leaderBoard[first_name] === undefined) {
             firebase.database().ref("users/").update({
                 [first_name]: this.scoreValue
@@ -665,10 +667,10 @@ export default class GameScene extends Phaser.Scene {
         this.journalContainer.add(heading);
         this.createCloseButton();
         this.journalContainer.add(this.closeButton);
-        let image = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.25, object).setOrigin(0.5);
+        let image = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.25, this.object).setOrigin(0.5);
         let aspect_ratio = image.height / image.width;
-        image.displayHeight = window.innerHeight * 0.092 * aspect_ratio * game_objects[object]['scaling_factor'];
-        image.displayWidth = window.innerWidth * 0.165 * game_objects[object]['scaling_factor'];
+        image.displayHeight = window.innerHeight * 0.092 * aspect_ratio * game_objects[this.object]['scaling_factor'];
+        image.displayWidth = window.innerWidth * 0.165 * game_objects[this.object]['scaling_factor'];
         this.journalContainer.add(image);
         for (let i = 1; i <= 3; i++) {
             let fact = this.add.text(window.innerWidth * 0.5, window.innerHeight * (0.25 + i * (0.15)), game_objects[object]['fact_'+i], JOURNAL_FONT).setOrigin(0.5);
