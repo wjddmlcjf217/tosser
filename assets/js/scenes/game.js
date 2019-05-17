@@ -14,25 +14,8 @@ const VELOCITY_Y_SCALE = -1.3;
 const VELOCITY_X_SCALE = 0.3;
 const GRAVITY = window.innerHeight * 1;
 
-function initApp() {
-    firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-            // User is signed in.
-            this.displayName = user.displayName;
-        } else {
-
-        }
-    }, function (error) {
-        console.log(error);
-    });
-}
-
-window.addEventListener('load', function () {
-    initApp()
-});
-
 export default class GameScene extends Phaser.Scene {
-    displayName = null;
+    displayName = 'user';
     object = null;
 
     constructor(key) {
@@ -607,6 +590,7 @@ export default class GameScene extends Phaser.Scene {
      */
     // Write score
     writeLeaderBoard() {
+        this.displayName = firebase.auth().currentUser.displayName;
         let first_name = this.displayName.split(' ')[0];
         if (this.scoreValue > leaderBoard[first_name] || leaderBoard[first_name] === undefined) {
             firebase.database().ref("users/").update({
@@ -659,7 +643,7 @@ export default class GameScene extends Phaser.Scene {
         image.displayWidth = window.innerWidth * 0.165 * game_objects[this.object]['scaling_factor'];
         this.journalContainer.add(image);
         for (let i = 1; i <= 3; i++) {
-            let fact = this.add.text(window.innerWidth * 0.5, window.innerHeight * (0.25 + i * (0.15)), game_objects[object]['fact_'+i], JOURNAL_FONT).setOrigin(0.5);
+            let fact = this.add.text(window.innerWidth * 0.5, window.innerHeight * (0.25 + i * (0.15)), game_objects[this.object]['fact_'+i], JOURNAL_FONT).setOrigin(0.5);
             fact.setFontSize(45);
             this.journalContainer.add(fact);
         }
