@@ -48,11 +48,11 @@ export default class ChallengeMode extends Phaser.Scene {
 
         // Create timer
 
-        this.t = 3;
-        this.timeText = this.add.text(400, 200, null, {
+        this.t = 30;
+        this.timeText = this.add.text(window.innerWidth / 3, window.innerHeight / 6, null, {
             fontFamily: 'Kalam',
             fontSize: 70,
-            color: '#000000',
+            color: '#ffffff',
         });
 
         this.createTimer();
@@ -681,31 +681,35 @@ export default class ChallengeMode extends Phaser.Scene {
     }
 
     updateTimer() {
-        let scene = window.game.scene.scenes[5];
-        scene.timeText.setText('Timer: ' + scene.t);
-        scene.t --;
 
+        // let scene = window.game.scene.scenes[5];
+        // console.log(scene);
+
+        let thisScene = this;
+        console.log(thisScene);
+        thisScene.timeText.setText('Timer: ' + thisScene.t);
+        thisScene.t --;
 
 
         let x = setInterval(function(){
-            scene.timeText.setText('Timer: ' + scene.t);
+            thisScene.timeText.setText('Timer: ' + thisScene.t);
 
-            scene.t --;
-            if (scene.t === -1) {
+            thisScene.t --;
+            if (thisScene.t === -1) {
 
                 clearInterval(x);
-                scene.staticScoreText.setVisible(false);
-                scene.scoreText.setVisible(false);
-                scene.gameOverText.setVisible(true);
+                thisScene.staticScoreText.setVisible(false);
+                thisScene.scoreText.setVisible(false);
+                thisScene.gameOverText.setVisible(true);
                 // clearInterval(this.discoInterval);
                 // Write score to leaderboard
                 // this.writeLeaderBoard();
                 setTimeout(function () {
-                    scene.scene.start('LeaderBoard')
-                }, 2000)
+                    thisScene.scene.start('LeaderBoard')
+                }, 2000, thisScene)
 
             }
-        }, 1000);
+        }, 1000, thisScene);
 
 
 
