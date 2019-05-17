@@ -9,8 +9,8 @@ export default class SubclassTest extends GameScene {
         super.create();
 
         // Create timer
-        this.t = 3;
-        this.timeText = this.add.text(400, 200, null, {
+        this.t = 30;
+        this.timeText = this.add.text(window.innerWidth / 3, window.innerHeight / 6, null, {
             fontFamily: 'Kalam',
             fontSize: 70,
             color: '#000000',
