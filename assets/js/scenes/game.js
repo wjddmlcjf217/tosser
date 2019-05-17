@@ -590,7 +590,7 @@ export default class GameScene extends Phaser.Scene {
     /**
      * write to firebase with score ONLY if it's a higher score
      */
-    // Write score
+    // Write score for normal mode
     writeLeaderBoard() {
         this.displayName = firebase.auth().currentUser.displayName;
         let first_name = this.displayName.split(' ')[0];
@@ -600,6 +600,7 @@ export default class GameScene extends Phaser.Scene {
             });
         }
     }
+
 
     /**
      * Add score related text to the canvas

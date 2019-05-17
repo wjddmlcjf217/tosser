@@ -643,6 +643,18 @@ export default class ChallengeMode extends Phaser.Scene {
     // }
 
     /**
+     * write to firebase with score ONLY if it's a higher score
+     */
+    // Write score for challenge mode
+    writeChallengeLeaderBoard() {
+        let first_name = displayName.split(' ')[0];
+        if (this.scoreValue > leaderBoard[first_name] || leaderBoard[first_name] === undefined) {
+            firebase.database().ref("challenge-users/").update({
+                [first_name]: this.scoreValue
+            });
+        }
+    }
+    /**
      * Add score related text to the canvas
      */
     addScoreText(scene) {
