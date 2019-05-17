@@ -695,7 +695,7 @@ export default class ChallengeMode extends Phaser.Scene {
             thisScene.timeText.setText('Timer: ' + thisScene.t);
 
             thisScene.t --;
-            if (thisScene.t === -1) {
+            if (thisScene.t === -1 || thisScene.lives.countActive() < 1) {
 
                 clearInterval(x);
                 thisScene.staticScoreText.setVisible(false);
