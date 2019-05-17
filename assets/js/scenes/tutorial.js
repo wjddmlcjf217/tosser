@@ -25,6 +25,7 @@ export default class TutorialScene extends Phaser.Scene {
         this.addTutorialText(this);
         this.addSwipeText(this);
         this.swipeText.setText("Swipe to throw!");
+
         // Create Hero
         this.queue = ['paper', 'banana', 'waterbottle'];
         object = this.queue[j];
