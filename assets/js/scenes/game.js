@@ -263,27 +263,30 @@ export default class GameScene extends Phaser.Scene {
         background.setBlendMode('MULTIPLY');
 
         this.discoBall.on('pointerdown', function () {
-            let gameScene = window.game.scene.scenes[2];
+            // let gameScene = window.game.scene.scenes[2];
+            // console.log(this);
             if (discoBool === true) {
-                gameScene.discoMusic = gameScene.sound.play('disco');
-                gameScene.discoInterval = setInterval(function () {
-                    for (let triangle of gameScene.discoTriangles) {
+                this.discoMusic = this.sound.play('disco');
+                let thisScene = this;
+                // console.log(this.discoTriangles);
+                this.discoInterval = setInterval(function () {
+                    for (let triangle of thisScene.discoTriangles) {
                         triangle.setRandomPosition();
                     }
-                }, 500);
+                }, 500, thisScene);
                 discoBool = false;
             }
             else if (discoBool === false){
-                gameScene.sound.stopAll('disco');
-                clearInterval(gameScene.discoInterval);
+                this.sound.stopAll('disco');
+                clearInterval(this.discoInterval);
                 discoBool = true;
             }
 
             background.setVisible(!background.visible);
-            for (let triangle of gameScene.discoTriangles) {
+            for (let triangle of this.discoTriangles) {
                 triangle.setVisible(!triangle.visible);
             }
-        });
+        }, this);
     }
 
     /**
