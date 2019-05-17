@@ -4,8 +4,8 @@ import TitleScene from './scenes/title.js'
 import LeaderBoard from './scenes/leaderboard.js'
 import CreditsScene from './scenes/credits.js'
 import TutorialScene from './scenes/tutorial.js'
-import ChallengeMode from './scenes/challengeMode.js'
 import LoadingScene from './scenes/loading.js'
+import SubclassTest from './scenes/subclass_test.js'
 
 
 class Game extends Phaser.Game {
@@ -14,10 +14,10 @@ class Game extends Phaser.Game {
         this.scene.add('Loading', LoadingScene);
         this.scene.add('Title', TitleScene);
         this.scene.add('LeaderBoard', LeaderBoard);
-        this.scene.add('Game', GameScene);
+        this.scene.add('Game', new GameScene('Game'));
         this.scene.add('Credits', CreditsScene);
         this.scene.add('Tutorial', TutorialScene);
-        this.scene.add('CHALLENGE-MODE', ChallengeMode);
+        this.scene.add('Subclass', SubclassTest);
         this.scene.start('Loading');
     }
 }
