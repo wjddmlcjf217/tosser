@@ -15,11 +15,10 @@ const VELOCITY_X_SCALE = 0.3;
 const GRAVITY = window.innerHeight * 1;
 
 export default class GameScene extends Phaser.Scene {
-    displayName = 'user';
-    object = null;
-
     constructor(key) {
         super(key);
+        this.displayName = null;
+        this.object = null;
     }
 
     /**

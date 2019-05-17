@@ -3,14 +3,13 @@ import game_objects from '../objects/game_objects.js'
 
 
 export default class TutorialScene extends GameScene {
-    object = null;
-    j = 0;
-    recycle = false;
-    organic = false;
-    paper = false;
-
     constructor() {
         super("Tutorial");
+        this.object = null;
+        this.j = 0;
+        this.recycle = false;
+        this.organic = false;
+        this.paper = false;
     }
 
     /**
