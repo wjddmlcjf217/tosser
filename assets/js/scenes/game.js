@@ -64,11 +64,7 @@ export default class GameScene extends Phaser.Scene {
         this.journalButton.displayHeight = window.innerHeight * 0.075;
         this.journalButton.setInteractive();
         this.journalButton.setOrigin(1);
-        this.journalButton.on('pointerdown', function() {
-            this.createJournal();
-            this.journalButton.visible = false;
-            this.hero.visible = false;
-        }, this);
+
 
         //Option
         this.optionButton = this.add.image(window.innerWidth * 0.945, window.innerHeight * 0.035, 'option');
@@ -80,6 +76,13 @@ export default class GameScene extends Phaser.Scene {
             this.optionButton.visible = false;
             this.hero.visible = false;
             this.journalButton.visible = false;
+        }, this);
+
+        this.journalButton.on('pointerdown', function() {
+            this.createJournal();
+            this.optionButton.visible = false;
+            this.journalButton.visible = false;
+            this.hero.visible = false;
         }, this);
     }
 
@@ -628,6 +631,7 @@ export default class GameScene extends Phaser.Scene {
 
     createJournal() {
         this.journalContainer = this.add.container(0, 0);
+        this.journalContainer.setDepth(500);
         let bg = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.5, 'journal').setOrigin(0.5);
         bg.displayWidth = window.innerWidth * 0.90;
         bg.displayHeight = window.innerHeight * 0.90;
@@ -653,6 +657,7 @@ export default class GameScene extends Phaser.Scene {
         this.closeButton.setInteractive();
         this.closeButton.on('pointerdown', () => {
             this.journalContainer.destroy();
+            this.optionButton.visible = true;
             this.journalButton.visible = true;
             this.hero.visible = true;
         })
