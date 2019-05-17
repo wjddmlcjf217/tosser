@@ -388,12 +388,12 @@ export default class ChallengeMode extends Phaser.Scene {
             this.sound.play('hit-target');
             if (game_objects[object]['paper']) {
                 this.createGood();
-                this.addGoodTween(this.good);
+                this.fadeAndRecedeTween(this.good);
                 this.scoreHandler(this);
             }
             else {
                 this.createBad();
-                this.addBadTween(this.bad);
+                this.fadeAndRecedeTween(this.bad);
                 this.lifeHandler(this);
             }
             this.resetProjectile(projectile);
@@ -413,12 +413,12 @@ export default class ChallengeMode extends Phaser.Scene {
             this.sound.play('hit-target');
             if (game_objects[object]['container']) {
                 this.createGood();
-                this.addGoodTween(this.good);
+                this.fadeAndRecedeTween(this.good);
                 this.scoreHandler(this);
             }
             else {
                 this.createBad();
-                this.addBadTween(this.bad);
+                this.fadeAndRecedeTween(this.bad);
                 this.lifeHandler(this);
             }
             this.resetProjectile(projectile);
@@ -438,12 +438,12 @@ export default class ChallengeMode extends Phaser.Scene {
             this.sound.play('hit-target');
             if (game_objects[object]['organic']) {
                 this.createGood();
-                this.addGoodTween(this.good);
+                this.fadeAndRecedeTween(this.good);
                 this.scoreHandler(this);
             }
             else {
                 this.createBad();
-                this.addBadTween(this.bad);
+                this.fadeAndRecedeTween(this.bad);
                 this.lifeHandler(this);
             }
             this.resetProjectile(projectile);
@@ -464,7 +464,7 @@ export default class ChallengeMode extends Phaser.Scene {
 
         if (projectile.body.angularVelocity === 0) {
             this.createBad();
-            this.addBadTween(this.bad);
+            this.fadeAndRecedeTween(this.bad);
             this.lifeHandler(this);
             projectile.disableBody(false, false);
             this.resetProjectile(projectile);
@@ -572,7 +572,7 @@ export default class ChallengeMode extends Phaser.Scene {
         });
     }
 
-    addGoodTween(image) {
+    fadeAndRecedeTween(image) {
         this.tweens.add({
             targets: image,
             alpha: 0,
@@ -584,7 +584,7 @@ export default class ChallengeMode extends Phaser.Scene {
         });
     }
 
-    addBadTween(image) {
+    fadeAndRecedeTween(image) {
         this.tweens.add({
             targets: image,
             alpha: 0,
