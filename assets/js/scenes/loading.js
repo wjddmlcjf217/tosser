@@ -39,10 +39,15 @@ export default class LoadingScene extends Phaser.Scene {
         this.load.image('wind_arrow', 'assets/img/arrow.png');
         this.load.image('good', 'assets/img/good.png');
         this.load.image('bad', 'assets/img/bad.png');
-        this.load.image('journal', 'assets/img/journal.jpg');
-        this.load.image('book', 'assets/img/book.png');
+        this.load.image('journal', 'assets/img/journalwhite.png');
+        this.load.image('book', 'assets/img/bookwhite.png');
         this.load.image('option', 'assets/img/options.png');
         this.load.image('options_background', 'assets/img/options_background.png');
+        this.load.image('bread', 'assets/img/bread.png');
+        this.load.image('cardboard', 'assets/img/cardboard.png');
+        this.load.image('popcan', 'assets/img/pop_can.png');
+        this.load.image('carton', 'assets/img/milk.png');
+
 
         // profile pictures
         this.load.image('bryden', 'assets/img/brydenAvatar.png');

@@ -1,6 +1,6 @@
 import GameScene from './game.js'
 
-export default class SubclassTest extends GameScene {
+export default class ChallengeMode extends GameScene {
     constructor() {
         super("ChallengeMode");
     }
@@ -8,57 +8,119 @@ export default class SubclassTest extends GameScene {
     create() {
         super.create();
 
+        // this.optionButton.visible = false;
+
+
         // Create timer
         this.t = 30;
         this.timeText = this.add.text(window.innerWidth / 3, window.innerHeight / 6, null, {
             fontFamily: 'Kalam',
             fontSize: 70,
-            color: '#000000',
+            color: '#FFFFFF',
         });
 
         this.updateTimer(this);
 
-        //Option
-        this.optionButton = this.add.image(window.innerWidth * 0.945, window.innerHeight * 0.035, 'option');
-        this.optionButton.displayWidth = window.innerWidth * 0.10;
-        this.optionButton.displayHeight = window.innerHeight * 0.056;
-        this.optionButton.setInteractive();
-        this.optionButton.on('pointerdown', function() {
-            this.createOptions();
-            this.optionButton.visible = false;
-            this.hero.visible = false;
-            this.journalButton.visible = false;
-        }, this);
+        // this.mainMenu.on('pointerdown', function() {
+        //     clearInterval(this.timerInterval);
+        //     this.scene.start('Title');
+        // }, this);
+
     }
 
     updateTimer() {
-
-
-
-
-        console.log(this);
         this.timeText.setText('Timer: ' + this.t);
         this.t--;
         let thisScene = this;
-        let x = setInterval(function () {
+        thisScene.timerInterval = setInterval(function () {
+            // line 37 thisScene.t becomes null on game end
             thisScene.timeText.setText('Timer: ' + thisScene.t);
-
+            // console.log(this);
             thisScene.t--;
             if (thisScene.t === -1) {
-
-                clearInterval(x);
+                clearInterval(thisScene.timerInterval);
                 thisScene.staticScoreText.setVisible(false);
                 thisScene.scoreText.setVisible(false);
                 thisScene.gameOverText.setVisible(true);
-                // clearInterval(this.discoInterval);
-                // Write score to leaderboard
-                // this.writeLeaderBoard();
+                thisScene.writeChallengeLeaderBoard();
                 setTimeout(function () {
-                    thisScene.scene.start('LeaderBoard')
+                    thisScene.scene.start('ChallengeLeaderBoard')
                 }, 2000, thisScene)
-
             }
         }, 1000, thisScene);
+    }
+
+    createOptions() {
+        this.optionContainer = this.add.container(0,0);
+        let bg = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.5, 'options_background').setOrigin(0.5);
+        bg.displayWidth = window.innerWidth * 0.90;
+        bg.displayHeight = window.innerHeight * 0.60;
+        this.optionContainer.add(bg);
+        this.resumeGame = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.4, 'Resume', TITLE_FONT).setOrigin(0.5);
+        this.resumeGame.setFontSize(150);
+        this.resumeGame.setInteractive();
+        this.resumeGame.on('pointerdown', () => {
+            this.optionContainer.destroy();
+            this.journalButton.visible = true;
+            this.hero.visible = true;
+            this.optionButton.visible = true;
+        }, this);
+        this.optionContainer.add(this.resumeGame);
+        this.mainMenu = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.55, 'Main Menu', TITLE_FONT).setOrigin(0.5);
+        this.mainMenu.setFontSize(150);
+        this.mainMenu.setInteractive();
+        this.mainMenu.on('pointerdown', function() {
+            this.sound.stopAll('disco');
+            this.discoBall.removeInteractive();
+            clearInterval(this.timerInterval);
+            clearInterval(this.discoInterval);
+            this.scene.start('Title');
+        }, this);
+        this.optionContainer.add(this.mainMenu);
+    }
+
+    /**
+     * Reduce player lives
+     */
+    lifeHandler() {
+        let life = this.lives.getFirstAlive();
+        if (life) {
+            this.lives.killAndHide(life);
+        }
+
+        if (this.lives.countActive() < 1) {
+            clearInterval(this.timerInterval);
+            this.hero.active = false;
+            this.staticScoreText.setVisible(false);
+            this.scoreText.setVisible(false);
+            this.gameOverText.setVisible(true);
+
+            // remove disco effect
+            this.sound.stopAll('disco');
+            this.discoBall.removeInteractive();
+            clearInterval(this.discoInterval);
+
+            // Write score to leaderboard
+            this.writeChallengeLeaderBoard();
+            let thisScene = this;
+            setTimeout(function () {
+                thisScene.scene.start('ChallengeLeaderBoard')
+            }, 2000, thisScene)
+        }
+    }
+
+    /**
+     * write to firebase with score ONLY if it's a higher score
+     */
+    // Write score for challenge mode
+    writeChallengeLeaderBoard() {
+        this.displayName = firebase.auth().currentUser.displayName;
+        let first_name = this.displayName.split(' ')[0];
+        if (this.scoreValue > challengeLeaderBoard[first_name] || challengeLeaderBoard[first_name] === undefined) {
+            firebase.database().ref("challengeUsers/").update({
+                [first_name]: this.scoreValue
+            });
+        }
     }
 }
 

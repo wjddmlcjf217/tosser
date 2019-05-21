@@ -47,7 +47,7 @@ export default class GameScene extends Phaser.Scene {
         // Create Hero
         // Uses the game_object instead
         this.queue = Object.keys(game_objects);
-        this.object = this.queue[Math.floor(Math.random() * 4)];
+        this.object = this.queue[Math.floor(Math.random() * this.queue.length)];
         this.spawnProjectile(this.createHeroProjectile(this.object));
 
         // Create Lives
@@ -451,7 +451,7 @@ export default class GameScene extends Phaser.Scene {
      */
     spawnProjectile(projectile) {
         let scene = projectile.scene;
-        this.object = scene.queue[Math.floor(Math.random() * 4)];
+        this.object = scene.queue[Math.floor(Math.random() * this.queue.length)];
         scene.objectText.setText(this.object);
         scene.hero = this.createHeroProjectile(this.object);
         scene.hero.visible = true;
@@ -649,6 +649,7 @@ export default class GameScene extends Phaser.Scene {
         for (let i = 1; i <= 3; i++) {
             let fact = this.add.text(window.innerWidth * 0.5, window.innerHeight * (0.25 + i * (0.15)), game_objects[this.object]['fact_'+i], JOURNAL_FONT).setOrigin(0.5);
             fact.setFontSize(45);
+            fact.setWordWrapWidth(window.innerWidth * 0.65);
             this.journalContainer.add(fact);
         }
     }

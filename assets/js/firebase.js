@@ -12,20 +12,29 @@ let firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 var playerList = [];
+var challengePlayerList = [];
 var leaderBoard = null;
+var challengeLeaderBoard = null;
 
 
 async function loadLeaderBoard() {
     await getLeaderBoard();
+    await getChallengeLeaderBoard();
 }
-
 
 function getLeaderBoard() {
     let dbRef = firebase.database().ref("users/");
     dbRef.on("value", function (snapshot) {
         leaderBoard = snapshot.val();
         this.sortLeaderBoard(leaderBoard);
-        // this.add.text(0, 0, parseInt(leaderBoard[0]), { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
+    });
+}
+
+function getChallengeLeaderBoard() {
+    let dbRef = firebase.database().ref("challengeUsers/");
+    dbRef.on("value", function (snapshot) {
+        challengeLeaderBoard = snapshot.val();
+        this.sortChallengeLeaderBoard(challengeLeaderBoard);
     });
 }
 
@@ -35,6 +44,16 @@ function sortLeaderBoard(leaderBoard) {
         playerList.push([name, leaderBoard[name]])
     }
     playerList.sort(function (key2, key1) {
+        return key1[1] - key2[1];
+    });
+}
+
+function sortChallengeLeaderBoard(challengeLeaderBoard) {
+    challengePlayerList = [];
+    for (name in challengeLeaderBoard) {
+        challengePlayerList.push([name, challengeLeaderBoard[name]])
+    }
+    challengePlayerList.sort(function (key2, key1) {
         return key1[1] - key2[1];
     });
 }
