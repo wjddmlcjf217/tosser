@@ -27,7 +27,7 @@ export default class TutorialScene extends GameScene {
         this.object = this.queue[this.j];
         this.objectText.setText(this.object);
         this.tutorial(this.object);
-        this.hero = this.createHeroProjectile();
+        this.hero = this.createHeroProjectile(this.object);
 
 
         this.hero.visible = true;
@@ -48,6 +48,7 @@ export default class TutorialScene extends GameScene {
         let aspect_ratio = hero.height / hero.width;
         hero.displayHeight = window.innerHeight * 0.092 * aspect_ratio * game_objects[this.object]['scaling_factor'];
         hero.displayWidth = window.innerWidth * 0.165 * game_objects[this.object]['scaling_factor'];
+        hero.setY(window.innerHeight * (1 - 0.07) - (hero.displayHeight * 0.5));
         hero.setBounce(.4);
         // hero.body.onWorldBounds = true;
         // hero.body.setCollideWorldBounds(true);
@@ -204,7 +205,7 @@ export default class TutorialScene extends GameScene {
         this.object = scene.queue[this.j];
         scene.objectText.setText(this.object);
         this.tutorial(scene, this.object);
-        scene.hero = this.createHeroProjectile();
+        scene.hero = this.createHeroProjectile(this.object);
         scene.hero.visible = true;
         scene.hero.setInteractive();
         scene.hero.on('pointerdown', this.pointerDownHandler, scene);
