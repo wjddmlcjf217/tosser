@@ -45,11 +45,11 @@ export default class LoadingScene extends Phaser.Scene {
         this.load.image('options_background', 'assets/img/options_background.png');
 
         // profile pictures
-        this.load.image('bryden', 'assets/img/paper_ball.png');
+        this.load.image('bryden', 'assets/img/brydenAvatar.png');
         this.load.image('dillon', 'assets/img/dillon.png');
-        this.load.image('kevin', 'assets/img/paper_ball.png');
+        this.load.image('kevin', 'assets/img/kevinAvatar.png');
         this.load.image('jacky', 'assets/img/jacky.png');
-        this.load.image('jared', 'assets/img/paper_ball.png');
+        this.load.image('jared', 'assets/img/jared.png');
 
         // audio assets
         this.load.audio('hit-target', [
