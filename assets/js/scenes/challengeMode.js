@@ -89,6 +89,7 @@ export default class ChallengeMode extends GameScene {
         }
 
         if (this.lives.countActive() < 1) {
+            clearInterval(this.timerInterval);
             this.hero.active = false;
             this.staticScoreText.setVisible(false);
             this.scoreText.setVisible(false);
