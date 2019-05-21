@@ -22,6 +22,7 @@ export default class NavScene extends Phaser.Scene {
         this.challengeButton.setOrigin(0.5);
         this.challengeButton.setFontSize(150);
         this.challengeButton.setInteractive();
+        this.normalButton.on('pointerdown', () => {this.scene.start('ChallengeLeaderBoard')});
 
         // Main Menu
         this.titleButton = this.add.text(

@@ -7,6 +7,7 @@ import TutorialScene from './scenes/tutorial.js'
 import LoadingScene from './scenes/loading.js'
 import ChallengeMode from './scenes/challengeMode.js'
 import NavScene from './scenes/leaderboardNav.js'
+import ChallengeLeaderBoardScene from './scenes/challengeLeaderboard.js'
 
 
 class Game extends Phaser.Game {
@@ -16,6 +17,7 @@ class Game extends Phaser.Game {
         this.scene.add('Title', TitleScene);
         this.scene.add('Nav', NavScene);
         this.scene.add('LeaderBoard', LeaderBoard);
+        this.scene.add('ChallengeLeaderBoard', ChallengeLeaderBoardScene);
         this.scene.add('Game', new GameScene('Game'));
         this.scene.add('Credits', CreditsScene);
         this.scene.add('Tutorial', TutorialScene);
