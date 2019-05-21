@@ -566,7 +566,7 @@ export default class GameScene extends Phaser.Scene {
             this.gameOverText.setVisible(true);
 
             // remove disco effect
-            // todo: mute music after exiting game
+            this.sound.stopAll('disco');
             this.discoBall.removeInteractive();
             clearInterval(this.discoInterval);
 
