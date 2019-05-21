@@ -204,7 +204,7 @@ export default class TutorialScene extends GameScene {
         let scene = projectile.scene;
         this.object = scene.queue[this.j];
         scene.objectText.setText(this.object);
-        this.tutorial(scene, this.object);
+        this.tutorial(this.object);
         scene.hero = this.createHeroProjectile(this.object);
         scene.hero.visible = true;
         scene.hero.setInteractive();
