@@ -70,7 +70,7 @@ export default {
         'container': true,
         'organic': false,
         'paper': false,
-        'scaling_factor': 1
+        'scaling_factor': 0.50
     },
     'carton' : {
         'fact_1': 'Cartons are mainly made of paper and some plastic!',
