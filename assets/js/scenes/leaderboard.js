@@ -3,19 +3,17 @@ export default class TitleScene extends Phaser.Scene {
         super('LeaderBoard');
     }
 
-
-    preload() {
-    }
-
     create() {
         this.leaderboardCreated = false;
-        this.createBackground(this);
+        this.createBackground();
+
+        // Main Menu
         this.titleButton = this.add.text(
             window.innerWidth * 0.5, window.innerHeight * 0.8, 'Main Menu', LEADERBOARD_FONT);
         this.titleButton.setFontSize(100);
         this.titleButton.setOrigin(0.5);
         this.titleButton.setInteractive();
-        this.titleButton.on('pointerdown', () => {this.scene.start('Title')})
+        this.titleButton.on('pointerdown', () => {this.scene.start('Title')});
     }
 
     update() {
@@ -39,8 +37,8 @@ export default class TitleScene extends Phaser.Scene {
         }
     }
 
-    createBackground(game) {
-        let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
+    createBackground() {
+        let background = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
         background.displayHeight = window.innerHeight;
         background.displayWidth = window.innerWidth;
     }

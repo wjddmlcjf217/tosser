@@ -29,7 +29,7 @@ export default class TutorialScene extends GameScene {
         this.tutorial(this.object);
         this.hero = this.createHeroProjectile(this.object);
 
-        this.hero.visible = false;
+        this.hero.visible = true;
         this.hero.setInteractive();
         this.hero.on('pointerdown', this.pointerDownHandler, this);
         this.createPhysicsObjects();
@@ -51,7 +51,7 @@ export default class TutorialScene extends GameScene {
         hero.setBounce(.4);
         // hero.body.onWorldBounds = true;
         // hero.body.setCollideWorldBounds(true);
-        hero.visible = false;
+        hero.visible = true;
         if (this.j < 2) {
             this.j += 1
         }

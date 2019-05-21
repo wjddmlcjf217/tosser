@@ -37,7 +37,7 @@ export default class TitleScene extends Phaser.Scene {
         this.optionsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.75, 'LeaderBoard', TITLE_FONT);
         this.optionsButton.setOrigin(0.5);
         this.optionsButton.setInteractive();
-        this.optionsButton.on('pointerdown', () => {this.scene.start('LeaderBoard')});
+        this.optionsButton.on('pointerdown', () => {this.scene.start('Nav')});
 
         // Credits
         this.creditsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.85, 'Credits', TITLE_FONT);
