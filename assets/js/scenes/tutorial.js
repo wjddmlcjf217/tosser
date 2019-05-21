@@ -51,7 +51,7 @@ export default class TutorialScene extends GameScene {
         hero.setBounce(.4);
         // hero.body.onWorldBounds = true;
         // hero.body.setCollideWorldBounds(true);
-        hero.visible = false;
+        hero.visible = true;
         if (this.j < 2) {
             this.j += 1
         }
