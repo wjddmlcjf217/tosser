@@ -63,8 +63,7 @@ var LOADING_FONT = {
 
 var JOURNAL_FONT = {
     fontFamily: 'Indie Flower',
-    fontSize: 90,
-    color: 'black',
-    fontWeight: 800,
+    fontSize: 70,
+    color: '#2d67cc',
     align: 'center'
 };

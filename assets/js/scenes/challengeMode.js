@@ -13,7 +13,7 @@ export default class SubclassTest extends GameScene {
         this.timeText = this.add.text(window.innerWidth / 3, window.innerHeight / 6, null, {
             fontFamily: 'Kalam',
             fontSize: 70,
-            color: '#000000',
+            color: '#FFFFFF',
         });
 
         this.updateTimer(this);
