@@ -29,7 +29,7 @@ export default class LoadingScene extends Phaser.Scene {
         this.load.image('banana', 'assets/img/banana.png');
         this.load.image('discoball', 'assets/img/disco-ball.png');
         this.load.image('paper', 'assets/img/paper_ball.png');
-        this.load.image('life', 'assets/img/life.gif');
+        this.load.image('life', 'assets/img/life.png');
         this.load.image('light_off', 'assets/img/light_off.png');
         this.load.image('light_on', 'assets/img/light_on.png');
         this.load.image('logo', 'assets/img/tosser_logo.png');
