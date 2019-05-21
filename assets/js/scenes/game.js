@@ -684,6 +684,9 @@ export default class GameScene extends Phaser.Scene {
         this.mainMenu.setFontSize(150);
         this.mainMenu.setInteractive();
         this.mainMenu.on('pointerdown', function() {
+            this.sound.stopAll('disco');
+            this.discoBall.removeInteractive();
+            clearInterval(this.discoInterval);
             this.scene.start('Title');
         }, this);
         this.optionContainer.add(this.mainMenu);
