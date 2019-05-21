@@ -28,10 +28,10 @@ export default class TitleScene extends Phaser.Scene {
         this.gameButton.on('pointerdown', () => {this.scene.start('Game')});
 
         // Challenge-Mode
-        this.tutorialButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.55, 'Challenge-Mode', TITLE_FONT);
+        this.tutorialButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.55, 'ChallengeMode', TITLE_FONT);
         this.tutorialButton.setOrigin(0.5);
         this.tutorialButton.setInteractive();
-        this.tutorialButton.on('pointerdown', () => {this.scene.start('Subclass')});
+        this.tutorialButton.on('pointerdown', () => {this.scene.start('ChallengeMode')});
 
         // LeaderBoard
         this.optionsButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.75, 'LeaderBoard', TITLE_FONT);

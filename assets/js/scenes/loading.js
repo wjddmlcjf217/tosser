@@ -51,6 +51,7 @@ export default class LoadingScene extends Phaser.Scene {
         this.load.image('jacky', 'assets/img/jacky.png');
         this.load.image('jared', 'assets/img/jared.png');
 
+
         // audio assets
         this.load.audio('hit-target', [
             'assets/audio/bin-sound.m4a',

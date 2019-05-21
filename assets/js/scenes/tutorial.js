@@ -29,8 +29,7 @@ export default class TutorialScene extends GameScene {
         this.tutorial(this.object);
         this.hero = this.createHeroProjectile();
 
-
-        this.hero.visible = true;
+        this.hero.visible = false;
         this.hero.setInteractive();
         this.hero.on('pointerdown', this.pointerDownHandler, this);
         this.createPhysicsObjects();
