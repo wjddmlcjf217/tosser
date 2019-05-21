@@ -23,11 +23,11 @@ export default class ChallengeLeaderBoard extends Phaser.Scene {
             this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.1, "Challenge Mode\nLeaderboard", LEADERBOARD_FONT).setOrigin(0.5).setFontSize(100).setAlign('center');
             let y = window.innerHeight * 0.15;
             let counter = 0;
-            for (let i = 0; i < playerList.length; i++) {
+            for (let i = 0; i < challengePlayerList.length; i++) {
                 counter++;
                 y += 100;
-                this.add.text(window.innerWidth * 0.20, y, playerList[i][0], LEADERBOARD_FONT);
-                this.add.text(window.innerWidth * 0.70, y, playerList[i][1], LEADERBOARD_FONT);
+                this.add.text(window.innerWidth * 0.20, y, challengePlayerList[i][0], LEADERBOARD_FONT);
+                this.add.text(window.innerWidth * 0.70, y, challengePlayerList[i][1], LEADERBOARD_FONT);
                 if (counter === 8) {
                     break
                 }

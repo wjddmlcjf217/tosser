@@ -29,27 +29,23 @@ export default class ChallengeMode extends GameScene {
     }
 
     updateTimer() {
-        console.log(this.scene);
         this.timeText.setText('Timer: ' + this.t);
         this.t--;
         let thisScene = this;
         thisScene.timerInterval = setInterval(function () {
+            // line 37 thisScene.t becomes null on game end
             thisScene.timeText.setText('Timer: ' + thisScene.t);
             // console.log(this);
             thisScene.t--;
             if (thisScene.t === -1) {
-
                 clearInterval(thisScene.timerInterval);
                 thisScene.staticScoreText.setVisible(false);
                 thisScene.scoreText.setVisible(false);
                 thisScene.gameOverText.setVisible(true);
-                // clearInterval(this.discoInterval);
-                // Write score to leaderboard
-                // this.writeLeaderBoard();
+                thisScene.writeChallengeLeaderBoard();
                 setTimeout(function () {
-                    thisScene.scene.start('LeaderBoard')
+                    thisScene.scene.start('ChallengeLeaderBoard')
                 }, 2000, thisScene)
-
             }
         }, 1000, thisScene);
     }
@@ -81,6 +77,49 @@ export default class ChallengeMode extends GameScene {
             this.scene.start('Title');
         }, this);
         this.optionContainer.add(this.mainMenu);
+    }
+
+    /**
+     * Reduce player lives
+     */
+    lifeHandler() {
+        let life = this.lives.getFirstAlive();
+        if (life) {
+            this.lives.killAndHide(life);
+        }
+
+        if (this.lives.countActive() < 1) {
+            this.hero.active = false;
+            this.staticScoreText.setVisible(false);
+            this.scoreText.setVisible(false);
+            this.gameOverText.setVisible(true);
+
+            // remove disco effect
+            this.sound.stopAll('disco');
+            this.discoBall.removeInteractive();
+            clearInterval(this.discoInterval);
+
+            // Write score to leaderboard
+            this.writeChallengeLeaderBoard();
+            let thisScene = this;
+            setTimeout(function () {
+                thisScene.scene.start('ChallengeLeaderBoard')
+            }, 2000, thisScene)
+        }
+    }
+
+    /**
+     * write to firebase with score ONLY if it's a higher score
+     */
+    // Write score for challenge mode
+    writeChallengeLeaderBoard() {
+        this.displayName = firebase.auth().currentUser.displayName;
+        let first_name = this.displayName.split(' ')[0];
+        if (this.scoreValue > leaderBoard[first_name] || leaderBoard[first_name] === undefined) {
+            firebase.database().ref("challengeUsers/").update({
+                [first_name]: this.scoreValue
+            });
+        }
     }
 }
 
