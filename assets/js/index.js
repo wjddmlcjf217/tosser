@@ -6,6 +6,7 @@ import CreditsScene from './scenes/credits.js'
 import TutorialScene from './scenes/tutorial.js'
 import LoadingScene from './scenes/loading.js'
 import SubclassTest from './scenes/subclass_test.js'
+import NavScene from './scenes/leaderboardNav.js'
 
 
 class Game extends Phaser.Game {
@@ -13,6 +14,7 @@ class Game extends Phaser.Game {
         super(config);
         this.scene.add('Loading', LoadingScene);
         this.scene.add('Title', TitleScene);
+        this.scene.add('Nav', NavScene);
         this.scene.add('LeaderBoard', LeaderBoard);
         this.scene.add('Game', new GameScene('Game'));
         this.scene.add('Credits', CreditsScene);

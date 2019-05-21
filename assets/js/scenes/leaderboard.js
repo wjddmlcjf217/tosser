@@ -3,10 +3,6 @@ export default class TitleScene extends Phaser.Scene {
         super('LeaderBoard');
     }
 
-
-    preload() {
-    }
-
     create() {
         this.leaderboardCreated = false;
         this.createBackground(this);
