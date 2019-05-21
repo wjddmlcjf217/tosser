@@ -116,7 +116,7 @@ export default class ChallengeMode extends GameScene {
     writeChallengeLeaderBoard() {
         this.displayName = firebase.auth().currentUser.displayName;
         let first_name = this.displayName.split(' ')[0];
-        if (this.scoreValue > leaderBoard[first_name] || leaderBoard[first_name] === undefined) {
+        if (this.scoreValue > challengeLeaderBoard[first_name] || challengeLeaderBoard[first_name] === undefined) {
             firebase.database().ref("challengeUsers/").update({
                 [first_name]: this.scoreValue
             });
