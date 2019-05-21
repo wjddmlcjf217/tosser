@@ -1,4 +1,4 @@
-export default class ChallengeLeaderBoardScene extends Phaser.Scene {
+export default class ChallengeLeaderBoard extends Phaser.Scene {
     constructor() {
         super('ChallengeLeaderBoard');
     }
@@ -16,6 +16,24 @@ export default class ChallengeLeaderBoardScene extends Phaser.Scene {
         this.titleButton.on('pointerdown', () => {
             this.scene.start('Title')
         });
+    }
+
+    update() {
+        if (this.leaderboardCreated === false) {
+            this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.1, "Challenge Mode\nLeaderboard", LEADERBOARD_FONT).setOrigin(0.5).setFontSize(100).setAlign('center');
+            let y = window.innerHeight * 0.15;
+            let counter = 0;
+            for (let i = 0; i < playerList.length; i++) {
+                counter++;
+                y += 100;
+                this.add.text(window.innerWidth * 0.20, y, playerList[i][0], LEADERBOARD_FONT);
+                this.add.text(window.innerWidth * 0.70, y, playerList[i][1], LEADERBOARD_FONT);
+                if (counter === 8) {
+                    break
+                }
+            }
+            this.leaderboardCreated = true;
+        }
     }
 
     createBackground() {
