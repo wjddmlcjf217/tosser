@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Tosser</title>
-    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+    <!-- firebase import -->
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css"/>
     <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
     <script src="assets/js/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
 </head>
 <body id="'bg" style="zoom: 250%">
-
-
-<script>
-    // Initialize the FirebaseUI Widget using Firebase.
-    var ui = new firebaseui.auth.AuthUI(firebase.auth());
-</script>
+    <script>
+        // Initialize the FirebaseUI Widget using Firebase.
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    </script>
 
 <!-- The surrounding HTML is left untouched by FirebaseUI.
      Your app may use that space for branding, controls and other customizations.-->
@@ -24,13 +23,13 @@
 <script>
     var uiConfig = {
         callbacks: {
-            signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+            signInSuccessWithAuthResult: function (authResult, redirectUrl) {
                 // User successfully signed in.
                 // Return type determines whether we continue the redirect automatically
                 // or whether we leave that to developer to handle.
                 return true;
             },
-            uiShown: function() {
+            uiShown: function () {
                 // The widget is rendered.
                 // Hide the loader.
                 document.getElementById('loader').style.display = 'none';
