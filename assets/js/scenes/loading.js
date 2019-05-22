@@ -1,5 +1,9 @@
+// import transitions
 import {fadeOut} from './transistions.js'
 
+/**
+ * LoadingScene is presented to the user while game assets are loading
+ */
 export default class LoadingScene extends Phaser.Scene {
     constructor() {
         super({
@@ -12,6 +16,9 @@ export default class LoadingScene extends Phaser.Scene {
         });
     }
 
+    /**
+     * Load all game assets
+     */
     preload() {
         // loading screen assets
         let background = this.add.rectangle(
@@ -48,14 +55,12 @@ export default class LoadingScene extends Phaser.Scene {
         this.load.image('popcan', 'assets/img/pop_can.png');
         this.load.image('carton', 'assets/img/milk.png');
 
-
         // profile pictures
         this.load.image('bryden', 'assets/img/brydenAvatar.png');
         this.load.image('dillon', 'assets/img/dillon.png');
         this.load.image('kevin', 'assets/img/kevinAvatar.png');
         this.load.image('jacky', 'assets/img/jacky.png');
         this.load.image('jared', 'assets/img/jared.png');
-
 
         // audio assets
         this.load.audio('hit-target', [
@@ -65,6 +70,9 @@ export default class LoadingScene extends Phaser.Scene {
         this.load.audio('disco', 'assets/audio/ymca.mp3')
     }
 
+    /**
+     * Transition to TitleScene when all assets are loaded
+     */
     create() {
         fadeOut(this, 0xFFFFFF, 500);
         this.time.delayedCall(500, function () {
