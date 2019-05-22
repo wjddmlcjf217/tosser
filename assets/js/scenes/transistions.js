@@ -2,7 +2,7 @@
  *  Fade a scene out to a solid color
  *  @param scene The scene to apply the transition to
  *  @param color The color to fade to
- *  @param time The duration of the fade
+ *  @param time The duration of the fade rectangle
  */
 export function fadeOut(scene, color, time) {
     let fade = scene.add.rectangle(
@@ -22,7 +22,7 @@ export function fadeOut(scene, color, time) {
  *  Fade a scene in from a solid color
  *  @param scene The scene to apply the transition to
  *  @param color The color to fade from
- *  @param time The duration of the fade
+ *  @param time The duration of the fade rectangle
  */
 export function fadeIn(scene, color, time) {
     let fade = scene.add.rectangle(
