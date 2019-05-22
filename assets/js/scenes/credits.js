@@ -1,5 +1,9 @@
+// import phaser configs
 import config from './config.js';
 
+/**
+ * CreditScene Displays scrolling credits to the user
+ */
 export default class CreditsScene extends Phaser.Scene {
     constructor () {
         super('Credits');
@@ -9,7 +13,9 @@ export default class CreditsScene extends Phaser.Scene {
     }
 
     create () {
-        this.createBackground(this);
+        // loads background
+        this.createBackground();
+        // adds credit text
         this.creditsText = this.add.text(0, 0, 'Credits', LEADERBOARD_FONT);
         this.madeByText = this.add.text(0, 0, 'Created By: ', LEADERBOARD_FONT);
         this.brydenPic = this.physics.add.image(window.innerWidth/2, 0, 'bryden');
@@ -34,9 +40,11 @@ export default class CreditsScene extends Phaser.Scene {
             this.jackyPic, this.jackyText, this.jackyBio, this.jaredPic, this.jaredText, this.jaredBio, this.thankYou];
         const offset = -5000;
 
+        // centers everything
         for (let i = 0; i < this.tweenArray.length; i++) {
             this.center(this.tweenArray[i])
         }
+        // sets y heights for credits objects
         this.madeByText.setY(1800);
         this.brydenPic.setY(2100);
         this.brydenText.setY(2200);
@@ -55,6 +63,7 @@ export default class CreditsScene extends Phaser.Scene {
         this.jaredBio.setY(4300);
         this.thankYou.setY(5800);
 
+        // scrolling for credit title
         this.creditsTween = this.tweens.add({
             targets: this.creditsText,
             y: -300,
@@ -66,6 +75,7 @@ export default class CreditsScene extends Phaser.Scene {
             }
         });
 
+        // scrolling for credit objects
         for (let i = 1; i < this.tweenArray.length; i++) {
             this.madeByTween = this.tweens.add({
                 targets: this.tweenArray[i],
@@ -82,6 +92,10 @@ export default class CreditsScene extends Phaser.Scene {
         }
     }
 
+    /**
+     * Centers credit text
+     * @param text
+     */
     center (text) {
         Phaser.Display.Align.In.Center(
             text,
@@ -89,8 +103,11 @@ export default class CreditsScene extends Phaser.Scene {
         )
     }
 
-    createBackground(game) {
-        let background = game.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
+    /**
+     *  Creates background
+     */
+    createBackground() {
+        let background = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
         background.displayHeight = window.innerHeight;
         background.displayWidth = window.innerWidth;
     }
