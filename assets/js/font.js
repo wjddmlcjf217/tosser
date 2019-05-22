@@ -1,3 +1,4 @@
+// font used for leaderboard
 var LEADERBOARD_FONT = {
     fontFamily: 'Luckiest Guy',
     fontSize: 80,
@@ -14,6 +15,7 @@ var LEADERBOARD_FONT = {
     },
 };
 
+// font used for title screen
 var TITLE_FONT = {
     fontFamily: 'Luckiest Guy',
     fontSize: 100,
@@ -30,6 +32,7 @@ var TITLE_FONT = {
     },
 };
 
+// font used for the tutorial
 var TUTORIAL_FONT = {
     fontFamily: 'Acme',
     color: '#fffdd9',
@@ -45,6 +48,7 @@ var TUTORIAL_FONT = {
     }
 };
 
+// font used for the loading screen
 var LOADING_FONT = {
     fontFamily: 'Luckiest Guy',
     fontSize: 100,
@@ -61,6 +65,7 @@ var LOADING_FONT = {
     },
 };
 
+// font used for the journal entries
 var JOURNAL_FONT = {
     fontFamily: 'Indie Flower',
     fontSize: 70,
