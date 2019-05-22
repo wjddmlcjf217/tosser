@@ -1,3 +1,4 @@
+// phaser game configuration
 export default {
     type: Phaser.AUTO,
     width: window.innerWidth,
