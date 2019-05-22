@@ -1,3 +1,4 @@
+// all game projectiles and their properties
 export default {
     'banana' : {
         'fact_1': 'The banana is actually classified as a berry!',
@@ -44,15 +45,6 @@ export default {
         'paper': true,
         'scaling_factor': 1.5
     },
-    // 'magazine' : {
-    //     'fact_1': 'Magazines were much more popular before the Internet!',
-    //     'fact_2': 'The glossy paper in magazines used to be unrecyclable, but not anymore!',
-    //     'fact_3': '50% of magazines are being recycled today!',
-    //     'container': false,
-    //     'organic': false,
-    //     'paper': true,
-    //     'scaling_factor': 0.420
-    // },
     'waterbottle' : {
         'fact_1': 'Only 1 in 5 water bottles are recycled!',
         'fact_2': 'It takes 500 years to decompose plastic bottles!',
