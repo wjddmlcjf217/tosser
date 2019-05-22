@@ -8,9 +8,6 @@ export default class ChallengeMode extends GameScene {
     create() {
         super.create();
 
-        // this.optionButton.visible = false;
-
-
         // Create timer
         this.t = 30;
         this.timeText = this.add.text(window.innerWidth / 3, window.innerHeight / 6, null, {
@@ -19,23 +16,21 @@ export default class ChallengeMode extends GameScene {
             color: '#FFFFFF',
         });
 
-        this.updateTimer(this);
-
-        // this.mainMenu.on('pointerdown', function() {
-        //     clearInterval(this.timerInterval);
-        //     this.scene.start('Title');
-        // }, this);
-
+        // update timer
+        this.updateTimer();
     }
 
     updateTimer() {
+        // define timer text
         this.timeText.setText('Timer: ' + this.t);
+        // decrement time value
         this.t--;
         let thisScene = this;
+
+        // update timer every second
         thisScene.timerInterval = setInterval(function () {
-            // line 37 thisScene.t becomes null on game end
             thisScene.timeText.setText('Timer: ' + thisScene.t);
-            // console.log(this);
+            // early decrementing of timer value
             thisScene.t--;
             if (thisScene.t === -1) {
                 clearInterval(thisScene.timerInterval);
@@ -43,6 +38,7 @@ export default class ChallengeMode extends GameScene {
                 thisScene.scoreText.setVisible(false);
                 thisScene.gameOverText.setVisible(true);
                 thisScene.writeChallengeLeaderBoard();
+                // go back to main menu after 2 seconds
                 setTimeout(function () {
                     thisScene.scene.start('ChallengeLeaderBoard')
                 }, 2000, thisScene)
@@ -50,12 +46,18 @@ export default class ChallengeMode extends GameScene {
         }, 1000, thisScene);
     }
 
+    /**
+     * Create options menu screen
+     */
     createOptions() {
+        // create menu container
         this.optionContainer = this.add.container(0,0);
         let bg = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.5, 'options_background').setOrigin(0.5);
         bg.displayWidth = window.innerWidth * 0.90;
         bg.displayHeight = window.innerHeight * 0.60;
         this.optionContainer.add(bg);
+
+        // create resume game option
         this.resumeGame = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.4, 'Resume', TITLE_FONT).setOrigin(0.5);
         this.resumeGame.setFontSize(150);
         this.resumeGame.setInteractive();
@@ -66,6 +68,8 @@ export default class ChallengeMode extends GameScene {
             this.optionButton.visible = true;
         }, this);
         this.optionContainer.add(this.resumeGame);
+
+        // create main menu option
         this.mainMenu = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.55, 'Main Menu', TITLE_FONT).setOrigin(0.5);
         this.mainMenu.setFontSize(150);
         this.mainMenu.setInteractive();
@@ -88,6 +92,7 @@ export default class ChallengeMode extends GameScene {
             this.lives.killAndHide(life);
         }
 
+        // if player is out of lives
         if (this.lives.countActive() < 1) {
             clearInterval(this.timerInterval);
             this.hero.active = false;
@@ -112,7 +117,6 @@ export default class ChallengeMode extends GameScene {
     /**
      * write to firebase with score ONLY if it's a higher score
      */
-    // Write score for challenge mode
     writeChallengeLeaderBoard() {
         this.displayName = firebase.auth().currentUser.displayName;
         let first_name = this.displayName.split(' ')[0];
