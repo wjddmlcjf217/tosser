@@ -1,11 +1,12 @@
+// import transitions
 import {fadeIn} from './transistions.js'
 
+/**
+ * TitleScene shows the user the main menu where they can navigate to various options
+ */
 export default class TitleScene extends Phaser.Scene {
     constructor() {
         super('Title');
-    }
-
-    preload() {
     }
 
     create() {
@@ -74,7 +75,11 @@ export default class TitleScene extends Phaser.Scene {
         }, this);
     }
 
+    /**
+     * Creates the fact journal
+     */
     createJournal() {
+        // creates and adds journal container and elements
         this.journalContainer = this.add.container(0, 0);
         let bg = this.add.image(window.innerWidth * 0.5, window.innerHeight * 0.5, 'journal').setOrigin(0.5);
         bg.displayWidth = window.innerWidth * 0.90;
@@ -82,6 +87,7 @@ export default class TitleScene extends Phaser.Scene {
         this.journalContainer.add(bg);
         let heading = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.15, "About the Game", JOURNAL_FONT).setOrigin(0.5);
         this.journalContainer.add(heading);
+        // about us description
         let about = ["It was a dark and stormy night... The goons " +
             "were enjoying their long walk along the coast " +
             "of Kitsilano beach. When suddenly, a single " +
@@ -100,6 +106,7 @@ export default class TitleScene extends Phaser.Scene {
             "to be drowned out by the screams of his squad "+
             "around him . And thus, we began our journey to "+
             "change the world. One toss at a time."];
+        // add content text to scene
         let content = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.53, about, JOURNAL_FONT).setOrigin(0.5);
         content.setFontSize(35);
         content.setWordWrapWidth(window.innerWidth * 0.65);
@@ -108,7 +115,11 @@ export default class TitleScene extends Phaser.Scene {
         this.journalContainer.add(this.closeButton);
     }
 
+    /**
+     * Create button to close the journal
+     */
     createCloseButton() {
+        // add button to scene
         this.closeButton = this.add.text(window.innerWidth * 0.90, window.innerHeight * 0.09, 'X', JOURNAL_FONT).setOrigin(0.5);
         this.closeButton.setInteractive();
         this.closeButton.on('pointerdown', () => {
