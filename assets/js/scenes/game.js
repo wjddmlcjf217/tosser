@@ -667,7 +667,7 @@ export default class GameScene extends Phaser.Scene {
         };
         // add text to scene
         this.gameOverText = this.add.text(
-            window.innerWidth * 0.285, window.innerHeight * 0.285, 'Game Over', fontStyle);
+            window.innerWidth * 0.31, window.innerHeight * 0.295, 'Game Over', fontStyle);
         this.gameOverText.setVisible(false);
         this.staticScoreText = this.add.text(
             window.innerWidth * 0.31, window.innerHeight * 0.295, 'Score:', fontStyle);
