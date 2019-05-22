@@ -121,6 +121,9 @@ export default class GameScene extends Phaser.Scene {
         // validate swipe direction
         let angle = swipe.angle();
         if (angle > 3.41 && angle < 6.01) {
+            //play sound
+            this.sound.play('throw');
+
             this.hero.state = 'flying';
             this.hero.disableInteractive();
 
@@ -189,6 +192,7 @@ export default class GameScene extends Phaser.Scene {
 
         // handle clicking on light
         light.on('pointerdown', function () {
+            this.scene.sound.play('light');
             this.setTexture(this.texture.key === 'light_on' ? 'light_off' : 'light_on');
             darkenEffect.setVisible(!darkenEffect.visible);
             this.scene.discoBall.visible = true;
@@ -346,6 +350,8 @@ export default class GameScene extends Phaser.Scene {
      * @param rim
      */
     hitRim(projectile, rim) {
+        //play sound
+        this.sound.play('rim');
         // remove X acceleration
         projectile.setAccelerationX(0);
         this.setProjectileDrag(projectile);

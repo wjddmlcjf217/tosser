@@ -67,7 +67,10 @@ export default class LoadingScene extends Phaser.Scene {
             'assets/audio/bin-sound.m4a',
             'assets/audio/bin-sound.mp3',
         ]);
-        this.load.audio('disco', 'assets/audio/ymca.mp3')
+        this.load.audio('disco', 'assets/audio/ymca.mp3');
+        this.load.audio('light', 'assets/audio/light.wav');
+        this.load.audio('rim', 'assets/audio/rim.wav');
+        this.load.audio('throw', 'assets/audio/throw.wav');
     }
 
     /**
