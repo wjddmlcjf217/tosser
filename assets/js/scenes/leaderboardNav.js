@@ -1,14 +1,17 @@
+/**
+ * NavScene presents a menu to the user to choose which leaderboard they would like to view
+ */
 export default class NavScene extends Phaser.Scene {
     constructor() {
         super("Nav");
     }
 
     create () {
+        // create background
         this.createBackground();
 
         // Header
         this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.1, 'Which Leader Board?', LEADERBOARD_FONT).setOrigin(0.5);
-
 
         // Normal
         this.normalButton = this.add.text(window.innerWidth * 0.5, window.innerHeight * 0.35, 'Normal', LEADERBOARD_FONT);
@@ -33,7 +36,9 @@ export default class NavScene extends Phaser.Scene {
         this.titleButton.on('pointerdown', () => {this.scene.start('Title')})
     }
 
-
+    /**
+     * Create Background
+     */
     createBackground() {
         let background = this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background_blur');
         background.displayHeight = window.innerHeight;
