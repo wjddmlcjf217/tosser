@@ -11,17 +11,27 @@ let firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+// sorted players normal mode
 var playerList = [];
+// sorted players challenge mode
 var challengePlayerList = [];
+// contains normal mode player objects
 var leaderBoard = null;
+// contains challenge mode player objects
 var challengeLeaderBoard = null;
 
-
+/**
+ * Waits for leaderboard to be populated before loading leaderboard scene
+ * @returns populated leaderboards
+ */
 async function loadLeaderBoard() {
     await getLeaderBoard();
     await getChallengeLeaderBoard();
 }
 
+/**
+ * Access firebase to obtain a sorted list of player scores for normal mode
+ */
 function getLeaderBoard() {
     let dbRef = firebase.database().ref("users/");
     dbRef.on("value", function (snapshot) {
@@ -30,6 +40,9 @@ function getLeaderBoard() {
     });
 }
 
+/**
+ * Access firebase to obtain a sorted list of player scores for challenge mode
+ */
 function getChallengeLeaderBoard() {
     let dbRef = firebase.database().ref("challengeUsers/");
     dbRef.on("value", function (snapshot) {
@@ -38,6 +51,10 @@ function getChallengeLeaderBoard() {
     });
 }
 
+/**
+ * Sorts the normal mode leaderboard by score
+ * @param leaderBoard
+ */
 function sortLeaderBoard(leaderBoard) {
     playerList = [];
     for (name in leaderBoard) {
@@ -48,6 +65,10 @@ function sortLeaderBoard(leaderBoard) {
     });
 }
 
+/**
+ * Sorts the challenge mode leaderboard by score
+ * @param leaderBoard
+ */
 function sortChallengeLeaderBoard(challengeLeaderBoard) {
     challengePlayerList = [];
     for (name in challengeLeaderBoard) {
