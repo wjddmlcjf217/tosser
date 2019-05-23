@@ -1,10 +1,6 @@
 Team 01
 
-Jacky Zheng
-Dillon Yeh
-Kevin Jeong
-Bryden Mitchell
-Jared Hall
+Jacky Zheng - Dillon Yeh - Kevin Jeong - Bryden Mitchell - Jared Hall
 
 Tosser - Saving the world one toss at a time.
 
